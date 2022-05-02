@@ -1,8 +1,21 @@
-import React from 'react';
+import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Header from "./components/Header";
+import MainPage from "./pages/main/MainPage";
+import GlobalStyle from "./style/GlobalStyle";
 export default function App(): JSX.Element {
   return (
-    <div>
-      <h1>App</h1>
-    </div>
+    <>
+      <GlobalStyle />
+      <Header />
+      <div style={{ marginTop: "70px" }}>
+        <BrowserRouter>
+          <Header />
+          <Routes>
+            <Route path="/" element={<MainPage />} />
+          </Routes>
+        </BrowserRouter>
+      </div>
+    </>
   );
 }
