@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, Content, Title, Body, Footer } from "./style";
 import { boardInfo } from "@/Types/MainType";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   borderID: number;
@@ -9,8 +10,10 @@ type Props = {
 };
 
 export default function MainCard({ board, imgSrc, borderID }: Props): JSX.Element {
+  const Navigate = useNavigate();
+
   const test = () => {
-    alert(borderID);
+    Navigate(`/@${borderID}`);
   };
   return (
     <Card onClick={test}>
