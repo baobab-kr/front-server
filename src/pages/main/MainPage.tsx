@@ -41,6 +41,10 @@ export default function MainPage(): JSX.Element {
     ]); // state에 추가
   };
 
+  const filterHandler = () => {
+    alert("filter");
+  };
+
   if (board?.length !== 0) {
     return (
       <div style={{ width: "100%" }}>
@@ -48,8 +52,13 @@ export default function MainPage(): JSX.Element {
           <FilterContainer>
             <Filter>
               <div>
-                <button style={{ border: "none", backgroundColor: "transparent" }}>로그인</button>&nbsp;|&nbsp;
-                <button style={{ border: "none", backgroundColor: "transparent" }}>회원가입</button>
+                <button style={{ border: "none", backgroundColor: "transparent" }} onClick={filterHandler}>
+                  최신순
+                </button>
+                &nbsp;|&nbsp;
+                <button style={{ border: "none", backgroundColor: "transparent" }} onClick={filterHandler}>
+                  정렬기준
+                </button>
               </div>
             </Filter>
             <TagSearch>
