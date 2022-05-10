@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const Signup = styled.div`
   background-color: #ffffff;
@@ -17,7 +17,7 @@ const Body = styled.div`
   label {
     font-size: 20px;
     font-weight: 500;
-    color: #9f9f9f;
+    color: #000000;
   }
   .ant-input {
     width: 400px;
@@ -39,12 +39,12 @@ const Body = styled.div`
 const signup_form_button = styled.button`
   width: 75px;
   height: 28px;
-  background-color: #2d3c78;
+  background-color: #8fceb1;
   border-radius: 5px;
   position: absolute;
   right: 44%;
   font-size: 12px;
-  color: #ffffff;
+  color: #000000;
 `;
 
 // const signup_form = styled.div`
