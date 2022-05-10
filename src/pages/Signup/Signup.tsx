@@ -122,7 +122,12 @@ const Signup = () => {
         validateStatus: "error",
         errorMsg: `${PASSWORD_MIN_LENGTH}-${PASSWORD_MAX_LENGTH}자 이내의 비밀번호를 입력해 주세요.`,
       };
-    } else {
+    } else if (!/(^[A-Za-z0-9._-]+$)/g.test(pwd)) {
+      return {
+        validateStatus: "error",
+        errorMsg: ``,
+      };
+    }  else {
       return {
         validateStatus: "success",
         errorMsg: null,
