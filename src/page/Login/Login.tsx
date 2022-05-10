@@ -1,6 +1,6 @@
-import React from 'react';
-import { Form, Input, Button, Checkbox, notification } from 'antd';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Form, Input, Button, Checkbox, notification } from "antd";
+import { Link } from "react-router-dom";
 export default function Login(props: any) {
   return (
     <div className="loginPage">
@@ -18,15 +18,15 @@ export default function Login(props: any) {
 }
 const LoginForm = (props: any) => {
   const [isEmptyPassword, setEmptyPassword] = React.useState(true);
-  const [idErrorStr, setIdError] = React.useState('');
-  const [passwordErrorStr, setPasswordError] = React.useState('');
+  const [idErrorStr, setIdError] = React.useState("");
+  const [passwordErrorStr, setPasswordError] = React.useState("");
   const handleSubmit = (values: any) => {
-    setPasswordError('');
+    setPasswordError("");
     if (values.username === undefined || values.username === null || values.username.length === 0) {
-      setIdError('아이디를 입력해 주세요.');
+      setIdError("아이디를 입력해 주세요.");
       return;
     }
-    setIdError('');
+    setIdError("");
 
     const loginRequest = Object.assign({}, values);
 
@@ -41,14 +41,14 @@ const LoginForm = (props: any) => {
     //   })
     //   .catch((error) => {
     //     if (error.status === 401) {
-    //       setPasswordError('아이디 또는 비밀번호가 올바르지 않습니다. 다시 시도하십시오.');
+    //       setPasswordError("아이디 또는 비밀번호가 올바르지 않습니다. 다시 시도하십시오.");
     //       // notification.error({
     //       //   message: "로그인 실패",
     //       //   description:
     //       //     "아이디 또는 비밀번호가 잘못 입력 되었습니다. 아이디와 비밀번호를 정확히 입력해 주세요.",
     //       // });
     //     } else {
-    //       setPasswordError('로그인 실패: 죄송합니다. 다시 시도해주세요.');
+    //       setPasswordError("로그인 실패: 죄송합니다. 다시 시도해주세요.");
     //       // notification.error({
     //       //   message: "로그인 실패",
     //       //   description:
@@ -59,7 +59,7 @@ const LoginForm = (props: any) => {
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
+    console.log("Failed:", errorInfo);
   };
 
   const layout = {
@@ -90,7 +90,7 @@ const LoginForm = (props: any) => {
       onFinish={handleSubmit}
       onFinishFailed={onFinishFailed}
     >
-      <Form.Item className="inputForm inputForm_id" name="username" rules={[{ required: false, message: '아이디를 입력해 주세요.' }]}>
+      <Form.Item className="inputForm inputForm_id" name="username" rules={[{ required: false, message: "아이디를 입력해 주세요." }]}>
         <Input placeholder="아이디" size="large" />
       </Form.Item>
 
@@ -98,7 +98,7 @@ const LoginForm = (props: any) => {
         <label className="id_error">{idErrorStr}</label>
       </div>
 
-      <Form.Item className="inputForm inputForm_pw" name="password" rules={[{ required: false, message: '비밀번호를 입력해 주세요.' }]}>
+      <Form.Item className="inputForm inputForm_pw" name="password" rules={[{ required: false, message: "비밀번호를 입력해 주세요." }]}>
         <Input.Password placeholder="비밀번호" size="large" onChange={passwordChanged} />
       </Form.Item>
 

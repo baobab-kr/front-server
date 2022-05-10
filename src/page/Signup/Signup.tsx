@@ -1,37 +1,37 @@
-import React, { useState, useEffect } from 'react';
-import * as S from './style';
-import { ID_MIN_LENGTH, ID_MAX_LENGTH, PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH } from '../../constants/index';
+import React, { useState, useEffect } from "react";
+import * as S from "./style";
+import { ID_MIN_LENGTH, ID_MAX_LENGTH, PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH } from "../../constants/index";
 
-import { Form, Input, Button, notification, Select } from 'antd';
-// import { checkUsernameAvailability, signup } from 'src/util/APIUtils';
+import { Form, Input, Button, notification, Select } from "antd";
+// import { checkUsernameAvailability, signup } from "src/util/APIUtils";
 
-// import './Signup.scss';
+// import "./Signup.scss";
 
 const Signup = () => {
   const [name, setName] = useState({
-    value: '',
-    validateStatus: '',
-    errorMsg: '',
+    value: "",
+    validateStatus: "",
+    errorMsg: "",
   });
   const [email, setEmail] = useState({
-    value: '',
-    validateStatus: '',
-    errorMsg: '',
+    value: "",
+    validateStatus: "",
+    errorMsg: "",
   });
   const [id, setId] = useState({
-    value: '',
-    validateStatus: '',
-    errorMsg: '',
+    value: "",
+    validateStatus: "",
+    errorMsg: "",
   });
   const [password, setPassword] = useState({
-    value: '',
-    validateStatus: '',
-    errorMsg: '',
+    value: "",
+    validateStatus: "",
+    errorMsg: "",
   });
   const [phone, setPhone] = useState({
-    value: '',
-    validateStatus: '',
-    errorMsg: '',
+    value: "",
+    validateStatus: "",
+    errorMsg: "",
   });
 
   // const [promise, setPromise] = useState();
@@ -41,25 +41,25 @@ const Signup = () => {
     const inputName = target.name;
     const inputValue = target.value;
     switch (inputName) {
-      case 'name':
+      case "name":
         console.log(inputValue);
         setName(inputValue);
         break;
-      case 'email':
+      case "email":
         setEmail(inputValue);
         break;
-      case 'id':
+      case "id":
         setId(inputValue);
         break;
-      case 'password':
+      case "password":
         setPassword(inputValue);
         break;
-      case 'phone':
-        console.log('phone');
+      case "phone":
+        console.log("phone");
         setPhone(inputValue);
         break;
       default:
-        console.log('404 check input Id');
+        console.log("404 check input Id");
     }
   };
 
@@ -69,21 +69,21 @@ const Signup = () => {
       id: id.value,
       password: password.value,
       email: email.value,
-      phone: phone ? phone : '',
+      phone: phone ? phone : "",
     };
     console.log(signupRequest);
     // signup(signupRequest)
     //   .then((response) => {
     //     notification.success({
-    //       message: '',
-    //       description: '회원가입 성공! 로그인을 진행해 주세요.',
+    //       message: "",
+    //       description: "회원가입 성공! 로그인을 진행해 주세요.",
     //     });
-    //     props.history.push('/');
+    //     props.history.push("/");
     //   })
     //   .catch((error) => {
     //     notification.error({
-    //       message: '회원가입 오류',
-    //       description: '죄송합니다. 다시 시도해주세요.',
+    //       message: "회원가입 오류",
+    //       description: "죄송합니다. 다시 시도해주세요.",
     //     });
     //   });
   };
@@ -91,37 +91,37 @@ const Signup = () => {
   const validateEmail = () => {
     // if (name.length < NAME_MIN_LENGTH) {
     //   return {
-    //     validateStatus: 'error',
+    //     validateStatus: "error",
     //     errorMsg: `Email is too short (Minimum ${NAME_MIN_LENGTH} characters needed.)`,
     //   };
     // } else if (name.length > NAME_MAX_LENGTH) {
     //   return {
-    //     validationStatus: 'error',
+    //     validationStatus: "error",
     //     errorMsg: `Email is too long (Maximum ${NAME_MAX_LENGTH} characters allowed.)`,
     //   };
     // } else {
     //   return {
-    //     // validateStatus: 'success',
+    //     // validateStatus: "success",
     //     errorMsg: null,
     //   };
     // }
   };
 
   const validateId = (id: string) => {
-    console.log(id + 'validateId');
+    console.log(id + "validateId");
     if (id.length < ID_MIN_LENGTH || id.length > ID_MAX_LENGTH) {
       return {
-        validateStatus: 'error',
+        validateStatus: "error",
         errorMsg: `${ID_MIN_LENGTH}-${ID_MAX_LENGTH}자 이내의 아이디를 입력해 주세요.`,
       };
     } else if (!/(^[A-Za-z0-9._-]+$)/g.test(id)) {
       return {
-        validateStatus: 'error',
+        validateStatus: "error",
         errorMsg: `영문(A-z), 숫자(0-9)와 특수문자(., -, _)만 입력 가능합니다.`,
       };
     } else {
       return {
-        validateStatus: 'success',
+        validateStatus: "success",
         errorMsg: null,
       };
     }
@@ -133,26 +133,26 @@ const Signup = () => {
     const idValue = id.target.value;
     const idValidation = validateId(idValue);
 
-    if (idValidation.validateStatus === 'error') {
-      setId({ value: idValue, validateStatus: idValidation.validateStatus, errorMsg: idValidation.errorMsg === null ? '' : idValidation.errorMsg });
+    if (idValidation.validateStatus === "error") {
+      setId({ value: idValue, validateStatus: idValidation.validateStatus, errorMsg: idValidation.errorMsg === null ? "" : idValidation.errorMsg });
       return;
     }
 
-    setId({ value: idValue, validateStatus: 'validating', errorMsg: '' });
+    setId({ value: idValue, validateStatus: "validating", errorMsg: "" });
 
     // checkUsernameAvailability(usernameValue)
     //   .then((response) => {
     //     if (response.available) {
     //       setUsername({
     //         value: usernameValue,
-    //         validateStatus: 'success',
+    //         validateStatus: "success",
     //         errorMsg: null,
     //       });
     //     } else {
     //       setUsername({
     //         value: usernameValue,
-    //         validateStatus: 'error',
-    //         errorMsg: '이미 사용중인 아이디 입니다',
+    //         validateStatus: "error",
+    //         errorMsg: "이미 사용중인 아이디 입니다",
     //       });
     //     }
     //   })
@@ -160,7 +160,7 @@ const Signup = () => {
     //     // Marking validateStatus as success, Form will be recchecked at server
     //     setUsername({
     //       value: usernameValue,
-    //       validateStatus: 'success',
+    //       validateStatus: "success",
     //       errorMsg: null,
     //     });
     //   });
@@ -169,12 +169,12 @@ const Signup = () => {
   const validatePassword = (password: string) => {
     if (password.length < PASSWORD_MIN_LENGTH || password.length > PASSWORD_MAX_LENGTH) {
       return {
-        validateStatus: 'error',
+        validateStatus: "error",
         errorMsg: `${PASSWORD_MIN_LENGTH}-${PASSWORD_MAX_LENGTH}자 이내의 비밀번호를 입력해 주세요.`,
       };
     } else {
       return {
-        validateStatus: 'success',
+        validateStatus: "success",
         errorMsg: null,
       };
     }
@@ -182,41 +182,41 @@ const Signup = () => {
 
   const onFinishFailed = (values: any) => {
     if (values.values.name === undefined) {
-      setName({ value: '', validateStatus: 'error', errorMsg: '' });
+      setName({ value: "", validateStatus: "error", errorMsg: "" });
     }
     if (values.values.email === undefined) {
-      setEmail({ value: '', validateStatus: 'error', errorMsg: '' });
+      setEmail({ value: "", validateStatus: "error", errorMsg: "" });
     }
     if (values.values.username === undefined) {
-      setId({ value: '', validateStatus: 'error', errorMsg: '' });
+      setId({ value: "", validateStatus: "error", errorMsg: "" });
     }
     if (values.values.password === undefined) {
-      setPassword({ value: '', validateStatus: 'error', errorMsg: '' });
+      setPassword({ value: "", validateStatus: "error", errorMsg: "" });
     }
   };
 
   return (
     <S.Signup className="signup">
       <div className="header">
-        {/* <Button className="btn_back" onClick={() => props.history.push('/')} /> */}
+        {/* <Button className="btn_back" onClick={() => props.history.push("/")} /> */}
         <h1 className="title">회원가입</h1>
       </div>
       <S.Body className="body">
-        <Form layout={'vertical'} onFinish={handleSubmit} onFinishFailed={onFinishFailed} className="signup-form">
+        <Form layout={"vertical"} onFinish={handleSubmit} onFinishFailed={onFinishFailed} className="signup-form">
           <Form.Item
             label="이름"
             name="name"
             hasFeedback
-            validateStatus={name.validateStatus === '' ? '' : name.validateStatus === 'success' ? 'success' : 'error'}
+            validateStatus={name.validateStatus === "" ? "" : name.validateStatus === "success" ? "success" : "error"}
             help={name.errorMsg}
-            rules={[{ required: true, message: '이름을 입력해 주세요' }]}
+            rules={[{ required: true, message: "이름을 입력해 주세요" }]}
           >
             <Input
               size="large"
               name="name"
               autoComplete="off"
               spellCheck="false"
-              // placeholder='A unique email'
+              // placeholder="A unique email"
               value={name.value}
               // onBlur={this.validateUsernameAvailability}
               onChange={changeInput}
@@ -226,9 +226,9 @@ const Signup = () => {
             label="아이디"
             name="id"
             hasFeedback
-            validateStatus={id.validateStatus === '' ? '' : id.validateStatus === 'success' ? 'success' : 'error'}
+            validateStatus={id.validateStatus === "" ? "" : id.validateStatus === "success" ? "success" : "error"}
             help={id.errorMsg}
-            rules={[{ required: true, message: '아이디를 입력해 주세요' }]}
+            rules={[{ required: true, message: "아이디를 입력해 주세요" }]}
           >
             <Input
               size="large"
@@ -236,7 +236,7 @@ const Signup = () => {
               autoComplete="off"
               spellCheck="false"
               maxLength={ID_MAX_LENGTH}
-              // placeholder='A unique id'
+              // placeholder="A unique id"
               value={id.value}
               onBlur={validateIdAvailability}
               onChange={changeInput}
@@ -246,9 +246,9 @@ const Signup = () => {
             label="비밀번호"
             name="password"
             hasFeedback
-            validateStatus={password.validateStatus === '' ? '' : password.validateStatus === 'success' ? 'success' : 'error'}
+            validateStatus={password.validateStatus === "" ? "" : password.validateStatus === "success" ? "success" : "error"}
             help={password.errorMsg}
-            rules={[{ required: true, message: '비밀번호를 입력해 주세요' }]}
+            rules={[{ required: true, message: "비밀번호를 입력해 주세요" }]}
           >
             <Input.Password
               size="large"
@@ -257,7 +257,7 @@ const Signup = () => {
               autoComplete="off"
               spellCheck="false"
               maxLength={PASSWORD_MAX_LENGTH}
-              // placeholder='A password between 6 to 20 characters'
+              // placeholder="A password between 6 to 20 characters"
               value={password.value}
               onChange={changeInput}
             />
@@ -266,13 +266,13 @@ const Signup = () => {
             label="Email"
             name="email"
             hasFeedback
-            validateStatus={email.validateStatus === '' ? '' : email.validateStatus === 'success' ? 'success' : 'error'}
+            validateStatus={email.validateStatus === "" ? "" : email.validateStatus === "success" ? "success" : "error"}
             help={email.errorMsg}
             rules={[
               {
-                type: 'email',
+                type: "email",
                 required: true,
-                message: '이메일을 입력해 주세요',
+                message: "이메일을 입력해 주세요",
               },
             ]}
           >
@@ -282,19 +282,19 @@ const Signup = () => {
               type="email"
               autoComplete="off"
               spellCheck="false"
-              // placeholder='A unique email'
+              // placeholder="A unique email"
               value={email.value}
               // onBlur={this.validateUsernameAvailability}
               onChange={changeInput}
             />
           </Form.Item>
-          <Form.Item label="휴대전화" validateStatus={phone.validateStatus ? '' : ''} help={phone.errorMsg}>
+          <Form.Item label="휴대전화" validateStatus={phone.validateStatus ? "" : ""} help={phone.errorMsg}>
             <Input
               size="large"
               name="phone"
               autoComplete="off"
               spellCheck="false"
-              // placeholder='Phone number'
+              // placeholder="Phone number"
               value={phone.value}
               onChange={changeInput}
             />
