@@ -3,6 +3,7 @@ import * as S from "./style";
 import { ID_MIN_LENGTH, ID_MAX_LENGTH, PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH } from "../../constants/index";
 
 import { Form, Input, Button, notification, Select } from "antd";
+import Password from "antd/lib/input/Password";
 // import { checkUsernameAvailability, signup } from "src/util/APIUtils";
 
 // import "./Signup.scss";
@@ -28,13 +29,6 @@ const Signup = () => {
     validateStatus: "",
     errorMsg: "",
   });
-  const [phone, setPhone] = useState({
-    value: "",
-    validateStatus: "",
-    errorMsg: "",
-  });
-
-  // const [promise, setPromise] = useState();
 
   const changeInput = (event: any) => {
     const target = event.target;
@@ -54,10 +48,6 @@ const Signup = () => {
       case "password":
         setPassword(inputValue);
         break;
-      case "phone":
-        console.log("phone");
-        setPhone(inputValue);
-        break;
       default:
         console.log("404 check input Id");
     }
@@ -69,7 +59,6 @@ const Signup = () => {
       id: id.value,
       password: password.value,
       email: email.value,
-      phone: phone ? phone : "",
     };
     console.log(signupRequest);
     // signup(signupRequest)
@@ -117,7 +106,7 @@ const Signup = () => {
     } else if (!/(^[A-Za-z0-9._-]+$)/g.test(id)) {
       return {
         validateStatus: "error",
-        errorMsg: `영문(A-z), 숫자(0-9)와 특수문자(., -, _)만 입력 가능합니다.`,
+        errorMsg: `영문(A-z), 숫자(0-9)를 입력 가능합니다.`,
       };
     } else {
       return {
@@ -127,9 +116,33 @@ const Signup = () => {
     }
   };
 
+  const validatePassword = (pwd: string) => {
+    if (pwd.length < PASSWORD_MIN_LENGTH || pwd.length > PASSWORD_MAX_LENGTH) {
+      return {
+        validateStatus: "error",
+        errorMsg: `${PASSWORD_MIN_LENGTH}-${PASSWORD_MAX_LENGTH}자 이내의 비밀번호를 입력해 주세요.`,
+      };
+    } else {
+      return {
+        validateStatus: "success",
+        errorMsg: null,
+      };
+    }
+  };
+
+  const validatePasswordAvailability = (pwd: any) => {
+    const pwdValue = pwd.target.value;
+    const pwdValidation = validatePassword(pwdValue);
+
+    if (pwdValidation.validateStatus === "error") {
+      setPassword({ value: pwdValue, validateStatus: pwdValidation.validateStatus, errorMsg: pwdValidation.errorMsg === null ? "" : pwdValidation.errorMsg });
+      return;
+    }
+
+    setPassword({ value: pwdValue, validateStatus: "", errorMsg: "" });
+  };
+
   const validateIdAvailability = (id: any) => {
-    // First check for client side errors in id
-    console.log(id.target.value);
     const idValue = id.target.value;
     const idValidation = validateId(idValue);
 
@@ -138,7 +151,7 @@ const Signup = () => {
       return;
     }
 
-    setId({ value: idValue, validateStatus: "validating", errorMsg: "" });
+    setId({ value: idValue, validateStatus: "", errorMsg: "" });
 
     // checkUsernameAvailability(usernameValue)
     //   .then((response) => {
@@ -164,20 +177,6 @@ const Signup = () => {
     //       errorMsg: null,
     //     });
     //   });
-  };
-
-  const validatePassword = (password: string) => {
-    if (password.length < PASSWORD_MIN_LENGTH || password.length > PASSWORD_MAX_LENGTH) {
-      return {
-        validateStatus: "error",
-        errorMsg: `${PASSWORD_MIN_LENGTH}-${PASSWORD_MAX_LENGTH}자 이내의 비밀번호를 입력해 주세요.`,
-      };
-    } else {
-      return {
-        validateStatus: "success",
-        errorMsg: null,
-      };
-    }
   };
 
   const onFinishFailed = (values: any) => {
@@ -255,10 +254,11 @@ const Signup = () => {
               name="password"
               type="password"
               autoComplete="off"
-              spellCheck="false"
+              spellCheck="true"
               maxLength={PASSWORD_MAX_LENGTH}
               // placeholder="A password between 6 to 20 characters"
               value={password.value}
+              onBlur={validatePasswordAvailability}
               onChange={changeInput}
             />
           </Form.Item>
@@ -282,20 +282,8 @@ const Signup = () => {
               type="email"
               autoComplete="off"
               spellCheck="false"
-              // placeholder="A unique email"
               value={email.value}
               // onBlur={this.validateUsernameAvailability}
-              onChange={changeInput}
-            />
-          </Form.Item>
-          <Form.Item label="휴대전화" validateStatus={phone.validateStatus ? "" : ""} help={phone.errorMsg}>
-            <Input
-              size="large"
-              name="phone"
-              autoComplete="off"
-              spellCheck="false"
-              // placeholder="Phone number"
-              value={phone.value}
               onChange={changeInput}
             />
           </Form.Item>
