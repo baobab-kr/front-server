@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, Content, Title, Body, Footer } from "./style";
-import { boardInfo } from "@/Types/MainType";
+import { boardInfo } from "@src/Types";
 import { useNavigate } from "react-router-dom";
 
 type Props = {

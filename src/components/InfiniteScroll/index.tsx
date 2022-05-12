@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, ReactNode } from "react";
 import { PuffLoader } from "react-spinners";
 
-import { boardInfo } from "@/Types/MainType";
+import { boardInfo } from "@src/Types";
 import { TopButton } from "./style";
 
 type Props = {

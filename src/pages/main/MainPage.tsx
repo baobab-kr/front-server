@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import MainCard from "../../components/Card";
 import image from "../../data/test.jpg";
 import InfiniteScroll from "../../components/InfiniteScroll";
-import { boardInfo } from "@/Types/MainType";
+import { boardInfo } from "@src/Types";
 
 import { FilterContainer, Filter, TagSearch } from "./style";
 
 import ReactTagInput from "@pathofdev/react-tag-input";
 import "./tagInputStyle.css";
+import { PuffLoader } from "react-spinners";
 
 export default function MainPage(): JSX.Element {
   const title: string = "Bobab-kr Blog Fronend";
@@ -84,6 +85,10 @@ export default function MainPage(): JSX.Element {
       </div>
     );
   } else {
-    return <div>loading....</div>;
+    return (
+      <div style={{ height: "150px", textAlign: "center", color: "black" }}>
+        <PuffLoader color="#8fceb1" />
+      </div>
+    );
   }
 }
