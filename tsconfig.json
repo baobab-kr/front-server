@@ -17,9 +17,9 @@
     "jsx": "react-jsx",
 
     // 절대경로
-    "baseUrl": "./",
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@src/*": ["src/*"]
     }
   },
   "include": ["src"]
