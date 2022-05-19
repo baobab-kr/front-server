@@ -4,22 +4,20 @@ import Header from "./components/Header";
 import MainPage from "./pages/main/MainPage";
 import PersonPage from "./pages/person/PersonPage";
 
-import GlobalStyle from "./style/GlobalStyle";
+import StyleRoot from "./style/StyleRoot";
 export default function App(): JSX.Element {
   return (
-    <>
-      <GlobalStyle />
-      <Header />
-      <div style={{ marginTop: "70px" }}>
-        <BrowserRouter>
-          <Header />
+    <StyleRoot>
+      <BrowserRouter>
+        <Header />
+        <div style={{ marginTop: "80px" }}>
           <Routes>
             <Route path="/" element={<MainPage />} />
             <Route path="/@:id" element={<PersonPage />} />
             <Route path="*" element={<div>Not Found</div>} />
           </Routes>
-        </BrowserRouter>
-      </div>
-    </>
+        </div>
+      </BrowserRouter>
+    </StyleRoot>
   );
 }

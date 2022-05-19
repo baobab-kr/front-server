@@ -1,7 +1,9 @@
 import { createGlobalStyle } from "styled-components";
-import backgroundImage from "../data/background.jpg";
+import reset from "styled-reset";
 
 const GlobalStyle = createGlobalStyle`
+  ${reset}
+  
   *, *::before, *::after {
     box-sizing: border-box;
     padding:0;
@@ -18,13 +20,13 @@ const GlobalStyle = createGlobalStyle`
   body {
     line-height: 1;
     color: white;
-    background-image: url(${backgroundImage});
     background-attachment: fixed;
     font-family: "Noto Sans CJK KR", sans-serif !important;
 
+    background-color:${({ theme }) => theme.backgroundColor.bg};
     margin: 0;
     padding: 0;
-    width:100%;
+    width: 100%;
     height: 100%;
   }
 
@@ -40,6 +42,26 @@ const GlobalStyle = createGlobalStyle`
     appearance: none;
   }
 
+  button{
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+  }
+
+  body::-webkit-scrollbar {
+    width: 8px;  /* 스크롤바의 너비 */
+  }
+
+  body::-webkit-scrollbar-thumb {
+      height: 30%; /* 스크롤바의 길이 */
+      background: #ddd; /* 스크롤바의 색상 */
+      
+      border-radius: 10px;
+  }
+
+  body::-webkit-scrollbar-track {
+      background: #000000;  /*스크롤바 뒷 배경 색상*/
+  }
 
 `;
 
