@@ -4,6 +4,8 @@ import { PuffLoader } from "react-spinners";
 import { boardInfo } from "@src/Types";
 import { TopButton } from "./style";
 
+import { FiArrowUp } from "react-icons/fi";
+
 type Props = {
   children: ReactNode;
   loadFnc: () => void;
@@ -59,10 +61,14 @@ export default function InfiniteScroll({ loadFnc, data, children }: Props): JSX.
       {children}
       <div ref={target} style={{ height: "150px", width: "100%" }}>
         <div style={{ height: "150px", textAlign: "center", color: "black" }}>
-          <PuffLoader color="#8fceb1" />
+          <PuffLoader color="#ffffff" />
         </div>
       </div>
-      {isTopButton && <TopButton onClick={topScroll}>▲</TopButton>}
+      {isTopButton && (
+        <TopButton onClick={topScroll}>
+          <FiArrowUp size={25} color={"#1d1d1d"} />
+        </TopButton>
+      )}
     </>
   );
 }
