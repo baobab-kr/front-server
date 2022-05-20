@@ -1,15 +1,22 @@
 import React from "react";
-import { HeaderContainer, Logo, SearchContainer, Search, Sign } from "./style";
+import { useNavigate } from "react-router-dom";
+import { HeaderContainer, Logo, SearchContainer, Search, Sign, Button } from "./style";
 export default function Header(): JSX.Element {
+  const navigate = useNavigate();
+  const navagateHome = () => {
+    navigate("/");
+  };
+
   return (
     <HeaderContainer>
-      <Logo>Logo</Logo>
+      <Logo onClick={navagateHome}>Logo</Logo>
       <SearchContainer>
         <Search />
       </SearchContainer>
       <Sign>
-        <button style={{ border: "none", backgroundColor: "transparent" }}>로그인</button>&nbsp;|&nbsp;
-        <button style={{ border: "none", backgroundColor: "transparent" }}>회원가입</button>
+        <Button>로그인</Button>
+        &nbsp;|&nbsp;
+        <Button>회원가입</Button>
       </Sign>
     </HeaderContainer>
   );
