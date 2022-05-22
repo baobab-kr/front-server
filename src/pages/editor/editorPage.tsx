@@ -1,5 +1,6 @@
 import React, { useState, useEffect, Component, Ref } from "react";
 import "@toast-ui/editor/dist/toastui-editor.css"; // Editor's Style
+import "@toast-ui/editor/dist/theme/toastui-editor-dark.css";
 import { Editor } from "@toast-ui/react-editor";
 import * as E from "./editorStyle";
 import cancleImg from "./img/cancleBtn.png";
@@ -108,7 +109,7 @@ export default function EditorPage() {
         <E.title className="contentTitle">제목</E.title>
         <E.titleInput placeholder="제목을 입력하세요." onChange={handleInputChange} value={editor.title}></E.titleInput>
       </div>
-      <Editor previewStyle="tab" height="700px" initialEditType="markdown" initialValue="" ref={editorRef} onChange={handleChange} />
+      <Editor previewStyle="tab" theme="dark" height="700px" initialEditType="markdown" initialValue="" ref={editorRef} onChange={handleChange} />
       <div id="toastUIEditor">
         <div id="Button">
           <E.saveBtn className="btn_save" onClick={onClickEvent}>

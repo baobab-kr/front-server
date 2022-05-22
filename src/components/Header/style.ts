@@ -5,16 +5,20 @@ export const HeaderContainer = styled.div`
   top: 0;
   width: 100%;
   height: 60px;
-  background-color: #8fceb1;
+  background-color: ${({ theme }) => theme.backgroundColor.bg};
+
   display: flex;
   align-items: center;
   z-index: 999;
+
+  border-bottom: 1px solid #ddd;
 `;
 
 export const Logo = styled.div`
   position: fixed;
-  color: black;
+  color: ${({ theme }) => theme.fontColor.white};
   left: 35px;
+  cursor: pointer;
 `;
 
 export const SearchContainer = styled.div`
@@ -24,7 +28,7 @@ export const SearchContainer = styled.div`
 
   &::before {
     content: "검색";
-    color: black;
+    color: ${({ theme }) => theme.fontColor.white};
     line-height: 1;
   }
 `;
@@ -41,7 +45,11 @@ export const Search = styled.input`
 `;
 
 export const Sign = styled.div`
-  color: black;
+  color: ${({ theme }) => theme.fontColor.white};
   position: fixed;
   right: 20px;
+`;
+
+export const Button = styled.button`
+  color: ${({ theme }) => theme.fontColor.white};
 `;
