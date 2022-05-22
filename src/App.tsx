@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
+import EditorPage from "./pages/editor/editorPage";
 import MainPage from "./pages/main/MainPage";
 import GlobalStyle from "./style/GlobalStyle";
 export default function App(): JSX.Element {
@@ -13,6 +14,7 @@ export default function App(): JSX.Element {
           <Header />
           <Routes>
             <Route path="/" element={<MainPage />} />
+            <Route path="/editor" element={<EditorPage />} />
           </Routes>
         </BrowserRouter>
       </div>
