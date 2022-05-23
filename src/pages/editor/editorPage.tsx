@@ -6,6 +6,8 @@ import * as E from "./editorStyle";
 import cancleImg from "./img/cancleBtn.png";
 
 function Popup(props: any) {
+  const { onClose, data } = props;
+  const [editor, setEditor] = useState({ title: data.title, content: data.content });
   const [fileImage, setFileImage] = useState("");
   const saveFileImage = (e: any) => {
     setFileImage(URL.createObjectURL(e.target.files[0]));
@@ -17,7 +19,6 @@ function Popup(props: any) {
   };
   const [scrollY, setScrollY] = useState(0);
   console.log(props);
-  const { onClose, data } = props;
   console.log(onClose);
   console.log(data);
 
@@ -52,9 +53,11 @@ function Popup(props: any) {
                 </div>
               )}
               <div>
-                <input name="imgUpload" type="file" accept="image/*" onChange={saveFileImage} />
+                <input className="imgUpload" name="imgUpload" type="file" accept="image/*" onChange={saveFileImage} />
 
-                <button onClick={() => deleteFileImage()}>삭제</button>
+                <button className="imgDeleteBtn" onClick={() => deleteFileImage()}>
+                  삭제
+                </button>
               </div>
             </div>
           </E.postImage>
