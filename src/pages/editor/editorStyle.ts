@@ -5,16 +5,15 @@ const popup = styled.div`
   top: 0px;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgb(29, 29, 29);
 `;
 
 const popupInner = styled.div`
   position: absolute;
-  top: 15%;
-  left: 15%;
-  width: 70%;
-  height: 80%;
-  background: rgb(100, 100, 100);
+  top 5%;
+  width: 100%;
+  height: 95%;
+  background: rgb(38, 38, 38);
   opacity: 1;
 
   .title {
@@ -44,8 +43,9 @@ const postImage = styled.div`
     position: relative;
     width: 100%;
     height: 285px;
-    background: rgb(255, 255, 255);
     margin-bottom: 5px;
+    background: rgb(100, 100, 100);
+    color: #fff;
     .defaultImage {
       position: absolute;
       width: 100%;
@@ -53,6 +53,12 @@ const postImage = styled.div`
 
       text-align: center;
     }
+  }
+  .imgDeleteBtn{
+    width: 32px;
+    height: 23px;
+    background: rgb(255, 255, 255);
+    color: #00;
   }
 `;
 const tag = styled.div`
@@ -64,6 +70,8 @@ const tag = styled.div`
     width:100%;
     height:40px;
     resize: none;
+    background: rgb(100, 100, 100);
+    color: #fff;
     &:focus {
       outline: none;
     }
@@ -78,6 +86,8 @@ width: 285px;
   width: 100%;
   height: 365px;
   resize: none;
+  background: rgb(100, 100, 100);
+  color: #fff;
   &:focus {
     outline: none;
   }
@@ -92,12 +102,16 @@ const btnBox = styled.div`
     left: 0px;
     width: 70px;
     height: 40px;
+    background: rgb(100, 100, 100);
+    color: #fff;
   }
   .saveBtn {
     position: absolute;
     right: 0px;
     width: 70px;
     height: 40px;
+    background: rgb(100, 100, 100);
+    color: #fff;
   }
 `;
 
@@ -113,6 +127,8 @@ const titleInput = styled.input`
   height: 50px;
   font-size: 35px;
   margin-bottom: 20px;
+  background: rgba(255, 255, 255, 0);
+  color: #fff;
   &:focus {
     outline: none;
   }
@@ -123,5 +139,7 @@ const saveBtn = styled.button`
   left: 93%;
   width: 70px;
   height: 40px;
+  background: rgb(255, 255, 255);
+  color: #000;
 `;
 export { popup, popupInner, postImage, tag, description, btnBox, title, titleInput, saveBtn };
