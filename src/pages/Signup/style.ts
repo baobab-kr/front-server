@@ -1,7 +1,14 @@
 import styled from "styled-components";
 
 const Signup = styled.div`
-  background-color: #ffffff;
+  .title {
+    position: absolute;
+    padding: 40px 15px 14px;
+    margin-left 42%;
+    font-size: 40px;
+    font-weight: 500;
+    color: #ffffff;
+  }
 `;
 
 const Body = styled.div`
@@ -9,7 +16,6 @@ const Body = styled.div`
   min-height: calc(100vh - 83px);
   position: relative;
   top: 83px;
-  background-color: #f2f2f2;
   padding: 40px 15px 14px;
   .signup-form {
     margin-left 35%;
@@ -17,13 +23,17 @@ const Body = styled.div`
   label {
     font-size: 20px;
     font-weight: 500;
-    color: #000000;
   }
   .ant-input {
     width: 400px;
     height: 40px;
     border-radius: 5px;
     border: solid 1px #e1e1e1;
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+  .ant-form-item-required{
+    color: #fff;
   }
   .ant-form-item {
     margin-bottom: 30px;
@@ -39,10 +49,9 @@ const Body = styled.div`
 const signup_form_button = styled.button`
   width: 75px;
   height: 28px;
-  background-color: #8fceb1;
+  background-color: #fff;
   border-radius: 5px;
   position: absolute;
-  right: 44%;
   font-size: 12px;
   color: #000000;
 `;
