@@ -7,9 +7,6 @@ export default function Login(props: any) {
     <div className="loginPage">
       <div className="bg"></div>
       <div className="login-container">
-        <div className="pageTitle">
-          <h1 id="logo">바오밥</h1>
-        </div>
         <div className="login-content">
           <LoginForm onLogin={props.onLogin} />
         </div>
@@ -19,27 +16,25 @@ export default function Login(props: any) {
 }
 const LoginForm = (props: any) => {
   const [loginRequest, setLoginRequest] = useState({ id: "", password: "" });
-  const [password, setPassword] = React.useState("");
-  const [id, setId] = React.useState("");
   const [isEmptyPassword, setEmptyPassword] = React.useState(true);
   const [isEmptyId, setEmptyId] = React.useState(true);
   const handleSubmit = () => {
-    setLoginRequest({ id: id, password: password });
-
     console.log(loginRequest);
   };
 
   const passwordChanged = (e: any) => {
-    setPassword(e.target.value);
+    console.log(e.target.value);
+    setLoginRequest({ id: loginRequest.id, password: e.target.value });
     setEmptyPassword(e.target.value.length == 0 ? true : false);
   };
   const passwordId = (e: any) => {
-    setId(e.target.value);
+    setLoginRequest({ id: e.target.value, password: loginRequest.password });
     setEmptyId(e.target.value.length == 0 ? true : false);
   };
 
   return (
     <S.Login>
+      <h1 className="title">로그인</h1>
       <Form name="basic" initialValues={{ remember: false }} onFinish={handleSubmit}>
         <Form.Item className="inputForm inputForm_id" name="username" rules={[{ required: false, message: "아이디를 입력해 주세요." }]}>
           <div>아이디</div>
@@ -51,7 +46,7 @@ const LoginForm = (props: any) => {
           <Input.Password className="label" placeholder="비밀번호" size="large" onChange={passwordChanged} />
         </Form.Item>
 
-        <Button block className="loginBtn" htmlType="submit" size="large" disabled={isEmptyPassword || isEmptyId}>
+        <Button className="loginBtn" htmlType="submit" size="large" disabled={isEmptyPassword || isEmptyId}>
           로그인
         </Button>
 
