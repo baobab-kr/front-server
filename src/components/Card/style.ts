@@ -7,13 +7,14 @@ type cardInit = {
 };
 
 export const CardWrapper = styled.div<cardInit>`
-  height: ${(props) => props.height};
+  position: relative;
   width: ${(props) => props.width};
+  max-height: ${(props) => props.height};
   display: flex;
   flex-direction: column;
   border-radius: 18px;
-  background: #1d1d1d;
-  color: white;
+  background: ${({ theme }) => theme.backgroundColor.card};
+  color: ${({ theme }) => theme.fontColor.color};
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.9);
   text-align: justify;
   cursor: pointer;
@@ -22,10 +23,18 @@ export const CardWrapper = styled.div<cardInit>`
   ${(props) =>
     props.isHover
       ? ` &:hover {
-    margin-top: -10px;
-    transition: 0.4s;
-  }`
+            transform: translate(0px, -15px);
+            transition: 0.4s;
+          }`
       : ""};
+
+  @media screen and (max-width: 1339px) {
+    /* 타블렛 가로 */
+    &:hover {
+      transform: translate(0px, 0px);
+      transition: 0s;
+    }
+  }
 `;
 
 export const CardImage = styled.img`
@@ -41,10 +50,12 @@ export const CardText = styled.div`
 `;
 
 export const Content = styled.p`
+  margin-bottom: 25px;
+  height: 4.8rem;
   word-break: break-word;
   overflow-wrap: break-word;
   font-size: 0.875rem;
-  line-height: 1.5;
+  line-height: 1.2rem;
   display: -webkit-box;
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
@@ -64,9 +75,47 @@ export const User = styled.span`
   align-items: center;
 `;
 
+export const TagWrapper = styled.div`
+  width: 80%;
+  display: flex;
+  gap: 10px;
+  padding-bottom: 3px;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    height: 5px;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    background: #ddd;
+  }
+`;
+
+export const TagComponent = styled.div`
+  line-height: 1rem;
+  display: flex;
+  align-items: center;
+  background-color: ${({ theme }) => theme.mainColor.main};
+  color: ${({ theme }) => theme.fontColor.subColor};
+  border-radius: 1rem;
+
+  padding-left: 1rem;
+  padding-right: 1rem;
+  height: 1.5rem;
+`;
+
+export const Like = styled.div`
+  display: flex;
+  align-items: center;
+  width: 10%;
+`;
+
 export const Footer = styled.div`
+  position: absolute;
+  padding: 0px 25px;
+  transform: translateZ(30px);
   display: flex;
   justify-content: space-between;
-
-  margin-top: 15px;
+  bottom: 10px;
+  width: 100%;
 `;
