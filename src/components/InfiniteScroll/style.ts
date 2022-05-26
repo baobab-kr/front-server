@@ -8,9 +8,7 @@ export const TopButton = styled.button`
   height: 45px;
   border-radius: 25px;
   border: 1px solid #1d1d1d;
-  background: white;
-
-  color: white;
+  background: ${({ theme }) => theme.mainColor.main};
 
   display: flex;
   align-items: center;
@@ -26,6 +24,8 @@ export const TopButton = styled.button`
       opacity: 1;
       font-size: 0.7rem;
       transition: font-size 0.2s 0s ease, opacity 0.2s 0.2s ease;
+
+      color: ${({ theme }) => theme.fontColor.color};
     }
   }
 
@@ -36,5 +36,7 @@ export const TopButton = styled.button`
     font-size: 0;
     opacity: 0;
     transition: opacity 0.2s 0s ease, font-size 0.2s 0.2s ease;
+
+    color: ${({ theme }) => theme.fontColor.color};
   }
 `;
