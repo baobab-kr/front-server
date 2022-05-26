@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { CardWrapper, CardImage, CardText, Date, Content, Footer, User, TagWrapper, TagComponent, Like } from "./style";
-import { Board, Tag } from "@src/Types";
+import { CardWrapper, CardImage, CardText, Date, Content, Footer, User, TagWrapper, TagComponent, LikeComponent } from "./style";
+import { Board, Tag, Like } from "@src/Types/main";
 import { useNavigate, useLocation } from "react-router-dom";
 import image from "../../data/test.jpg";
 import { timeForToday } from "../../util/date";
+import { touchLikes } from "../../api/board";
 
 import DefaultAvator from "../../assets/defaultAvator.png";
 
@@ -24,20 +25,43 @@ type tUesrId = {
 export default function Card({ board, width, height }: Props): JSX.Element {
   const navigate = useNavigate();
   const location = useLocation();
-  const props: tState = { state: { userId: board.writer.id } };
+  const props: tState = { state: { userId: board.writer!.id } };
+  const [likeState, setLikeState] = useState<string>("");
 
   const navigatePerson = () => {
     if (location.pathname === "/") {
-      navigate(`/@${board.writer.username}`, props);
+      navigate(`/@${board.writer!.username}`, props);
     }
   };
 
-  const liking = () => {};
+  useEffect(() => {
+    likeIcon(board.likes_count, board.likes);
+  }, []);
 
-  const likeIcon = (count: number): string => {
-    if (count > 50) return `🌿 ${count}`;
-    else if (count > 100) return `🌴 ${count}`;
-    else return `🍃 ${count}`;
+  const liking = async () => {
+    await touchLikes(board.id)
+      .then((res) => {
+        console.log(res);
+        Object.assign(board, { likes: [{ id: board.likes[0].id, likes_status: Number(!board.likes[0].likes_status) }] });
+
+        const count = Number(board.likes[0].likes_status) ? ++board.likes_count : --board.likes_count;
+        likeIcon(count, board.likes);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const likeIcon = (count: number, state: Like[]) => {
+    if (state.length === 0 || state[0].likes_status === 0) {
+      setLikeState(`☘ ${count}`);
+      return;
+    }
+    console.log(state[0].likes_status);
+
+    if (count > 50) setLikeState(`🌿 ${count}`);
+    else if (count > 100) setLikeState(`🌴 ${count}`);
+    else return setLikeState(`🍃 ${count}`);
   };
 
   return (
@@ -50,7 +74,7 @@ export default function Card({ board, width, height }: Props): JSX.Element {
             <div style={{ width: "1.5rem", height: "1.5rem", borderRadius: "50%", overflow: "hidden" }}>
               <img src={DefaultAvator} style={{ width: "100%", height: "100%", objectFit: "cover" }} alt="avator"></img>
             </div>
-            {board.writer.username}
+            {board.writer!.username}
           </User>
           <Date>{timeForToday(board.date)}</Date>
         </div>
@@ -65,7 +89,7 @@ export default function Card({ board, width, height }: Props): JSX.Element {
           })}
         </TagWrapper>
 
-        <Like onClick={liking}>{likeIcon(board.likes_count)}</Like>
+        <LikeComponent onClick={liking}>{likeState}</LikeComponent>
         {/* 🍃->🌿->🌴  => 추후 좋아요 수에 따라 이모티콘 변경 예정*/}
       </Footer>
     </CardWrapper>
