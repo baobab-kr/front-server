@@ -115,19 +115,31 @@ const Signup = () => {
       };
     }
   };
-
+  const validateName = (name: string) => {
+    if (name.length < 1) {
+      return {
+        validateStatus: "error",
+        errorMsg: `이름을 입력해주세요`,
+      };
+    } else {
+      return {
+        validateStatus: "success",
+        errorMsg: null,
+      };
+    }
+  };
   const validatePassword = (pwd: string) => {
     if (pwd.length < PASSWORD_MIN_LENGTH || pwd.length > PASSWORD_MAX_LENGTH) {
       return {
         validateStatus: "error",
         errorMsg: `${PASSWORD_MIN_LENGTH}-${PASSWORD_MAX_LENGTH}자 이내의 비밀번호를 입력해 주세요.`,
       };
-    } else if (!/(^[A-Za-z0-9._-]+$)/g.test(pwd)) {
+    } else if (!/(^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,16}$)/g.test(pwd)) {
       return {
         validateStatus: "error",
-        errorMsg: ``,
+        errorMsg: `1개 이상의 대문자와 숫자를 포함해야 합니다.(특수문자는 사용할 수 없습니다)`,
       };
-    }  else {
+    } else {
       return {
         validateStatus: "success",
         errorMsg: null,
@@ -135,6 +147,16 @@ const Signup = () => {
     }
   };
 
+  const validateUsernameAvailability = (name: any) => {
+    const idValue = name.target.value;
+    const idValidation = validateName(idValue);
+    console.log();
+    if (idValidation.validateStatus === "error") {
+      setId({ value: idValue, validateStatus: idValidation.validateStatus, errorMsg: idValidation.errorMsg === null ? "" : idValidation.errorMsg });
+      return;
+    }
+    setPassword({ value: idValue, validateStatus: "", errorMsg: "" });
+  };
   const validatePasswordAvailability = (pwd: any) => {
     const pwdValue = pwd.target.value;
     const pwdValidation = validatePassword(pwdValue);
@@ -222,7 +244,7 @@ const Signup = () => {
               spellCheck="false"
               // placeholder="A unique email"
               value={name.value}
-              // onBlur={this.validateUsernameAvailability}
+              onBlur={validateUsernameAvailability}
               onChange={changeInput}
             />
           </Form.Item>
