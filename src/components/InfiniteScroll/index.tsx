@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, ReactNode } from "react";
 import { PuffLoader } from "react-spinners";
 
-import { boardInfo } from "@src/Types";
+import { Board } from "@src/Types";
 import { TopButton } from "./style";
 
 import { FiArrowUp } from "react-icons/fi";
@@ -9,9 +9,10 @@ import { FiArrowUp } from "react-icons/fi";
 type Props = {
   children: ReactNode;
   loadFnc: () => void;
-  data: boardInfo[];
+  data: Board[];
+  isLast: boolean;
 };
-export default function InfiniteScroll({ loadFnc, data, children }: Props): JSX.Element {
+export default function InfiniteScroll({ loadFnc, data, children, isLast }: Props): JSX.Element {
   const [isTopButton, setIsTopButton] = useState<boolean>(false);
 
   // ref
@@ -48,7 +49,6 @@ export default function InfiniteScroll({ loadFnc, data, children }: Props): JSX.
   };
 
   const handleScrollThrottle = () => {
-    console.log(window.scrollY);
     if (window.scrollY > 100) {
       setIsTopButton(true);
     } else {
@@ -59,11 +59,14 @@ export default function InfiniteScroll({ loadFnc, data, children }: Props): JSX.
   return (
     <>
       {children}
-      <div ref={target} style={{ height: "150px", width: "100%" }}>
-        <div style={{ height: "150px", textAlign: "center", color: "black" }}>
-          <PuffLoader color="#ffffff" />
+      {!isLast && (
+        <div ref={target} style={{ height: "150px", width: "100%" }}>
+          <div style={{ height: "150px", textAlign: "center", color: "black" }}>
+            <PuffLoader color="#ffffff" />
+          </div>
         </div>
-      </div>
+      )}
+
       {isTopButton && (
         <TopButton onClick={topScroll}>
           <FiArrowUp size={25} color={"#1d1d1d"} />
