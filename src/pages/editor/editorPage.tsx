@@ -4,10 +4,12 @@ import "@toast-ui/editor/dist/theme/toastui-editor-dark.css";
 import { Editor } from "@toast-ui/react-editor";
 import * as E from "./editorStyle";
 import cancleImg from "./img/cancleBtn.png";
+import ReactTagInput from "@pathofdev/react-tag-input";
 
 function Popup(props: any) {
   const { onClose, data } = props;
   const [editor, setEditor] = useState({ title: data.title, content: data.content });
+  const [tags, setTags] = useState<string[]>([]);
   const [fileImage, setFileImage] = useState("");
   const saveFileImage = (e: any) => {
     setFileImage(URL.createObjectURL(e.target.files[0]));
@@ -64,6 +66,15 @@ function Popup(props: any) {
           <E.tag>
             <div className="title tagTitle">태그</div>
             <textarea className="tagInput" />
+            <ReactTagInput
+              tags={tags}
+              placeholder="태그를 입력하세요"
+              maxTags={4}
+              editable={true}
+              readOnly={false}
+              removeOnBackspace={true}
+              onChange={(newTags) => setTags(newTags)}
+            />
           </E.tag>
           <E.description>
             <div className="title descriptionTitle">설명</div>
