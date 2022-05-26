@@ -4,8 +4,8 @@ import { DefaultTheme } from "styled-components";
  */
 
 const fontColor = {
-  white: "#dddddd",
-  black: "#000000",
+  color: "#FFFFFF",
+  subColor: "#000000",
 };
 
 const mainColor = {
@@ -14,8 +14,8 @@ const mainColor = {
 };
 
 const backgroundColor = {
-  bg: "#1d1d1d",
-  card: "#1d1d1d",
+  bg: "#1D1D1D",
+  card: "#1D1D1D",
 };
 
 export const Theme: DefaultTheme = {
