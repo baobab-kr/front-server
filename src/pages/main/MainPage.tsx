@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Suspense } from "react";
 import image from "../../data/test.jpg";
 import InfiniteScroll from "../../components/InfiniteScroll";
-import { Board } from "@src/Types";
+import { Board } from "@src/Types/main";
 import Card from "../../components/Card";
 import { getMainBoard } from "../../api/board";
 
@@ -36,7 +36,6 @@ export default function MainPage(): JSX.Element {
   };
 
   const filterHandler = () => {
-    // alert("filter");
     const refresh = Cookies.get("RefreshToken");
     console.log(refresh);
   };

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, ReactNode } from "react";
 import { PuffLoader } from "react-spinners";
 
-import { Board } from "@src/Types";
+import { Board } from "@src/Types/main";
 import { TopButton } from "./style";
 
 import { FiArrowUp } from "react-icons/fi";

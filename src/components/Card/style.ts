@@ -104,9 +104,10 @@ export const TagComponent = styled.div`
   height: 1.5rem;
 `;
 
-export const Like = styled.div`
+export const LikeComponent = styled.div`
   display: flex;
   align-items: center;
+  justify-content: end;
   width: 10%;
 `;
 

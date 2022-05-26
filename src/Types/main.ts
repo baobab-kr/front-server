@@ -1,6 +1,7 @@
 export interface PersonalInfo {
   board: Board[];
   tagCount: TagCount[];
+  writer: Writer;
 }
 
 export interface Board {
@@ -14,8 +15,8 @@ export interface Board {
   board_status: number;
   likes_count: number;
   tags: Tag[];
-  writer: Writer;
-  likes: any[];
+  writer: Writer | null;
+  likes: Like[];
 }
 
 export interface Tag {
@@ -36,4 +37,9 @@ export interface Writer {
 export interface TagCount {
   tag_name: string;
   tag_count: string;
+}
+
+export interface Like {
+  id: number;
+  likes_status: number;
 }
