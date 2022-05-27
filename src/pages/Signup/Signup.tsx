@@ -3,10 +3,7 @@ import * as S from "./style";
 import { ID_MIN_LENGTH, ID_MAX_LENGTH, PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH } from "../../constants/index";
 
 import { Form, Input, Button, notification, Select } from "antd";
-import Password from "antd/lib/input/Password";
-// import { checkUsernameAvailability, signup } from "src/util/APIUtils";
-
-// import "./Signup.scss";
+import { checkUsername, checkId, emailRegisterCode, users_register } from "../../api/signup";
 
 const Signup = () => {
   const [name, setName] = useState({
@@ -29,24 +26,47 @@ const Signup = () => {
     validateStatus: "",
     errorMsg: "",
   });
+  const [emailCode, setEmailCode] = useState({
+    value: 0,
+    validateStatus: "success",
+    errorMsg: "",
+  });
+
+  const summitBtnDis = () => {
+    return !(
+      name.validateStatus === "success" &&
+      email.validateStatus === "success" &&
+      id.validateStatus === "success" &&
+      password.validateStatus === "success" &&
+      emailCode.validateStatus === "success"
+    );
+  };
+
+  const [idOverlap, setIdOverlap] = useState(false);
+  const [nameOverlap, setNameOverlap] = useState(false);
+  const [emailOverlap, setEmailOverlap] = useState(false);
 
   const changeInput = (event: any) => {
     const target = event.target;
     const inputName = target.name;
     const inputValue = target.value;
+    console.log(inputName);
     switch (inputName) {
       case "name":
         console.log(inputValue);
-        setName(inputValue);
+        setName({ value: inputValue, validateStatus: "", errorMsg: "" });
+        break;
+      case "emailCode":
+        setEmailCode({ value: inputValue, validateStatus: "success", errorMsg: "" });
         break;
       case "email":
-        setEmail(inputValue);
+        setEmail({ value: inputValue, validateStatus: "", errorMsg: "" });
         break;
       case "id":
-        setId(inputValue);
+        setId({ value: inputValue, validateStatus: "", errorMsg: "" });
         break;
       case "password":
-        setPassword(inputValue);
+        setPassword({ value: inputValue, validateStatus: "", errorMsg: "" });
         break;
       default:
         console.log("404 check input Id");
@@ -55,58 +75,33 @@ const Signup = () => {
 
   const handleSubmit = () => {
     const signupRequest = {
-      name: name.value,
-      id: id.value,
-      password: password.value,
+      userid: id.value,
       email: email.value,
+      username: name.value,
+      password: password.value,
+      inputVerifyCode: emailCode.value,
     };
     console.log(signupRequest);
-    // signup(signupRequest)
-    //   .then((response) => {
-    //     notification.success({
-    //       message: "",
-    //       description: "회원가입 성공! 로그인을 진행해 주세요.",
-    //     });
-    //     props.history.push("/");
-    //   })
-    //   .catch((error) => {
-    //     notification.error({
-    //       message: "회원가입 오류",
-    //       description: "죄송합니다. 다시 시도해주세요.",
-    //     });
-    //   });
-  };
-
-  const validateEmail = () => {
-    // if (name.length < NAME_MIN_LENGTH) {
-    //   return {
-    //     validateStatus: "error",
-    //     errorMsg: `Email is too short (Minimum ${NAME_MIN_LENGTH} characters needed.)`,
-    //   };
-    // } else if (name.length > NAME_MAX_LENGTH) {
-    //   return {
-    //     validationStatus: "error",
-    //     errorMsg: `Email is too long (Maximum ${NAME_MAX_LENGTH} characters allowed.)`,
-    //   };
-    // } else {
-    //   return {
-    //     // validateStatus: "success",
-    //     errorMsg: null,
-    //   };
-    // }
+    users_register(signupRequest)
+      .then((response) => {
+        console.log("회원가입 성공");
+      })
+      .catch((error) => {
+        console.log(error);
+        console.log("회원가입 실패");
+      });
   };
 
   const validateId = (id: string) => {
-    console.log(id + "validateId");
     if (id.length < ID_MIN_LENGTH || id.length > ID_MAX_LENGTH) {
       return {
         validateStatus: "error",
         errorMsg: `${ID_MIN_LENGTH}-${ID_MAX_LENGTH}자 이내의 아이디를 입력해 주세요.`,
       };
-    } else if (!/(^[A-Za-z0-9._-]+$)/g.test(id)) {
+    } else if (!/^[A-Za-z0-9+]*$/g.test(id)) {
       return {
         validateStatus: "error",
-        errorMsg: `영문(A-z), 숫자(0-9)를 입력 가능합니다.`,
+        errorMsg: `아이디는 영문자, 숫자를 조합할 수 있습니다.`,
       };
     } else {
       return {
@@ -121,6 +116,11 @@ const Signup = () => {
         validateStatus: "error",
         errorMsg: `이름을 입력해주세요`,
       };
+    } else if (!/^[ㄱ-ㅎ가-힣A-Za-z0-9+]*$/g.test(name)) {
+      return {
+        validateStatus: "error",
+        errorMsg: `유저 이름은 한글, 영문자, 숫자만 조합할 수 있습니다.`,
+      };
     } else {
       return {
         validateStatus: "success",
@@ -134,10 +134,24 @@ const Signup = () => {
         validateStatus: "error",
         errorMsg: `${PASSWORD_MIN_LENGTH}-${PASSWORD_MAX_LENGTH}자 이내의 비밀번호를 입력해 주세요.`,
       };
-    } else if (!/(^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,16}$)/g.test(pwd)) {
+    } else if (!/(^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$)/g.test(pwd)) {
       return {
         validateStatus: "error",
-        errorMsg: `1개 이상의 대문자와 숫자를 포함해야 합니다.(특수문자는 사용할 수 없습니다)`,
+        errorMsg: "암호는 대문자, 소문자, 숫자, 특수문자를 조합하여야 합니다. 특수문자는 !, @, $, %, *, &만 사용할 수 있습니다.",
+      };
+    } else {
+      return {
+        validateStatus: "success",
+        errorMsg: null,
+      };
+    }
+  };
+
+  const validateEmail = (emails: string) => {
+    if (!/([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/g.test(emails)) {
+      return {
+        validateStatus: "error",
+        errorMsg: "잘못된 이메일 입니다.",
       };
     } else {
       return {
@@ -152,10 +166,25 @@ const Signup = () => {
     const idValidation = validateName(idValue);
     console.log();
     if (idValidation.validateStatus === "error") {
-      setId({ value: idValue, validateStatus: idValidation.validateStatus, errorMsg: idValidation.errorMsg === null ? "" : idValidation.errorMsg });
+      setName({ value: idValue, validateStatus: idValidation.validateStatus, errorMsg: idValidation.errorMsg === null ? "" : idValidation.errorMsg });
       return;
     }
-    setPassword({ value: idValue, validateStatus: "", errorMsg: "" });
+    setName({ value: idValue, validateStatus: "success", errorMsg: "" });
+  };
+
+  const validateEmailAvailability = (email: any) => {
+    const emailValue = email.target.value;
+    const emailValidation = validateEmail(emailValue);
+    console.log();
+    if (emailValidation.validateStatus === "error") {
+      setEmail({
+        value: emailValue,
+        validateStatus: emailValidation.validateStatus,
+        errorMsg: emailValidation.errorMsg === null ? "" : emailValidation.errorMsg,
+      });
+      return;
+    }
+    setEmail({ value: emailValue, validateStatus: "success", errorMsg: "" });
   };
   const validatePasswordAvailability = (pwd: any) => {
     const pwdValue = pwd.target.value;
@@ -166,7 +195,7 @@ const Signup = () => {
       return;
     }
 
-    setPassword({ value: pwdValue, validateStatus: "", errorMsg: "" });
+    setPassword({ value: pwdValue, validateStatus: "success", errorMsg: "" });
   };
 
   const validateIdAvailability = (id: any) => {
@@ -178,32 +207,7 @@ const Signup = () => {
       return;
     }
 
-    setId({ value: idValue, validateStatus: "", errorMsg: "" });
-
-    // checkUsernameAvailability(usernameValue)
-    //   .then((response) => {
-    //     if (response.available) {
-    //       setUsername({
-    //         value: usernameValue,
-    //         validateStatus: "success",
-    //         errorMsg: null,
-    //       });
-    //     } else {
-    //       setUsername({
-    //         value: usernameValue,
-    //         validateStatus: "error",
-    //         errorMsg: "이미 사용중인 아이디 입니다",
-    //       });
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     // Marking validateStatus as success, Form will be recchecked at server
-    //     setUsername({
-    //       value: usernameValue,
-    //       validateStatus: "success",
-    //       errorMsg: null,
-    //     });
-    //   });
+    setId({ value: idValue, validateStatus: "success", errorMsg: "" });
   };
 
   const onFinishFailed = (values: any) => {
@@ -221,6 +225,37 @@ const Signup = () => {
     }
   };
 
+  const checkName = async (names: any) => {
+    await checkUsername(names.value)
+      .then((data) => {
+        console.log(data + "______name");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const checkedId = async (ids: any) => {
+    await checkId(ids.value)
+      .then((data) => {
+        console.log(data + "______id");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const registerCode = async (name: any, emails: any) => {
+    console.log(emails.value);
+    await emailRegisterCode(name.value, emails.value)
+      .then((data) => {
+        console.log(data + "______email_code");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <S.Signup className="signup">
       <div className="header">
@@ -228,7 +263,7 @@ const Signup = () => {
         <h1 className="title">회원가입</h1>
       </div>
       <S.Body className="body">
-        <Form layout={"vertical"} onFinish={handleSubmit} onFinishFailed={onFinishFailed} className="signup-form">
+        <Form layout={"vertical"} className="signup-form">
           <Form.Item
             label="이름"
             name="name"
@@ -247,6 +282,9 @@ const Signup = () => {
               onBlur={validateUsernameAvailability}
               onChange={changeInput}
             />
+            <button className="nameBtn" onClick={() => checkName(name)}>
+              중복 확인
+            </button>
           </Form.Item>
           <Form.Item
             label="아이디"
@@ -267,6 +305,9 @@ const Signup = () => {
               onBlur={validateIdAvailability}
               onChange={changeInput}
             />
+            <button className="idBtn" onClick={() => checkedId(id)}>
+              중복 확인
+            </button>
           </Form.Item>
           <Form.Item
             label="비밀번호"
@@ -310,12 +351,31 @@ const Signup = () => {
               autoComplete="off"
               spellCheck="false"
               value={email.value}
-              // onBlur={this.validateUsernameAvailability}
               onChange={changeInput}
+              onBlur={validateEmailAvailability}
             />
+            <button className="emailBtn" onClick={() => registerCode(name, email)}>
+              이메일 인증
+            </button>
+          </Form.Item>
+          <Form.Item
+            label="인증코드"
+            name="emailCode"
+            hasFeedback
+            validateStatus={emailCode.validateStatus === "" ? "" : emailCode.validateStatus === "success" ? "success" : "error"}
+            help={emailCode.errorMsg}
+            rules={[
+              {
+                type: "number",
+                required: true,
+                message: "인증코드를 입력해주세요",
+              },
+            ]}
+          >
+            <Input size="large" name="emailCode" type="number" autoComplete="off" spellCheck="false" value={emailCode.value} onChange={changeInput} />
           </Form.Item>
           <Form.Item>
-            <S.signup_form_button type="submit" className="signup-form-button">
+            <S.signup_form_button type="submit" className="signup-form-button" onClick={handleSubmit} disabled={summitBtnDis()}>
               회원가입
             </S.signup_form_button>
           </Form.Item>

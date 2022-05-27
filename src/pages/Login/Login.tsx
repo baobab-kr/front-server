@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Form, Input, Button, Checkbox, notification } from "antd";
 import { Link } from "react-router-dom";
 import * as S from "./loginStyle";
+import { loginAPI } from "../../api/login";
 export default function Login(props: any) {
   return (
     <div className="loginPage">
@@ -18,8 +19,14 @@ const LoginForm = (props: any) => {
   const [loginRequest, setLoginRequest] = useState({ id: "", password: "" });
   const [isEmptyPassword, setEmptyPassword] = React.useState(true);
   const [isEmptyId, setEmptyId] = React.useState(true);
-  const handleSubmit = () => {
-    console.log(loginRequest);
+  const handleSubmit = async () => {
+    await loginAPI(loginRequest.id, loginRequest.password)
+      .then((data) => {
+        console.log(data + "______login");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const passwordChanged = (e: any) => {
