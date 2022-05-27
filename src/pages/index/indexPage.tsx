@@ -1,15 +1,12 @@
 import "@toast-ui/editor/dist/toastui-editor.css";
 import "@toast-ui/editor/dist/theme/toastui-editor-dark.css";
-import React, { Component, useEffect, useState } from "react";
-import { Editor } from "@toast-ui/react-editor";
-import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
+import React, { useEffect, useState } from "react";
 
 import { Content, CommentBox, Index, InputComment, Top } from "./indexPageStyle";
 import { useRecoilState } from "recoil";
 import { USER } from "../../store/store.user";
 import { useLocation } from "react-router-dom";
 import { createComment, createReComment, getBoardDetail, getComments, getReComments, patchDeleteComment, patchDeleteReComment } from "../../api/indexPage";
-import { getComment } from "@src/Types/indexPage";
 
 export default function IndexPage() {
   const location = useLocation();
@@ -52,16 +49,11 @@ export default function IndexPage() {
   };
 
   const onSaveReComment = (comment_id: number, content: string) => {
-    console.log(comment_id, reComment);
-    // createReComment(inputText, comment_id).then(() => {
-    //   getReComments(comment_id)
-    //     .then((res) => {
-    //       setReCommentArray({ comments: res });
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //     });
-    // });
+    console.log(comment_id, content);
+    createReComment(content, comment_id).then(() => {
+      console.log("답글추가됨");
+      reCommentLoad(comment_id);
+    });
   };
   useEffect(() => {
     const apiGet = async () => {
@@ -103,73 +95,85 @@ export default function IndexPage() {
     input.name = `input_${idx}`;
 
     recommentInput.appendChild(input);
-    input.addEventListener("input", function (e) {
-      handleReCommentChange(e, idx);
-    });
+
+    // const inputs = document.querySelectorAll("input");
+
+    // inputs.addEventListener("change", function (e) {
+    //   handleReCommentChange(e, idx);
+    // });
 
     const btn = document.createElement("button");
     btn.className = "saveComment";
     btn.textContent = "답글 작성";
 
     btn.addEventListener("click", () => {
-      console.log(reComment);
-      onSaveReComment(idx, reComment);
+      onSaveReComment(idx, document.querySelectorAll("input")[idx + 2].value);
     });
     recommentInput.appendChild(btn);
     return recommentInput;
   };
+
+  const reCommentLoad = (idx: number) => {
+    getReComments(idx)
+      .then((res) => {
+        console.log("----sadasdasd----------------");
+        console.log(res);
+        const reCommentObj: any = { comments: res };
+        setReCommentArray({ comments: res });
+        console.log(reCommentArray);
+        reCommentObj.comments.map((data: any) => {
+          console.log("--------------------");
+          console.log(data);
+          const recomment = document.createElement("div");
+          recomment.className = "recomment";
+
+          const nickname = document.createElement("div");
+          nickname.className = "re_nickname";
+          nickname.textContent = data.writer.username;
+
+          const date = document.createElement("div");
+          date.className = "re_date";
+          date.textContent = data.date;
+
+          const recomment_description = document.createElement("div");
+          recomment_description.className = "recomment_description";
+          recomment_description.textContent = data.content;
+          if (data.writer.username === userInfo.username) {
+            const recomment_delete = document.createElement("button");
+            recomment_delete.className = "deleteReComment";
+            recomment_delete.textContent = "삭제";
+            recomment.appendChild(recomment_delete);
+
+            recomment_delete.addEventListener("click", () => {
+              deleteReComment(data.id, idx);
+            });
+          }
+          const comment = document.querySelector(`.comment_${idx} .recommentBox`)!;
+          comment.appendChild(recomment);
+
+          recomment.appendChild(nickname);
+          recomment.appendChild(date);
+          recomment.appendChild(recomment_description);
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const recommentView = (idx: number) => {
     setIsViewId(idx);
     const comment = document.querySelector(`.comment_${idx} .recommentBox`)!;
     if (comment?.childElementCount >= 1) {
       comment.innerHTML = "";
     } else {
-      getReComments(idx)
-        .then((res) => {
-          setReCommentArray({ comments: res });
-          reCommentArray.comments.map((data: any) => {
-            console.log(data);
-            const recomment = document.createElement("div");
-            recomment.className = "recomment";
-
-            const nickname = document.createElement("div");
-            nickname.className = "re_nickname";
-            nickname.textContent = data.re_nicname;
-
-            const date = document.createElement("div");
-            date.className = "re_date";
-            date.textContent = data.re_date;
-
-            const recomment_description = document.createElement("div");
-            recomment_description.className = "recomment_description";
-            recomment_description.textContent = data.recomment_description;
-            if (data.re_nicname === userInfo.username) {
-              const recomment_delete = document.createElement("button");
-              recomment_delete.className = "deleteReComment";
-              recomment_delete.textContent = "삭제";
-              recomment.appendChild(recomment_delete);
-
-              recomment_delete.addEventListener("click", () => {
-                deleteReComment(data.id, idx);
-              });
-            }
-
-            recomment.appendChild(nickname);
-            recomment.appendChild(date);
-            recomment.appendChild(recomment_description);
-
-            const comment = document.querySelector(`.comment_${idx} .recommentBox`)!;
-            comment.appendChild(recomment);
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      reCommentLoad(idx);
 
       const recommentInput = writeRecomment(idx);
       comment.appendChild(recommentInput);
     }
   };
+
   const deleteComment = (id: number) => {
     patchDeleteComment(id)
       .then(() => {
@@ -190,13 +194,8 @@ export default function IndexPage() {
     patchDeleteReComment(id)
       .then(() => {
         console.log("삭제됨");
-        getReComments(idx)
-          .then((res) => {
-            setReCommentArray({ comments: res });
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+
+        reCommentLoad(idx);
       })
       .catch((err) => {
         console.log(err, "오류남");
