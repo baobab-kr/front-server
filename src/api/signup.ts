@@ -1,4 +1,4 @@
-import { userName, id, email } from "@src/Types/signup";
+import { userName, id, email, emailCode, register } from "@src/Types/signup";
 import axios from "axios";
 import API from ".";
 
@@ -7,9 +7,12 @@ export function checkUsername(username_: string): Promise<userName> {
   console.log(name);
   return new Promise<userName>((resolve, reject) => {
     axios
-      .post("http://localhost:3000/users/check-username", name)
+      .post("/users/check-username", name)
       .then((res) => {
-        console.log(res);
+        if (res.data.message) {
+          reject(res.data.message);
+        }
+        resolve(res.data);
       })
       .catch((err) => {
         console.log("err", err);
@@ -22,9 +25,12 @@ export function checkId(id_: string): Promise<id> {
   console.log(id_data);
   return new Promise<id>((resolve, reject) => {
     axios
-      .post("http://localhost:3000/users/check-userid", id_data)
+      .post("/users/check-userid", id_data)
       .then((res) => {
-        console.log(res);
+        if (res.data.message) {
+          reject(res.data.message);
+        }
+        resolve(res.data);
       })
       .catch((err) => {
         console.log("err", err);
@@ -33,15 +39,17 @@ export function checkId(id_: string): Promise<id> {
   });
 }
 
-export function emailRegisterCode(name_: string, email_: string): Promise<email> {
-  console.log(email_);
-  const email_data = { username: name_, email: email_ };
+export function checkEmail(email_: string): Promise<email> {
+  const email_data = { email: email_ };
   console.log(email_data);
   return new Promise<email>((resolve, reject) => {
     axios
-      .post("http://localhost:3000/users/register-code", email_data)
+      .post("/users/check-email", email_data)
       .then((res) => {
-        console.log(res);
+        if (res.data.message) {
+          reject(res.data.message);
+        }
+        resolve(res.data);
       })
       .catch((err) => {
         console.log("err", err);
@@ -49,13 +57,45 @@ export function emailRegisterCode(name_: string, email_: string): Promise<email>
       });
   });
 }
-export function users_register(register_data: object): Promise<email> {
-  console.log(register_data);
-  return new Promise<email>((resolve, reject) => {
+
+// /users/check-email
+
+export function emailRegisterCode(name_: string, email_: string): Promise<emailCode> {
+  console.log(email_);
+  const email_code_data = { username: name_, email: email_ };
+  console.log(email_code_data);
+  return new Promise<emailCode>((resolve, reject) => {
     axios
-      .post("http://localhost:3000/users/register", register_data)
+      .post("/users/register-code", email_code_data)
       .then((res) => {
         console.log(res);
+        if (res.data.message) {
+          console.log("?");
+          reject(res.statusText);
+        }
+        console.log("??");
+        reject(res);
+      })
+      .catch((err) => {
+        console.log("err", err);
+        reject(err.response);
+      });
+  });
+}
+export function users_register(id_: string, email_: string, username_: string, password_: string, code_: string): Promise<register> {
+  console.log(code_);
+  const codeInt = parseInt(code_);
+  console.log(codeInt);
+  console.log(typeof codeInt);
+  return new Promise<register>((resolve, reject) => {
+    axios
+      .post("/users/register", { userid: id_, email: email_, username: username_, password: password_, inputVerifyCode: codeInt })
+      .then((res) => {
+        console.log(res);
+        if (res.data.message) {
+          reject(res.data.message);
+        }
+        resolve(res.data);
       })
       .catch((err) => {
         console.log("err", err);
