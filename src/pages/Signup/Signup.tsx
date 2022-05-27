@@ -3,7 +3,7 @@ import * as S from "./style";
 import { ID_MIN_LENGTH, ID_MAX_LENGTH, PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH } from "../../constants/index";
 
 import { Form, Input, Button, notification, Select } from "antd";
-import { checkUsername, checkId, emailRegisterCode, users_register } from "../../api/signup";
+import { checkUsername, checkId, emailRegisterCode, users_register, checkEmail } from "../../api/signup";
 
 const Signup = () => {
   const [name, setName] = useState({
@@ -27,8 +27,8 @@ const Signup = () => {
     errorMsg: "",
   });
   const [emailCode, setEmailCode] = useState({
-    value: 0,
-    validateStatus: "success",
+    value: "",
+    validateStatus: "error",
     errorMsg: "",
   });
 
@@ -82,7 +82,7 @@ const Signup = () => {
       inputVerifyCode: emailCode.value,
     };
     console.log(signupRequest);
-    users_register(signupRequest)
+    users_register(id.value, email.value, name.value, password.value, emailCode.value)
       .then((response) => {
         console.log("회원가입 성공");
       })
@@ -228,7 +228,7 @@ const Signup = () => {
   const checkName = async (names: any) => {
     await checkUsername(names.value)
       .then((data) => {
-        console.log(data + "______name");
+        console.log(data);
       })
       .catch((err) => {
         console.log(err);
@@ -237,8 +237,8 @@ const Signup = () => {
 
   const checkedId = async (ids: any) => {
     await checkId(ids.value)
-      .then((data) => {
-        console.log(data + "______id");
+      .then((data: any) => {
+        console.log(data);
       })
       .catch((err) => {
         console.log(err);
@@ -246,10 +246,17 @@ const Signup = () => {
   };
 
   const registerCode = async (name: any, emails: any) => {
-    console.log(emails.value);
-    await emailRegisterCode(name.value, emails.value)
-      .then((data) => {
-        console.log(data + "______email_code");
+    await checkEmail(emails.value)
+      .then(async (data) => {
+        console.log(data + "______email 중복확인");
+        // 조건식
+        await emailRegisterCode(name.value, emails.value)
+          .then((data) => {
+            console.log(data + "______email_code");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       })
       .catch((err) => {
         console.log(err);
