@@ -6,12 +6,12 @@ export const Wrapper = styled.div`
 
   @media screen and (max-width: 1339px) {
     /* 타블렛 가로 */
-    width: 870px;
+    width: 874px;
   }
   @media screen and (max-width: 919px) {
     /* 모바일 가로, 타블렛 세로 */
 
-    width: 420px;
+    width: 424px;
   }
 
   @media screen and (max-width: 599px) {
@@ -32,7 +32,7 @@ export const Filter = styled.div`
   height: 40px;
   border-radius: 20px;
   background-color: ${({ theme }) => theme.mainColor.filter};
-  color: ${({ theme }) => theme.fontColor.black};
+  color: ${({ theme }) => theme.fontColor.subColor};
 
   display: flex;
   justify-content: center;
