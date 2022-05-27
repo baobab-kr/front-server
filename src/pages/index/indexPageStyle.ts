@@ -17,6 +17,19 @@ export const Index = styled.div`
     width: 100px;
     height: 30px;
   }
+  .deleteComment {
+    position: absolute;
+    width: 30px;
+    height: 20px;
+    right: 0px;
+  }
+  .deleteReComment {
+    position: absolute;
+    width: 30px;
+    height: 20px;
+    right: 0px;
+    top: 25px;
+  }
 `;
 export const Top = styled.div`
   text-align: center;
@@ -53,7 +66,7 @@ export const CommentBox = styled.div`
     margin-bottom: 20px;
   }
   .date {
-    position: absolute;
+    position: relative;
     top: 0px;
     right: 0px;
   }
