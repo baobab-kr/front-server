@@ -78,6 +78,26 @@ export const CommentBox = styled.div`
       margin-top: 10px;
     }
   }
+  .recommentBox {
+    position: relative;
+    .writeRecommentBox {
+      position: relative;
+      top: 20px;
+      .comment_write {
+        margin-bottom: 10px;
+      }
+      input {
+        width: 40vw;
+        height: 70px;
+        margin-bottom: 10px;
+      }
+      button {
+        position: relative;
+        color: #000;
+        right: 0px;
+      }
+    }
+  }
 `;
 
 export const InputComment = styled.div`
