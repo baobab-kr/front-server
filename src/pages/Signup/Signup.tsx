@@ -4,8 +4,10 @@ import { ID_MIN_LENGTH, ID_MAX_LENGTH, PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH 
 
 import { Form, Input, Button, notification, Select } from "antd";
 import { checkUsername, checkId, emailRegisterCode, users_register, checkEmail } from "../../api/signup";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
+  const Navigate = useNavigate();
   const [name, setName] = useState({
     value: "",
     validateStatus: "",
@@ -42,9 +44,9 @@ const Signup = () => {
     );
   };
 
-  const [idOverlap, setIdOverlap] = useState(false);
-  const [nameOverlap, setNameOverlap] = useState(false);
-  const [emailOverlap, setEmailOverlap] = useState(false);
+  const [isId, setIsId] = useState(false);
+  const [isName, setIsName] = useState(false);
+  const [isEmail, setIsEmail] = useState(false);
 
   const changeInput = (event: any) => {
     const target = event.target;
@@ -85,6 +87,7 @@ const Signup = () => {
     users_register(id.value, email.value, name.value, password.value, emailCode.value)
       .then((response) => {
         console.log("회원가입 성공");
+        Navigate("/login");
       })
       .catch((error) => {
         console.log(error);
@@ -228,19 +231,25 @@ const Signup = () => {
   const checkName = async (names: any) => {
     await checkUsername(names.value)
       .then((data) => {
+        setIsName(true);
         console.log(data);
       })
       .catch((err) => {
-        console.log(err);
+        setIsName(false);
+        setName({ value: name.value, validateStatus: "error", errorMsg: "이름이 중복되었습니다" });
+        console.log(err + "_____err 중복됨");
       });
   };
 
   const checkedId = async (ids: any) => {
     await checkId(ids.value)
       .then((data: any) => {
+        setIsId(true);
         console.log(data);
       })
       .catch((err) => {
+        setIsName(false);
+        setId({ value: id.value, validateStatus: "error", errorMsg: "아이디가 중복되었습니다" });
         console.log(err);
       });
   };
@@ -248,8 +257,7 @@ const Signup = () => {
   const registerCode = async (name: any, emails: any) => {
     await checkEmail(emails.value)
       .then(async (data) => {
-        console.log(data + "______email 중복확인");
-        // 조건식
+        setIsEmail(true);
         await emailRegisterCode(name.value, emails.value)
           .then((data) => {
             console.log(data + "______email_code");
@@ -259,6 +267,8 @@ const Signup = () => {
           });
       })
       .catch((err) => {
+        setIsEmail(false);
+        setEmail({ value: email.value, validateStatus: "error", errorMsg: "이메일이 중복되었습니다" });
         console.log(err);
       });
   };

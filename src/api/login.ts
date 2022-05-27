@@ -6,10 +6,12 @@ export function loginAPI(id_: string, password_: string): Promise<login> {
   const login = { userid: id_, password: password_ };
   console.log(login);
   return new Promise<login>((resolve, reject) => {
-    axios
-      .post("/users/login", login)
+    API.post("/users/login", login)
       .then((res) => {
-        console.log(res);
+        if (res.data.message) {
+          reject(res.data.message);
+        }
+        resolve(res.data);
       })
       .catch((err) => {
         console.log("err", err);

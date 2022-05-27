@@ -6,8 +6,7 @@ export function checkUsername(username_: string): Promise<userName> {
   const name = { username: username_ };
   console.log(name);
   return new Promise<userName>((resolve, reject) => {
-    axios
-      .post("/users/check-username", name)
+    API.post("/users/check-username", name)
       .then((res) => {
         if (res.data.message) {
           reject(res.data.message);
@@ -24,8 +23,7 @@ export function checkId(id_: string): Promise<id> {
   const id_data = { userid: id_ };
   console.log(id_data);
   return new Promise<id>((resolve, reject) => {
-    axios
-      .post("/users/check-userid", id_data)
+    API.post("/users/check-userid", id_data)
       .then((res) => {
         if (res.data.message) {
           reject(res.data.message);
@@ -43,8 +41,7 @@ export function checkEmail(email_: string): Promise<email> {
   const email_data = { email: email_ };
   console.log(email_data);
   return new Promise<email>((resolve, reject) => {
-    axios
-      .post("/users/check-email", email_data)
+    API.post("/users/check-email", email_data)
       .then((res) => {
         if (res.data.message) {
           reject(res.data.message);
@@ -65,8 +62,7 @@ export function emailRegisterCode(name_: string, email_: string): Promise<emailC
   const email_code_data = { username: name_, email: email_ };
   console.log(email_code_data);
   return new Promise<emailCode>((resolve, reject) => {
-    axios
-      .post("/users/register-code", email_code_data)
+    API.post("/users/register-code", email_code_data)
       .then((res) => {
         console.log(res);
         if (res.data.message) {
@@ -88,8 +84,7 @@ export function users_register(id_: string, email_: string, username_: string, p
   console.log(codeInt);
   console.log(typeof codeInt);
   return new Promise<register>((resolve, reject) => {
-    axios
-      .post("/users/register", { userid: id_, email: email_, username: username_, password: password_, inputVerifyCode: codeInt })
+    API.post("/users/register", { userid: id_, email: email_, username: username_, password: password_, inputVerifyCode: codeInt })
       .then((res) => {
         console.log(res);
         if (res.data.message) {

@@ -30,7 +30,7 @@ const Body = styled.div`
     border-radius: 5px;
     border: solid 1px #e1e1e1;
     margin-top: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
   .ant-form-item-required{
     color: #fff;
@@ -44,6 +44,22 @@ const Body = styled.div`
       padding: 0 0 5px;
     }
   }
+  .ant-form-item-explain{
+    height: 20px;
+    margin-bottom: 10px;
+  }
+  button{
+    width: 75px;
+    height: 28px;
+    background-color: #fff;
+    border-radius: 5px;
+    position: relative;
+    font-size: 12px;
+    color: #000000;
+    left 20px;
+  }
+  .nameBtn{
+  }
 `;
 
 const signup_form_button = styled.button`
@@ -54,6 +70,7 @@ const signup_form_button = styled.button`
   position: absolute;
   font-size: 12px;
   color: #000000;
+  left: 0px !important;
 `;
 
 // const signup_form = styled.div`

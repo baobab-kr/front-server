@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { Form, Input, Button, Checkbox, notification } from "antd";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import * as S from "./loginStyle";
 import { loginAPI } from "../../api/login";
+import { useNavigate } from "react-router-dom";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { USER } from "../../store/store.user";
+import API from "../../api";
 export default function Login(props: any) {
   return (
     <div className="loginPage">
@@ -16,13 +20,18 @@ export default function Login(props: any) {
   );
 }
 const LoginForm = (props: any) => {
+  const Navigate = useNavigate();
+  const [_, setUserInfo] = useRecoilState(USER);
+
   const [loginRequest, setLoginRequest] = useState({ id: "", password: "" });
   const [isEmptyPassword, setEmptyPassword] = React.useState(true);
   const [isEmptyId, setEmptyId] = React.useState(true);
   const handleSubmit = async () => {
-    await loginAPI(loginRequest.id, loginRequest.password)
-      .then((data) => {
-        console.log(data + "______login");
+    API.post("/users/login", { userid: loginRequest.id, password: loginRequest.password }, { withCredentials: true })
+      .then((res) => {
+        console.log(res);
+        setUserInfo(res.data);
+        Navigate("/");
       })
       .catch((err) => {
         console.log(err);
