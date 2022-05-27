@@ -5,8 +5,14 @@ import { Editor } from "@toast-ui/react-editor";
 import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
 
 import { Content, CommentBox, Index, InputComment, Top } from "./indexPageStyle";
+import { useRecoilState } from "recoil";
+import { USER } from "../../store/store.user";
+import { useLocation } from "react-router-dom";
 
 export default function IndexPage() {
+  const location = useLocation();
+  console.log(location.pathname.split("@")[2]);
+  const [userInfo] = useRecoilState(USER);
   const [comment, setComment] = useState();
   const [reComment, setReComment] = useState();
   const content = `<p><strong>asdfasdfasdfasdfasdfasdfasdfasdf</strong></p><table><thead><tr><th><p>d</p></th><th><p>d</p></th><th><p>d</p></th><th><p>d</p></th></tr></thead><tbody><tr><td><p>gd</p></td><td><p>gd</p></td><td><p>gd gd</p></td><td><p>gd  gd</p></td></tr><tr><td><p>a</p></td><td><p>a</p></td><td><p>a</p></td><td><p>a</p></td></tr><tr><td><p>a</p></td><td><p>a</p></td><td><p>a</p></td><td><p>a</p></td></tr></tbody></table><p>asdf</p><p><strong>asdf</strong></p><table><thead><tr><th><p>d</p></th><th><p>d</p></th><th><p>d</p></th><th><p>d</p></th></tr></thead><tbody><tr><td><p>gd</p></td><td><p>gd</p></td><td><p>gd gd</p></td><td><p>gd  gd</p></td></tr><tr><td><p>a</p></td><td><p>a</p></td><td><p>a</p></td><td><p>a</p></td></tr><tr><td><p>a</p></td><td><p>a</p></td><td><p>a</p></td><td><p>a</p></td></tr></tbody></table><p>asdf</p><p><strong>asdf</strong></p><table><thead><tr><th><p>d</p></th><th><p>d</p></th><th><p>d</p></th><th><p>d</p></th></tr></thead><tbody><tr><td><p>gd</p></td><td><p>gd</p></td><td><p>gd gd</p></td><td><p>gd  gd</p></td></tr><tr><td><p>a</p></td><td><p>a</p></td><td><p>a</p></td><td><p>a</p></td></tr><tr><td><p>a</p></td><td><p>a</p></td><td><p>a</p></td><td><p>a</p></td></tr></tbody></table><p>asdf</p><p><strong>asdf</strong></p><table><thead><tr><th><p>d</p></th><th><p>d</p></th><th><p>d</p></th><th><p>d</p></th></tr></thead><tbody><tr><td><p>gd</p></td><td><p>gd</p></td><td><p>gd gd</p></td><td><p>gd  gd</p></td></tr><tr><td><p>a</p></td><td><p>a</p></td><td><p>a</p></td><td><p>a</p></td></tr><tr><td><p>a</p></td><td><p>a</p></td><td><p>a</p></td><td><p>a</p></td></tr></tbody></table><p>asdf</p>`;
@@ -91,13 +97,6 @@ export default function IndexPage() {
   };
   return (
     <>
-      {/* <Editor
-        previewStyle="vertical"
-        ref={editorRef}
-        onChange={handleChange}
-        plugins={[[colorSyntax, { preset: ["#1F2E3D", "#4c5864", "#ED7675"] }]]}
-        theme="dark"
-      /> */}
       <Index>
         <Top>
           <div className="title">제목</div>

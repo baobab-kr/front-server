@@ -5,8 +5,8 @@ import "styled-components";
 declare module "styled-components" {
   export interface DefaultTheme {
     fontColor: {
-      white: string;
-      black: string;
+      color: string;
+      subColor: string;
     };
     mainColor: {
       main: string;

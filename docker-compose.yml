@@ -1,0 +1,12 @@
+version: "3.7"
+services:
+  react:
+    build:
+      context: . # dockerfile 위치
+    container_name: front_server # 컨테이너 이름 설정
+    ports:
+      # 포트 설장
+      - "2999:3000"
+    volumes:
+      - /usr/src/app/node_modules
+      - ./:/usr/src/app
