@@ -1,5 +1,4 @@
 import React, { useState, useEffect, Suspense } from "react";
-import image from "../../data/test.jpg";
 import InfiniteScroll from "../../components/InfiniteScroll";
 import { Board } from "@src/Types/main";
 import Card from "../../components/Card";
@@ -8,7 +7,7 @@ import { getMainBoard } from "../../api/board";
 import { Wrapper, FilterContainer, Filter } from "./style";
 
 import ReactTagInput from "@pathofdev/react-tag-input";
-import "./tagInputStyle.css";
+import "../../style/tagInputStyle.css";
 import { PuffLoader } from "react-spinners";
 
 import Cookies from "js-cookie";
@@ -73,7 +72,7 @@ export default function MainPage(): JSX.Element {
           <div style={{ margin: "0px auto", display: "flex", gap: "32px", flexWrap: "wrap" }}>
             <InfiniteScroll loadFnc={getInfo} data={board} isLast={mainState}>
               {board?.map((item: Board, index: number) => {
-                return <Card key={index} board={item} width={"420px"} height={"500px"} />;
+                return <Card key={index} board={item} width={"420px"} height={"500px"} isMyHome={false} />;
               })}
             </InfiniteScroll>
           </div>

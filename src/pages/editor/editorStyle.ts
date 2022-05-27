@@ -2,18 +2,19 @@ import styled from "styled-components";
 
 const popup = styled.div`
   position: absolute;
-  top: 0px;
+  top: 0;
   width: 100%;
   height: 100%;
-  background: rgb(29, 29, 29);
+  background-color: #2f2f2f;
+  z-index: 990;
 `;
 
 const popupInner = styled.div`
   position: absolute;
-  top 5%;
+  top: 5%;
   width: 100%;
   height: 95%;
-  background: rgb(38, 38, 38);
+  background-color: #2f2f2f;
   opacity: 1;
 
   .title {
@@ -23,7 +24,7 @@ const popupInner = styled.div`
   }
   .cancleBtn {
     position: absolute;
-    top: 2%;
+    top: 35px;
     right: 2%;
     width: 50px;
     height: 50px;
@@ -32,11 +33,11 @@ const popupInner = styled.div`
 
 const postImage = styled.div`
   position: absolute;
-  left 20%;
-  top 20%;
+  left: 30%;
+  top: 20%;
   width: 285px;
-  .image{
-    width 285px;
+  .image {
+    width: 285px;
     height: 285px;
   }
   .defaultImageBg {
@@ -54,21 +55,23 @@ const postImage = styled.div`
       text-align: center;
     }
   }
-  .imgDeleteBtn{
+  .imgDeleteBtn {
     width: 32px;
     height: 23px;
     background: rgb(255, 255, 255);
-    color: #00;
+    color: #000;
   }
 `;
-const tag = styled.div`
+
+const description = styled.div`
   position: absolute;
-  left 20%;
-  top 70%;
+  left: 55%;
+  top: 20%;
   width: 285px;
-  .tagInput{
-    width:100%;
-    height:40px;
+  .descriptionInput {
+    padding: 15px;
+    width: 100%;
+    height: 300px;
     resize: none;
     background: rgb(100, 100, 100);
     color: #fff;
@@ -76,22 +79,7 @@ const tag = styled.div`
       outline: none;
     }
   }
-  `;
-const description = styled.div`
-position: absolute;
-left 55%;
-top 20%;
-width: 285px;
-.descriptionInput{
-  width: 100%;
-  height: 365px;
-  resize: none;
-  background: rgb(100, 100, 100);
-  color: #fff;
-  &:focus {
-    outline: none;
-  }
-}`;
+`;
 const btnBox = styled.div`
   top: 74%;
   position: absolute;
@@ -115,16 +103,18 @@ const btnBox = styled.div`
   }
 `;
 
-const title = styled.h1`
-  width: 100%;
-  text-align: center;
-  margin-bottom: 20px;
+const TitleWrpper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  height: 140px;
+  padding: 0px 10px;
 `;
+
 const titleInput = styled.input`
-  width: 100%;
-  text-align: center;
   border: none;
-  height: 50px;
+  height: 40px;
   font-size: 35px;
   margin-bottom: 20px;
   background: rgba(255, 255, 255, 0);
@@ -134,12 +124,10 @@ const titleInput = styled.input`
   }
 `;
 const saveBtn = styled.button`
-  position: absolute;
-  top: 14%;
-  left: 93%;
-  width: 70px;
-  height: 40px;
-  background: rgb(255, 255, 255);
-  color: #000;
+  padding: 8px 16px;
+  background: transparent;
+  color: #ffffff;
+  border: 1px solid #ffffff;
+  border-radius: 3px;
 `;
-export { popup, popupInner, postImage, tag, description, btnBox, title, titleInput, saveBtn };
+export { popup, popupInner, postImage, description, btnBox, TitleWrpper, titleInput, saveBtn };

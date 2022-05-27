@@ -40,7 +40,7 @@ export default function App(): JSX.Element {
           <Route path="/@:id" element={<PrivateRoute authentication={true} component={PersonPage} />} />
           <Route path="/login" element={<PrivateRoute authentication={false} component={Login} path="login" />} />
           <Route path="/setting" element={<PrivateRoute authentication={true} component={Setting} />} />
-          <Route path="/editor" element={<PrivateRoute authentication={true} component={EditorPage} />} />
+          <Route path="/editor" element={<PrivateRoute authentication={false} component={EditorPage} />} />
         </Routes>
       </BrowserRouter>
     </StyleRoot>

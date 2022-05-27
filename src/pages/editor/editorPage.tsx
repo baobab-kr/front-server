@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Component, Ref } from "react";
+import React, { useState, useEffect } from "react";
 import "@toast-ui/editor/dist/toastui-editor.css"; // Editor's Style
 import "@toast-ui/editor/dist/theme/toastui-editor-dark.css";
 import { Editor } from "@toast-ui/react-editor";
@@ -6,49 +6,77 @@ import * as E from "./editorStyle";
 import cancleImg from "./img/cancleBtn.png";
 import ReactTagInput from "@pathofdev/react-tag-input";
 
-function Popup(props: any) {
-  const { onClose, data } = props;
-  const [editor, setEditor] = useState({ title: data.title, content: data.content });
-  const [tags, setTags] = useState<string[]>([]);
-  const [fileImage, setFileImage] = useState("");
+import { ICreateBoard } from "@src/Types/main";
+import { CreateBoard } from "../../api/board";
+import { useNavigate } from "react-router-dom";
+
+import "prismjs/themes/prism.css";
+import "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css";
+import Prism from "prismjs";
+import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight";
+
+import "tui-color-picker/dist/tui-color-picker.css";
+import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
+
+type props = {
+  onClose: React.Dispatch<React.SetStateAction<boolean>>;
+  data: ICreateBoard;
+  setData: React.Dispatch<React.SetStateAction<ICreateBoard>>;
+};
+
+function Popup({ onClose, data, setData }: props) {
+  const navigate = useNavigate();
+
   const saveFileImage = (e: any) => {
-    setFileImage(URL.createObjectURL(e.target.files[0]));
-    console.log(fileImage);
+    setData({ ...data, thumbnail: e.target.files[0] });
   };
   const deleteFileImage = () => {
-    URL.revokeObjectURL(fileImage);
-    setFileImage("");
+    URL.revokeObjectURL(data.thumbnail);
+    setData({ ...data, thumbnail: "" });
   };
-  const [scrollY, setScrollY] = useState(0);
-  console.log(props);
-  console.log(onClose);
-  console.log(data);
 
-  useEffect(() => {
-    window.addEventListener("scroll", () => setScrollY(window.pageYOffset));
-    window.scrollTo(0, 0);
-  }, [scrollY]);
+  const descriptionHandle = (e: any) => {
+    setData({ ...data, description: e.target.value });
+  };
 
-  console.log(window.scrollY);
   const onClick = () => {
     onClose(false);
   };
+
   const onSave = () => {
-    //저장
-    onClose(false);
+    setData({ ...data, board_status: 0 });
+    CreateBoard(data)
+      .then((res) => {
+        console.log("Board 생성 성공", res);
+
+        navigate("/");
+      })
+      .catch((err) => {
+        console.log("Board 생성 실패", err);
+      });
   };
-  const onOnlyMe = () => {};
+
+  const onOnlyMe = () => {
+    setData({ ...data, board_status: 1 });
+    CreateBoard(data)
+      .then((res) => {
+        console.log("Board 생성 성공", res);
+
+        navigate("/");
+      })
+      .catch((err) => {
+        console.log("Board 생성 실패", err);
+      });
+  };
   return (
     <>
       <E.popup>
         <E.popupInner>
-          {/* <div>제목 : {data.title}</div>
-          <div>내용 : {data.content}</div> */}
           <E.postImage>
             <div className="title imageTitle">포스트 미리보기</div>
             <div>
-              {fileImage ? (
-                <img className="image" alt="sample" src={fileImage} />
+              {data.thumbnail ? (
+                <img className="image" alt="sample" src={data.thumbnail} />
               ) : (
                 <div className="defaultImageBg">
                   <div className="defaultImage">포스트 이미지</div>
@@ -63,24 +91,14 @@ function Popup(props: any) {
               </div>
             </div>
           </E.postImage>
-          <E.tag>
-            <div className="title tagTitle">태그</div>
-            <textarea className="tagInput" />
-            <ReactTagInput
-              tags={tags}
-              placeholder="태그를 입력하세요"
-              maxTags={4}
-              editable={true}
-              readOnly={false}
-              removeOnBackspace={true}
-              onChange={(newTags) => setTags(newTags)}
-            />
-          </E.tag>
+
           <E.description>
             <div className="title descriptionTitle">설명</div>
-            <textarea className="descriptionInput" />
+            <textarea className="descriptionInput" value={data.description} onChange={descriptionHandle} />
           </E.description>
-          <img className="cancleBtn" onClick={onClick} src={cancleImg} />
+
+          <img className="cancleBtn" onClick={onClick} src={cancleImg} alt="cancle" />
+
           <E.btnBox>
             <button className="onlyMeBtn" onClick={onOnlyMe}>
               나만보기
@@ -96,42 +114,86 @@ function Popup(props: any) {
 }
 
 export default function EditorPage() {
-  const [editor, setEditor] = useState({ title: "", content: "" });
-  const [showPopup, setShowPopup] = useState(false);
+  const [showPopup, setShowPopup] = useState<boolean>(false);
+  const [windowHeight, setWindowHeight] = useState<number>(window.innerHeight);
+  const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
+
+  const [editor, setEditor] = useState<ICreateBoard>({
+    title: "",
+    description: "",
+    content: "",
+    board_status: 0,
+    thumbnail: "",
+    tag_name: [],
+  });
 
   const editorRef: any = React.createRef();
 
-  const handleInputChange = (e: any) => {
-    console.log(e.target.value);
-    setEditor({ title: e.target.value, content: editor.content });
+  const titleHandler = (e: any) => {
+    setEditor({ ...editor, title: e.target.value });
   };
 
-  const handleChange = (e: any) => {
-    console.log(e);
-    setEditor({
-      title: editor.title,
-      content: editorRef.current.getInstance().getHTML(),
-    });
+  const handleChange = () => {
+    setEditor({ ...editor, content: editorRef.current.getInstance().getHTML() });
   };
+
+  const tagHandler = (tag: string[]) => {
+    setEditor({ ...editor, tag_name: [...tag] });
+  };
+
   const onClickEvent = () => {
     console.log(editor);
+    if (editor.title.replace(" ", "") === "") {
+      alert("제목을 입력해주세요");
+      return;
+    }
     setShowPopup(true);
   };
+
+  const handleResize = () => {
+    setWindowHeight(window.innerHeight);
+    setWindowWidth(window.innerWidth);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <>
-      <div>
-        <E.title className="contentTitle">제목</E.title>
-        <E.titleInput placeholder="제목을 입력하세요." onChange={handleInputChange} value={editor.title}></E.titleInput>
-      </div>
-      <Editor previewStyle="tab" theme="dark" height="700px" initialEditType="markdown" initialValue="" ref={editorRef} onChange={handleChange} />
-      <div id="toastUIEditor">
-        <div id="Button">
+      <E.TitleWrpper>
+        <E.titleInput placeholder="제목을 입력하세요." onChange={titleHandler} value={editor.title}></E.titleInput>
+        <div style={{ display: "flex", gap: "10px", width: "100%", justifyContent: "space-between" }}>
+          <div style={{ width: "50%" }}>
+            <ReactTagInput
+              tags={editor.tag_name}
+              placeholder="태그를 입력하세요"
+              editable={true}
+              readOnly={false}
+              removeOnBackspace={true}
+              onChange={(newTags) => tagHandler(newTags)}
+            />
+          </div>
           <E.saveBtn className="btn_save" onClick={onClickEvent}>
-            저장하기
+            SAVE
           </E.saveBtn>
         </div>
-      </div>
-      {showPopup ? <Popup onClose={setShowPopup} data={editor} /> : null}
+      </E.TitleWrpper>
+      <Editor
+        previewStyle={windowWidth > 720 ? "vertical" : "tab"}
+        theme="dark"
+        height={`${Math.max(windowHeight - 250, 300)}px`}
+        initialEditType="markdown"
+        initialValue=""
+        ref={editorRef}
+        onChange={handleChange}
+        placeholder="당신의 바오밥 나무에 가지를 추가해보세요..."
+        plugins={[[codeSyntaxHighlight, { highlighter: Prism }], colorSyntax]}
+      />
+      {showPopup ? <Popup onClose={setShowPopup} data={editor} setData={setEditor} /> : null}
     </>
   );
 }

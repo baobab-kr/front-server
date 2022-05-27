@@ -1,5 +1,5 @@
 import API from ".";
-import { Board, PersonalInfo } from "@src/Types/main";
+import { Board, PersonalInfo, ICreateBoard } from "@src/Types/main";
 
 export function getMainBoard(page: number): Promise<Board[]> {
   console.log(page);
@@ -55,6 +55,32 @@ export function getBoardPersonalTag(page: number, userId: number, tag: string[])
 export function touchLikes(board_id: number): Promise<string> {
   return new Promise<string>((resolve, reject) => {
     API.post("/board/Like", { board_id: board_id })
+      .then((res) => {
+        console.log(res);
+        resolve(res.statusText);
+      })
+      .catch((err) => {
+        reject(err.response);
+      });
+  });
+}
+
+export function CreateBoard(_createBoard: ICreateBoard): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
+    API.post("/board/CreateBoard", _createBoard)
+      .then((res) => {
+        console.log(res);
+        resolve(res.statusText);
+      })
+      .catch((err) => {
+        reject(err.response);
+      });
+  });
+}
+
+export function DeleteBoard(board_id: number): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
+    API.patch("/board/BoardDelete", { board_id: board_id })
       .then((res) => {
         console.log(res);
         resolve(res.statusText);

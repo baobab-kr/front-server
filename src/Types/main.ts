@@ -43,3 +43,12 @@ export interface Like {
   id: number;
   likes_status: number;
 }
+
+export interface ICreateBoard {
+  title: string;
+  description: string;
+  content: string;
+  board_status: number;
+  thumbnail: string;
+  tag_name: string[];
+}

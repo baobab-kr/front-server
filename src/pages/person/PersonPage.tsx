@@ -7,6 +7,8 @@ import { getPersonalBoard, getBoardPersonalTag } from "../../api/board";
 import InfiniteScroll from "../../components/InfiniteScroll";
 import { useLocation } from "react-router-dom";
 import { PuffLoader } from "react-spinners";
+import { useRecoilState } from "recoil";
+import { USER } from "../../store/store.user";
 
 type tState = {
   userId: number;
@@ -19,6 +21,9 @@ export default function PersonPage(): JSX.Element {
   const [page, setPage] = useState<number>(0);
   const [tagMode, setTagMode] = useState<string>("ALL");
   const [mainState, setMainState] = useState<boolean>(false);
+  const [isMyHome, setIsMyHome] = useState<boolean>(false);
+
+  const [userInfo] = useRecoilState(USER);
   const location = useLocation();
 
   const modeSelector = async (mode: string) => {
@@ -75,6 +80,11 @@ export default function PersonPage(): JSX.Element {
         if (!data) return;
         setTag(data.tagCount);
         setWriter(data.writer);
+        if (userInfo.id === data.writer.id) {
+          setIsMyHome(true);
+        } else {
+          setIsMyHome(false);
+        }
       })
       .catch((err) => {
         setMainState(true);
@@ -134,7 +144,7 @@ export default function PersonPage(): JSX.Element {
               <Content>
                 <InfiniteScroll loadFnc={getBoardInfo} data={board} isLast={mainState}>
                   {board.map((blogInfo: Board, index: number) => {
-                    return <Card key={index} board={blogInfo} width={"650px"} height={"500px"} />;
+                    return <Card key={index} board={blogInfo} width={"650px"} height={"500px"} isMyHome={isMyHome} />;
                   })}
                 </InfiniteScroll>
               </Content>
