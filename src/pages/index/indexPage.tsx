@@ -27,14 +27,16 @@ export default function IndexPage() {
   const [te, setTe] = useState("");
 
   const [comment, setComment] = useState("");
-  const [reComment, setReComment] = useState({ content: "", idx: 0 });
+  const [reComment, setReComment] = useState("");
+
+  const [isViewIdx, setIsViewId] = useState(0);
+
   const handleChange = (e: any) => {
     setComment(e.target.value);
   };
 
   const handleReCommentChange = (e: any, idx: number) => {
-    console.log(e, idx);
-    setReComment({ content: e.target.value, idx: idx });
+    setReComment(e.target.value);
   };
   const onSaveComment = () => {
     createComment(comment, parseInt(board_id)).then(() => {
@@ -50,17 +52,16 @@ export default function IndexPage() {
   };
 
   const onSaveReComment = (comment_id: number, content: string) => {
-    console.log(content);
-    console.log(document.querySelector(`.input_${comment_id}`));
-    createReComment(content, comment_id).then(() => {
-      getReComments(comment_id)
-        .then((res) => {
-          setReCommentArray({ comments: res });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    });
+    console.log(comment_id, reComment);
+    // createReComment(inputText, comment_id).then(() => {
+    //   getReComments(comment_id)
+    //     .then((res) => {
+    //       setReCommentArray({ comments: res });
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    // });
   };
   useEffect(() => {
     const apiGet = async () => {
@@ -84,19 +85,6 @@ export default function IndexPage() {
     apiGet();
   }, []);
 
-  // useEffect(() => {
-  //   getComments(parseInt(board_id))
-  //     .then((res) => {
-  //       console.log("test", res);
-  //       setCommentArray({ comment: res.comments });
-  //       console.log(indexPageTag);
-  //       console.log(commentArray);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }, [onSaveComment]);
-
   const writeRecomment = (idx: number) => {
     const recommentInput = document.createElement("div");
     recommentInput.className = "writeRecommentBox";
@@ -106,13 +94,14 @@ export default function IndexPage() {
 
     const comment_write = document.createElement("div");
     comment_write.className = "comment_write";
-    comment_write.textContent = "닷글 작성";
+    comment_write.textContent = "답글 작성";
     recommentInput.appendChild(comment_write);
 
     const input = document.createElement("input");
-    input.placeholder = "닷글을 입력해주세요";
+    input.placeholder = "답글을 입력해주세요";
     input.className = `input_${idx}`;
-    input.value = reComment.content;
+    input.name = `input_${idx}`;
+
     recommentInput.appendChild(input);
     input.addEventListener("input", function (e) {
       handleReCommentChange(e, idx);
@@ -120,56 +109,62 @@ export default function IndexPage() {
 
     const btn = document.createElement("button");
     btn.className = "saveComment";
-    btn.textContent = "닷글 작성";
+    btn.textContent = "답글 작성";
 
     btn.addEventListener("click", () => {
       console.log(reComment);
-      onSaveReComment(idx, reComment.content);
+      onSaveReComment(idx, reComment);
     });
     recommentInput.appendChild(btn);
     return recommentInput;
   };
   const recommentView = (idx: number) => {
+    setIsViewId(idx);
     const comment = document.querySelector(`.comment_${idx} .recommentBox`)!;
     if (comment?.childElementCount >= 1) {
       comment.innerHTML = "";
     } else {
-      getReComments(idx).then((res) => {
-        setReCommentArray({ comments: res });
-        reCommentArray.comments.map((data: any) => {
-          const recomment = document.createElement("div");
-          recomment.className = "recomment";
+      getReComments(idx)
+        .then((res) => {
+          setReCommentArray({ comments: res });
+          reCommentArray.comments.map((data: any) => {
+            console.log(data);
+            const recomment = document.createElement("div");
+            recomment.className = "recomment";
 
-          const nickname = document.createElement("div");
-          nickname.className = "re_nickname";
-          nickname.textContent = data.re_nicname;
+            const nickname = document.createElement("div");
+            nickname.className = "re_nickname";
+            nickname.textContent = data.re_nicname;
 
-          const date = document.createElement("div");
-          date.className = "re_date";
-          date.textContent = data.re_date;
+            const date = document.createElement("div");
+            date.className = "re_date";
+            date.textContent = data.re_date;
 
-          const recomment_description = document.createElement("div");
-          recomment_description.className = "recomment_description";
-          recomment_description.textContent = data.recomment_description;
-          if (data.re_nicname === userInfo.username) {
-            const recomment_delete = document.createElement("button");
-            recomment_delete.className = "deleteReComment";
-            recomment_delete.textContent = "삭제";
-            recomment.appendChild(recomment_delete);
+            const recomment_description = document.createElement("div");
+            recomment_description.className = "recomment_description";
+            recomment_description.textContent = data.recomment_description;
+            if (data.re_nicname === userInfo.username) {
+              const recomment_delete = document.createElement("button");
+              recomment_delete.className = "deleteReComment";
+              recomment_delete.textContent = "삭제";
+              recomment.appendChild(recomment_delete);
 
-            recomment_delete.addEventListener("click", () => {
-              deleteReComment(data.id, idx);
-            });
-          }
+              recomment_delete.addEventListener("click", () => {
+                deleteReComment(data.id, idx);
+              });
+            }
 
-          recomment.appendChild(nickname);
-          recomment.appendChild(date);
-          recomment.appendChild(recomment_description);
+            recomment.appendChild(nickname);
+            recomment.appendChild(date);
+            recomment.appendChild(recomment_description);
 
-          const comment = document.querySelector(`.comment_${idx} .recommentBox`)!;
-          comment.appendChild(recomment);
+            const comment = document.querySelector(`.comment_${idx} .recommentBox`)!;
+            comment.appendChild(recomment);
+          });
+        })
+        .catch((err) => {
+          console.log(err);
         });
-      });
 
       const recommentInput = writeRecomment(idx);
       comment.appendChild(recommentInput);

@@ -27,6 +27,7 @@ export function getReComments(_commemt_id: number): Promise<getReComment> {
   return new Promise<getReComment>((resolve, reject) => {
     API.post("/board/ReComment", { comment_id: _commemt_id })
       .then((res) => {
+        console.log(res);
         resolve(res.data);
       })
       .catch((err) => {
