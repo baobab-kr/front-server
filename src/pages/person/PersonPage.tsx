@@ -3,12 +3,11 @@ import { Container, TagPlace, UserInfo, Content, Input } from "./style";
 import Card from "../../components/Card/index";
 import DefaultAvator from "../../assets/defaultAvator.png";
 import { Board, TagCount, Writer } from "../../Types/main";
-import { getPersonalBoard, getBoardPersonalTag } from "../../api/board";
+import { getPersonalBoard, getBoardPersonalTag, DeleteBoard, getBoardPersonalTagCount, getBoardPersonalWriter } from "../../api/board";
 import InfiniteScroll from "../../components/InfiniteScroll";
 import { useLocation } from "react-router-dom";
 import { PuffLoader } from "react-spinners";
-import { useRecoilState } from "recoil";
-import { USER } from "../../store/store.user";
+import { user } from "@src/Types/user";
 
 type tState = {
   userId: number;
@@ -23,11 +22,10 @@ export default function PersonPage(): JSX.Element {
   const [mainState, setMainState] = useState<boolean>(false);
   const [isMyHome, setIsMyHome] = useState<boolean>(false);
 
-  const [userInfo] = useRecoilState(USER);
+  const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
   const location = useLocation();
 
   const modeSelector = async (mode: string) => {
-    console.log(mode);
     setTagMode(mode);
     setBoard([]);
     setMainState(false);
@@ -38,7 +36,6 @@ export default function PersonPage(): JSX.Element {
   const getBoardInfo = async () => {
     if (mainState) return;
     const userId = location.state as tState;
-
     if (tagMode === "ALL") {
       await getPersonalBoard(page, userId.userId)
         .then((data) => {
@@ -49,10 +46,12 @@ export default function PersonPage(): JSX.Element {
 
           setPage(page + 1);
           setBoard((curInfoArray) => [...curInfoArray, ...mBoard]); // state에 추가
+          getTagCount();
+          if (board.length === 0) setTag([]);
         })
         .catch((err) => {
           setMainState(true);
-          console.log("마지막 페이지", err);
+          if (board.length === 0) setTag([]);
         });
     } else {
       await getBoardPersonalTag(page, userId.userId, [tagMode])
@@ -61,13 +60,15 @@ export default function PersonPage(): JSX.Element {
           const mBoard: Board[] = data.map((item) => {
             return Object.assign(item, { writer: writer });
           });
-          console.log("getBoardPersonalTag", mBoard);
+
           setPage(page + 1);
           setBoard((curInfoArray) => [...curInfoArray, ...mBoard]); // state에 추가
+          getTagCount();
+          if (board.length === 0) setTag([]);
         })
         .catch((err) => {
           setMainState(true);
-          console.log("마지막 페이지", err);
+          if (board.length === 0) setTag([]);
         });
     }
   };
@@ -75,27 +76,50 @@ export default function PersonPage(): JSX.Element {
   const getWriter = async () => {
     if (mainState) return;
     const userId = location.state as tState;
-    await getPersonalBoard(0, userId.userId)
+
+    await getBoardPersonalWriter(userId.userId)
       .then((data) => {
         if (!data) return;
-        setTag(data.tagCount);
-        setWriter(data.writer);
-        if (userInfo.id === data.writer.id) {
+        setWriter(data);
+        if (userInfo!.id === data.id) {
           setIsMyHome(true);
         } else {
           setIsMyHome(false);
         }
       })
+      .catch((err) => {});
+  };
+
+  const getTagCount = async () => {
+    // if (mainState) return;
+    const userId = location.state as tState;
+
+    await getBoardPersonalTagCount(userId.userId)
+      .then((data) => {
+        console.log("getTagCount", data);
+
+        setTag(data);
+      })
       .catch((err) => {
-        setMainState(true);
-        console.log("마지막 페이지", err);
+        setTag([]);
       });
   };
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
     getWriter();
+    getTagCount();
   }, []);
+
+  const deleteHandler = (id: number) => {
+    DeleteBoard(id)
+      .then((res) => {
+        setMainState(false);
+        setPage(0);
+        modeSelector(tagMode);
+      })
+      .catch((err) => {});
+  };
 
   const fallback = () => {
     return (
@@ -144,7 +168,7 @@ export default function PersonPage(): JSX.Element {
               <Content>
                 <InfiniteScroll loadFnc={getBoardInfo} data={board} isLast={mainState}>
                   {board.map((blogInfo: Board, index: number) => {
-                    return <Card key={index} board={blogInfo} width={"650px"} height={"500px"} isMyHome={isMyHome} />;
+                    return <Card key={index} board={blogInfo} width={"650px"} height={"500px"} isMyHome={isMyHome} deleteBoard={deleteHandler} />;
                   })}
                 </InfiniteScroll>
               </Content>

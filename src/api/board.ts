@@ -1,8 +1,7 @@
 import API from ".";
-import { Board, PersonalInfo, ICreateBoard } from "@src/Types/main";
+import { Board, PersonalInfo, ICreateBoard, Like, TagCount, Writer } from "@src/Types/main";
 
 export function getMainBoard(page: number): Promise<Board[]> {
-  console.log(page);
   return new Promise<Board[]>((resolve, reject) => {
     API.post("/board/BoardMain", { page: page })
       .then((res) => {
@@ -12,7 +11,6 @@ export function getMainBoard(page: number): Promise<Board[]> {
         resolve(res.data);
       })
       .catch((err) => {
-        console.log("err", err);
         reject(err.response);
       });
   });
@@ -23,9 +21,8 @@ export function getPersonalBoard(page: number, userId: number): Promise<Personal
     API.post("/board/BoardPersonal", { page: page, user_id: userId })
       .then((res) => {
         if (res.data.message) {
-          reject(res.data.message);
+          reject(res);
         }
-        console.log("getPersonalBoard", res.data);
 
         resolve(res.data);
       })
@@ -42,7 +39,6 @@ export function getBoardPersonalTag(page: number, userId: number, tag: string[])
         if (res.data.message) {
           reject(res.data.message);
         }
-        console.log("getBoardPersonalTag", res.data);
 
         resolve(res.data);
       })
@@ -52,12 +48,11 @@ export function getBoardPersonalTag(page: number, userId: number, tag: string[])
   });
 }
 
-export function touchLikes(board_id: number): Promise<string> {
-  return new Promise<string>((resolve, reject) => {
+export function touchLikes(board_id: number): Promise<Like> {
+  return new Promise<Like>((resolve, reject) => {
     API.post("/board/Like", { board_id: board_id })
       .then((res) => {
-        console.log(res);
-        resolve(res.statusText);
+        resolve(res.data);
       })
       .catch((err) => {
         reject(err.response);
@@ -69,7 +64,6 @@ export function CreateBoard(_createBoard: ICreateBoard): Promise<string> {
   return new Promise<string>((resolve, reject) => {
     API.post("/board/CreateBoard", _createBoard)
       .then((res) => {
-        console.log(res);
         resolve(res.statusText);
       })
       .catch((err) => {
@@ -82,8 +76,33 @@ export function DeleteBoard(board_id: number): Promise<string> {
   return new Promise<string>((resolve, reject) => {
     API.patch("/board/BoardDelete", { board_id: board_id })
       .then((res) => {
-        console.log(res);
-        resolve(res.statusText);
+        console.log("DeleteBoard", res.statusText);
+        resolve("OK");
+      })
+      .catch((err) => {
+        reject(err.response);
+      });
+  });
+}
+
+export function getBoardPersonalTagCount(user_id: number): Promise<TagCount[]> {
+  return new Promise<TagCount[]>((resolve, reject) => {
+    API.post("/board/boardPersonalTagCount", { user_id: user_id })
+      .then((res) => {
+        console.log("getBoardPersonalTagCount", res.data);
+        resolve(res.data);
+      })
+      .catch((err) => {
+        reject(err.response);
+      });
+  });
+}
+
+export function getBoardPersonalWriter(user_id: number): Promise<Writer> {
+  return new Promise<Writer>((resolve, reject) => {
+    API.post("/board/BoardPersonalWriter", { user_id: user_id })
+      .then((res) => {
+        resolve(res.data);
       })
       .catch((err) => {
         reject(err.response);

@@ -124,7 +124,7 @@ export const Footer = styled.div`
 export const DeleteButton = styled.div`
   position: absolute;
   top: -18px;
-  right: 0px;
+  right: -60px;
   color: #fff;
   font-size: 20px;
 `;

@@ -1,7 +1,6 @@
-import React from "react";
+import { user } from "@src/Types/user";
+import React, { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
-import { USER } from "../store/store.user";
 
 interface Props {
   component: React.ComponentType;
@@ -10,13 +9,13 @@ interface Props {
 }
 
 export const PrivateRoute: React.FC<Props> = ({ component: RouteComponent, authentication, path }) => {
-  const [userInfo] = useRecoilState(USER);
+  const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
 
-  if (path === "login" && userInfo.username !== "") return <Navigate to="/" />;
+  if (path === "login" && userInfo !== null) return <Navigate to="/" />;
 
-  if (authentication && userInfo.username === "") {
+  if (authentication && userInfo === null) {
     return <Navigate to="/login" />;
-  } else if ((authentication && userInfo.username !== "") || !authentication) {
+  } else if ((authentication && userInfo !== null) || !authentication) {
     return <RouteComponent />;
   }
 
