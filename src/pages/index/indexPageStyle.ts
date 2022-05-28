@@ -6,7 +6,7 @@ export const Index = styled.div`
   left: 50%;
   transform: translate(-50%, 0);
   .line {
-    background: black;
+    background: #ddd;
     width: 40vw;
     height: 1px;
     margin-top: 2rem;
@@ -67,11 +67,11 @@ export const CommentBox = styled.div`
   }
   .date {
     position: relative;
-    top: 0px;
+    top: 10px;
     right: 0px;
   }
   .comment_description {
-    margin-top: 10px;
+    margin-top: 20px;
     margin-bottom: 20px;
   }
   .recomment {
