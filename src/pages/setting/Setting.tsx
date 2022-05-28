@@ -2,12 +2,10 @@ import React from "react";
 
 import { UserInfo, ImageButton, EditButton } from "./style";
 import DefaultAvator from "../../assets/defaultAvator.png";
-
-import { useRecoilState } from "recoil";
-import { USER } from "../../store/store.user";
+import { user } from "@src/Types/user";
 
 export default function Setting(): JSX.Element {
-  const [userInfo] = useRecoilState(USER);
+  const userInfo: user = JSON.parse(localStorage.getItem("user")!);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>

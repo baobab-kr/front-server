@@ -3,25 +3,24 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { HeaderContainer, Logo, SearchContainer, Search, Sign, Button, UserAvator, UserContainer, UserActionList, UserActionListItem } from "./style";
 import LogoImg2 from "../../assets/Logo2.png";
 import DefaultAvator from "../../assets/defaultAvator.png";
-import { useRecoilState } from "recoil";
-import { USER } from "../../store/store.user";
 import { userLogout } from "../../api/user";
+import { user } from "@src/Types/user";
 
 type tState = {
   state: tUesrId;
 };
 
 type tUesrId = {
-  userId: number;
+  userId: number | null;
 };
 
 export default function Header(): JSX.Element {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [userInfo] = useRecoilState(USER);
+  const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
   const [toggleUser, setToggleUser] = useState<number>(0);
-  const props: tState = { state: { userId: userInfo.id } };
+  const props: tState = { state: { userId: userInfo?.id || null } };
 
   const navagateHome = () => {
     navigate("/");
@@ -31,7 +30,7 @@ export default function Header(): JSX.Element {
   };
 
   const navagateMy = () => {
-    navigate(`/@${userInfo.username}`, props);
+    if (userInfo !== null) navigate(`/@${userInfo.username}`, props);
   };
 
   const navagateSetting = () => {
@@ -65,7 +64,7 @@ export default function Header(): JSX.Element {
         <Search />
       </SearchContainer>
       <Sign>
-        {userInfo.username === "" ? (
+        {userInfo === null ? (
           <>
             <Button onClick={navagateLogin}>로그인</Button>
             &nbsp;|&nbsp;
