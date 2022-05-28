@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { PrivateRoute } from "./router/PrivateRoute";
 import Header from "./components/Header";
 import IndexPage from "./pages/index/indexPage";
-// import Login from "./pages/login/Login";
+
 import EditorPage from "./pages/editor/editorPage";
 import Login from "./pages/login/Login";
 import MainPage from "./pages/main/MainPage";
