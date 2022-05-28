@@ -10,25 +10,19 @@ import PersonPage from "./pages/person/PersonPage";
 import Setting from "./pages/setting/Setting";
 import StyleRoot from "./style/StyleRoot";
 import { getUserInfo } from "./api/user";
-import { useRecoilState } from "recoil";
-import { USER } from "./store/store.user";
 
 export default function App(): JSX.Element {
-  const [_, setUserInfo] = useRecoilState(USER);
-
   useEffect(() => {
     getUserInfoFnc();
-    console.log("asd");
   }, []);
 
   const getUserInfoFnc = async () => {
     await getUserInfo()
       .then((data) => {
-        // localStorage.setItem("user", JSON.stringify(data));
-        setUserInfo(data);
+        localStorage.setItem("user", JSON.stringify(data));
       })
       .catch((err) => {
-        console.log("로그인 실패", err);
+        localStorage.removeItem("user");
       });
   };
 

@@ -12,6 +12,7 @@ type Props = {
   width: string;
   height: string;
   isMyHome: boolean;
+  deleteBoard: (id: number) => void;
 };
 
 type tState = {
@@ -22,15 +23,15 @@ type tUesrId = {
   userId: number;
 };
 
-export default function Card({ board, width, height, isMyHome }: Props): JSX.Element {
+export default function Card({ board, width, height, isMyHome, deleteBoard }: Props): JSX.Element {
   const navigate = useNavigate();
   const location = useLocation();
-  const props: tState = { state: { userId: board.writer!.id } };
+  const state: tState = { state: { userId: board.writer!.id } };
   const [likeState, setLikeState] = useState<string>("");
 
   const navigatePerson = () => {
     if (location.pathname === "/") {
-      navigate(`/@${board.writer!.username}`, props);
+      navigate(`/@${board.writer!.username}`, state);
     }
   };
 
@@ -41,22 +42,11 @@ export default function Card({ board, width, height, isMyHome }: Props): JSX.Ele
   const liking = async () => {
     await touchLikes(board.id)
       .then((res) => {
-        console.log(res);
-        Object.assign(board, { likes: [{ id: board.likes[0].id, likes_status: Number(!board.likes[0].likes_status) }] });
-
-        const count = Number(board.likes[0].likes_status) ? ++board.likes_count : --board.likes_count;
+        console.log("liking", res);
+        Object.assign(board, { likes: [res] });
+        console.log("board.likes[0].likes_status", board.likes[0]);
+        const count = board.likes[0].likes_status === 1 ? ++board.likes_count : --board.likes_count;
         likeIcon(count, board.likes);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const deleteHandler = () => {
-    console.log("delete");
-    DeleteBoard(board.id)
-      .then((res) => {
-        console.log(res);
       })
       .catch((err) => {
         console.log(err);
@@ -87,7 +77,15 @@ export default function Card({ board, width, height, isMyHome }: Props): JSX.Ele
             </div>
             {board.writer!.username}
           </User>
-          {isMyHome && <DeleteButton onClick={deleteHandler}>🗑</DeleteButton>}
+          {isMyHome && (
+            <DeleteButton
+              onClick={() => {
+                deleteBoard(board.id);
+              }}
+            >
+              🗑
+            </DeleteButton>
+          )}
           <Date>{timeForToday(board.date)}</Date>
         </div>
         <h2 style={{ margin: "15px 0px" }}>{board.title}</h2>

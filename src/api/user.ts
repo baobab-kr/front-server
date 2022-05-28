@@ -9,6 +9,7 @@ export function getUserInfo(): Promise<user> {
       })
       .catch((err) => {
         reject(err.response);
+        localStorage.removeItem("user");
       });
   });
 }
@@ -18,9 +19,11 @@ export function userLogout(): Promise<string> {
     API.get("/users/logout")
       .then((res) => {
         resolve(res.data);
+        localStorage.removeItem("user");
       })
       .catch((err) => {
         reject(err.response);
+        localStorage.removeItem("user");
       });
   });
 }
