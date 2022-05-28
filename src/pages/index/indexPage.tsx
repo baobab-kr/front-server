@@ -18,7 +18,7 @@ export default function IndexPage() {
   const [indexPageData, setIndexPageData] = useState({ title: "", content: "", description: "", date: "" });
   const [indexPageTag, setIndexPageTag] = useState({ tag: [] });
   const [commentArray, setCommentArray] = useState<any>({ comments: [] });
-  const [reCommentArray, setReCommentArray] = useState<any>({ comments: [] });
+  const [isBtnText, setIsBtnText] = useState<boolean>(true);
   const [te, setTe] = useState("");
 
   const [comment, setComment] = useState("");
@@ -43,21 +43,18 @@ export default function IndexPage() {
     });
   };
 
-  const onSaveReComment = (comment_id: number, content: string, idx: number) => {
-    console.log(comment_id, content);
-
-    createReComment(content, comment_id)
+  const onSaveReComment = (id: number, content: string, idx: number) => {
+    createReComment(content, id)
       .then(() => {
         console.log("답글추가됨");
         document
           .querySelector(`.comment_${idx}`)
           ?.querySelectorAll(".recomment")!
           .forEach((data) => {
-            console.log(data);
             data.remove();
           });
         setTimeout(() => {
-          reCommentLoad(comment_id, idx);
+          reCommentLoad(id, idx);
         }, 100);
       })
       .catch((err) => {
@@ -68,10 +65,8 @@ export default function IndexPage() {
     const apiGet = async () => {
       await getBoardDetail(parseInt(board_id))
         .then((res) => {
-          console.log(res);
           getComments(parseInt(board_id))
             .then((res) => {
-              console.log(res);
               setCommentArray({ comments: res });
             })
             .catch((err) => {
@@ -112,11 +107,12 @@ export default function IndexPage() {
     btn.textContent = "답글 작성";
 
     btn.addEventListener("click", () => {
-      const inputtest = document.querySelector("#commentBox")!;
-      console.log(inputtest.querySelectorAll("input"));
-      const reCommentText = inputtest.querySelectorAll("input")[idx].value;
+      const inputtest = document.querySelector(`.comment_${idx}`)!;
+      console.log(inputtest);
+      const reCommentText = inputtest.querySelector("input")!;
+      console.log(reCommentText.value);
+      onSaveReComment(id, reCommentText.value, idx);
       inputtest.querySelectorAll("input")[idx].value = "";
-      onSaveReComment(id, reCommentText, idx);
     });
     recommentInput.appendChild(btn);
     return recommentInput;
@@ -127,7 +123,6 @@ export default function IndexPage() {
       getReComments(id)
         .then((res) => {
           const reCommentObj: any = { comments: res };
-          console.log(reCommentObj);
           reCommentObj.comments.map((data: any) => {
             const recomment = document.createElement("div");
             recomment.className = "recomment";
@@ -150,7 +145,7 @@ export default function IndexPage() {
               recomment.appendChild(recomment_delete);
 
               recomment_delete.addEventListener("click", () => {
-                deleteReComment(data.id, idx);
+                deleteReComment(data.id, id, idx);
               });
             }
             const comment = document.querySelector(`.comment_${idx} .recommentBox`)!;
@@ -175,8 +170,10 @@ export default function IndexPage() {
   };
 
   const recommentView = async (id: number, idx: number) => {
+    document.querySelector(`.comment_${idx} button`)!.innerHTML = "댓글 숨기기";
     const comment = document.querySelector(`.comment_${idx} .recommentBox`)!;
     if (comment?.childElementCount >= 1) {
+      document.querySelector(`.comment_${idx} button`)!.innerHTML = "댓글 보기";
       comment.innerHTML = "";
     } else {
       reCommentLoad(id, idx);
@@ -203,16 +200,22 @@ export default function IndexPage() {
         console.log(err, "오류남");
       });
   };
-  const deleteReComment = (id: number, idx: number) => {
-    patchDeleteReComment(id)
+  const deleteReComment = (re_id: number, id: number, idx: number) => {
+    patchDeleteReComment(re_id)
       .then(() => {
         console.log("삭제됨");
+        document
+          .querySelector(`.comment_${idx}`)
+          ?.querySelectorAll(".recomment")!
+          .forEach((data) => {
+            data.remove();
+          });
         setTimeout(() => {
           reCommentLoad(id, idx);
-        }, 100);
+        }, 200);
       })
       .catch((err) => {
-        console.log(err, "오류남");
+        console.log("오류남");
       });
   };
 
@@ -251,7 +254,12 @@ export default function IndexPage() {
                   <div className="nickname">{data.writer.username}</div>
                   <div className="date">{moment(data.date).format("YYYY년 MM월 DD일")}</div>
                   <div className="comment_description">{data.content}</div>
-                  <button className="recommentView" onClick={() => recommentView(data.id, idx)}>
+                  <button
+                    className="recommentView"
+                    onClick={() => {
+                      recommentView(data.id, idx);
+                    }}
+                  >
                     댓글 보기
                   </button>
                   {data.writer.username === userInfo.username ? (

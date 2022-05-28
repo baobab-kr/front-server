@@ -38,7 +38,21 @@ export const Top = styled.div`
   }
   .tag {
     position: absolute;
-    left: 0px;
+    right: -100px;
+    div {
+      width: min-content;
+      line-height: 1rem;
+      display: flex;
+      align-items: center;
+      background-color: ${({ theme }) => theme.mainColor.main};
+      color: ${({ theme }) => theme.fontColor.subColor};
+      border-radius: 1rem;
+
+      padding-left: 1rem;
+      padding-right: 1rem;
+      height: 1.5rem;
+      margin-bottom: 10px;
+    }
   }
   .writer {
     position: absolute;

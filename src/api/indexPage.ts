@@ -36,7 +36,6 @@ export function getReComments(_commemt_id: number): Promise<getReComment> {
 }
 
 export function patchDeleteComment(_commemt_id: number): Promise<DeleteComment> {
-  console.log(_commemt_id);
   return new Promise<DeleteComment>((resolve, reject) => {
     API.patch("/board/DeleteComment", { comment_id: _commemt_id })
       .then((res) => {
