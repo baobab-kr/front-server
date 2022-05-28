@@ -28,7 +28,11 @@ export default function Card({ board, width, height, isMyHome, deleteBoard }: Pr
   const location = useLocation();
   const state: tState = { state: { userId: board.writer!.id } };
   const [likeState, setLikeState] = useState<string>("");
-
+  const navigateIndex = () => {
+    if (location.pathname === "/") {
+      navigate(`/@${board.writer!.username}/@${board.id}`);
+    }
+  };
   const navigatePerson = () => {
     if (location.pathname === "/") {
       navigate(`/@${board.writer!.username}`, state);
@@ -69,7 +73,7 @@ export default function Card({ board, width, height, isMyHome, deleteBoard }: Pr
     <CardWrapper width={width} height={height} isHover={location.pathname === "/"}>
       {board.thumbnail !== "" && <CardImage src={board.thumbnail} alt="이미지"></CardImage>}
 
-      <CardText>
+      <CardText onClick={navigateIndex}>
         <div style={{ height: "1.5rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <User onClick={navigatePerson}>
             <div style={{ width: "1.5rem", height: "1.5rem", borderRadius: "50%", overflow: "hidden" }}>
