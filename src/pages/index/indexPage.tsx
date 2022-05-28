@@ -8,7 +8,6 @@ import { USER } from "../../store/store.user";
 import { useLocation } from "react-router-dom";
 import { createComment, createReComment, getBoardDetail, getComments, getReComments, patchDeleteComment, patchDeleteReComment } from "../../api/indexPage";
 import moment from "moment";
-import { getReComment } from "@src/Types/indexPage";
 
 export default function IndexPage() {
   const location = useLocation();
@@ -18,13 +17,8 @@ export default function IndexPage() {
   const [indexPageData, setIndexPageData] = useState({ title: "", content: "", description: "", date: "" });
   const [indexPageTag, setIndexPageTag] = useState({ tag: [] });
   const [commentArray, setCommentArray] = useState<any>({ comments: [] });
-  const [isBtnText, setIsBtnText] = useState<boolean>(true);
-  const [te, setTe] = useState("");
 
   const [comment, setComment] = useState("");
-  const [reComment, setReComment] = useState("");
-
-  const [isViewIdx, setIsViewId] = useState(0);
 
   const handleChange = (e: any) => {
     setComment(e.target.value);
