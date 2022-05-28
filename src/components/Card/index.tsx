@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { CardWrapper, CardImage, CardText, Date, Content, Footer, User, TagWrapper, TagComponent, LikeComponent } from "./style";
+import { CardWrapper, CardImage, CardText, Date, Content, Footer, User, TagWrapper, TagComponent, LikeComponent, DeleteButton } from "./style";
 import { Board, Tag, Like } from "@src/Types/main";
 import { useNavigate, useLocation } from "react-router-dom";
-import image from "../../data/test.jpg";
 import { timeForToday } from "../../util/date";
-import { touchLikes } from "../../api/board";
+import { touchLikes, DeleteBoard } from "../../api/board";
 
 import DefaultAvator from "../../assets/defaultAvator.png";
 
@@ -12,6 +11,7 @@ type Props = {
   board: Board;
   width: string;
   height: string;
+  isMyHome: boolean;
 };
 
 type tState = {
@@ -22,7 +22,7 @@ type tUesrId = {
   userId: number;
 };
 
-export default function Card({ board, width, height }: Props): JSX.Element {
+export default function Card({ board, width, height, isMyHome }: Props): JSX.Element {
   const navigate = useNavigate();
   const location = useLocation();
   const props: tState = { state: { userId: board.writer!.id } };
@@ -56,6 +56,17 @@ export default function Card({ board, width, height }: Props): JSX.Element {
       });
   };
 
+  const deleteHandler = () => {
+    console.log("delete");
+    DeleteBoard(board.id)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const likeIcon = (count: number, state: Like[]) => {
     if (state.length === 0 || state[0].likes_status === 0) {
       setLikeState(`☘ ${count}`);
@@ -70,7 +81,7 @@ export default function Card({ board, width, height }: Props): JSX.Element {
 
   return (
     <CardWrapper width={width} height={height} isHover={location.pathname === "/"}>
-      {board.thumbnail !== "" && <CardImage src={image} alt="이미지"></CardImage>}
+      {board.thumbnail !== "" && <CardImage src={board.thumbnail} alt="이미지"></CardImage>}
 
       <CardText onClick={navigateIndex}>
         <div style={{ height: "1.5rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -80,6 +91,7 @@ export default function Card({ board, width, height }: Props): JSX.Element {
             </div>
             {board.writer!.username}
           </User>
+          {isMyHome && <DeleteButton onClick={deleteHandler}>🗑</DeleteButton>}
           <Date>{timeForToday(board.date)}</Date>
         </div>
         <h2 style={{ margin: "15px 0px" }}>{board.title}</h2>
