@@ -4,8 +4,6 @@ import { Link, Navigate } from "react-router-dom";
 import * as S from "./loginStyle";
 import { loginAPI } from "../../api/login";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import { USER } from "../../store/store.user";
 import API from "../../api";
 export default function Login(props: any) {
   return (
@@ -21,16 +19,15 @@ export default function Login(props: any) {
 }
 const LoginForm = (props: any) => {
   const Navigate = useNavigate();
-  const [_, setUserInfo] = useRecoilState(USER);
 
   const [loginRequest, setLoginRequest] = useState({ id: "", password: "" });
-  const [isEmptyPassword, setEmptyPassword] = React.useState(true);
-  const [isEmptyId, setEmptyId] = React.useState(true);
+  const [isEmptyPassword, setEmptyPassword] = useState(true);
+  const [isEmptyId, setEmptyId] = useState(true);
   const handleSubmit = async () => {
     API.post("/users/login", { userid: loginRequest.id, password: loginRequest.password }, { withCredentials: true })
       .then((res) => {
-        console.log(res);
-        setUserInfo(res.data);
+        console.log(res.data);
+        localStorage.setItem("user", JSON.stringify(res.data));
         Navigate("/");
       })
       .catch((err) => {

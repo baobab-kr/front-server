@@ -3,9 +3,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { PrivateRoute } from "./router/PrivateRoute";
 import Header from "./components/Header";
 import IndexPage from "./pages/index/indexPage";
-
 import EditorPage from "./pages/editor/editorPage";
-import Login from "./pages/login/Login";
+import Login from "./pages/Login/Login";
 import MainPage from "./pages/main/MainPage";
 import PersonPage from "./pages/person/PersonPage";
 import Setting from "./pages/setting/Setting";
@@ -35,7 +34,7 @@ export default function App(): JSX.Element {
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="/@:id" element={<PrivateRoute authentication={true} component={PersonPage} />} />
-          <Route path="/@:id/@:boardid" element={<PrivateRoute authentication={false} component={IndexPage} />} />
+          <Route path="/@:id/:boardid" element={<PrivateRoute authentication={false} component={IndexPage} />} />
           <Route path="/editor" element={<PrivateRoute authentication={false} component={EditorPage} />} />
           <Route path="/login" element={<PrivateRoute authentication={false} component={Login} />} />
           <Route path="/Signup" element={<PrivateRoute authentication={false} component={Signup} path="signup" />} />

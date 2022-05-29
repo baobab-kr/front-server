@@ -52,7 +52,7 @@ export function touchLikes(board_id: number): Promise<Like> {
   return new Promise<Like>((resolve, reject) => {
     API.post("/board/Like", { board_id: board_id })
       .then((res) => {
-        resolve(res.data);
+        resolve(res.data[0]);
       })
       .catch((err) => {
         reject(err.response);

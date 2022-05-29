@@ -30,7 +30,7 @@ export default function Card({ board, width, height, isMyHome, deleteBoard }: Pr
   const [likeState, setLikeState] = useState<string>("");
   const navigateIndex = () => {
     if (location.pathname === "/") {
-      navigate(`/@${board.writer!.username}/@${board.id}`);
+      navigate(`/@${board.writer!.username}/${board.id}`);
     }
   };
   const navigatePerson = () => {
@@ -71,9 +71,9 @@ export default function Card({ board, width, height, isMyHome, deleteBoard }: Pr
 
   return (
     <CardWrapper width={width} height={height} isHover={location.pathname === "/"}>
-      {board.thumbnail !== "" && <CardImage src={board.thumbnail} alt="이미지"></CardImage>}
+      {board.thumbnail !== "" && <CardImage onClick={navigateIndex} src={board.thumbnail} alt="이미지"></CardImage>}
 
-      <CardText onClick={navigateIndex}>
+      <CardText>
         <div style={{ height: "1.5rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <User onClick={navigatePerson}>
             <div style={{ width: "1.5rem", height: "1.5rem", borderRadius: "50%", overflow: "hidden" }}>
@@ -92,8 +92,10 @@ export default function Card({ board, width, height, isMyHome, deleteBoard }: Pr
           )}
           <Date>{timeForToday(board.date)}</Date>
         </div>
-        <h2 style={{ margin: "15px 0px" }}>{board.title}</h2>
-        <Content>{board.description}</Content>
+        <div onClick={navigateIndex} style={{ display: "flex", flexDirection: "column" }}>
+          <h2 style={{ margin: "15px 0px" }}>{board.title}</h2>
+          <Content>{board.description}</Content>
+        </div>
       </CardText>
 
       <Footer>

@@ -91,7 +91,7 @@ export const CommentBox = styled.div`
   .recomment {
     position: relative;
     bottom: 0px;
-    width: 40vw;
+    width: calc(40vw - 40px);
     height: auto;
     color: #fff;
     left: 30px;

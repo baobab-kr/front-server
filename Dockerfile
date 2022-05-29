@@ -1,5 +1,5 @@
 # nodejs 버전 설정
-FROM node:14.17.4-alpine
+FROM node:16-alpine
 
 # 내부 작업 경로 설정
 WORKDIR /usr/src/app

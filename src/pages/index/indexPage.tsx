@@ -3,17 +3,16 @@ import "@toast-ui/editor/dist/theme/toastui-editor-dark.css";
 import React, { useEffect, useState } from "react";
 
 import { Content, CommentBox, Index, InputComment, Top } from "./indexPageStyle";
-import { useRecoilState } from "recoil";
-import { USER } from "../../store/store.user";
 import { useLocation } from "react-router-dom";
 import { createComment, createReComment, getBoardDetail, getComments, getReComments, patchDeleteComment, patchDeleteReComment } from "../../api/indexPage";
 import moment from "moment";
+import { user } from "@src/Types/user";
 
 export default function IndexPage() {
   const location = useLocation();
-  const board_witer = location.pathname.split("@")[1];
-  const board_id = location.pathname.split("@")[2];
-  const [userInfo] = useRecoilState(USER);
+  const board_witer = location.pathname.split("/")[1];
+  const board_id = location.pathname.split("/")[2];
+  const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
   const [indexPageData, setIndexPageData] = useState({ title: "", content: "", description: "", date: "" });
   const [indexPageTag, setIndexPageTag] = useState({ tag: [] });
   const [commentArray, setCommentArray] = useState<any>({ comments: [] });
@@ -132,7 +131,7 @@ export default function IndexPage() {
             const recomment_description = document.createElement("div");
             recomment_description.className = "recomment_description";
             recomment_description.textContent = data.content;
-            if (data.writer.username === userInfo.username) {
+            if ((userInfo !== null && data.writer.username) === userInfo!.username) {
               const recomment_delete = document.createElement("button");
               recomment_delete.className = "deleteReComment";
               recomment_delete.textContent = "삭제";
@@ -256,7 +255,7 @@ export default function IndexPage() {
                   >
                     댓글 보기
                   </button>
-                  {data.writer.username === userInfo.username ? (
+                  {userInfo !== null && data.writer.username === userInfo.username ? (
                     <button className="deleteComment" onClick={() => deleteComment(data.id, idx)}>
                       삭제
                     </button>
