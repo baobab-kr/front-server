@@ -3,12 +3,13 @@ import "@toast-ui/editor/dist/theme/toastui-editor-dark.css";
 import React, { useEffect, useState } from "react";
 
 import { Content, CommentBox, Index, InputComment, Top } from "./indexPageStyle";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { createComment, createReComment, getBoardDetail, getComments, getReComments, patchDeleteComment, patchDeleteReComment } from "../../api/indexPage";
 import moment from "moment";
 import { user } from "@src/Types/user";
 
 export default function IndexPage() {
+  const navigate = useNavigate();
   const location = useLocation();
   const board_witer = location.pathname.split("/")[1];
   const board_id = location.pathname.split("/")[2];
@@ -24,35 +25,45 @@ export default function IndexPage() {
   };
 
   const onSaveComment = () => {
-    createComment(comment, parseInt(board_id)).then(() => {
-      setComment("");
-      getComments(parseInt(board_id))
-        .then((res) => {
-          setCommentArray({ comments: res });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    });
+    if (userInfo === null) {
+      console.log(userInfo);
+      navigate("/login");
+    } else {
+      createComment(comment, parseInt(board_id)).then(() => {
+        setComment("");
+        getComments(parseInt(board_id))
+          .then((res) => {
+            setCommentArray({ comments: res });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      });
+    }
   };
 
   const onSaveReComment = (id: number, content: string, idx: number) => {
-    createReComment(content, id)
-      .then(() => {
-        console.log("답글추가됨");
-        document
-          .querySelector(`.comment_${idx}`)
-          ?.querySelectorAll(".recomment")!
-          .forEach((data) => {
-            data.remove();
-          });
-        setTimeout(() => {
-          reCommentLoad(id, idx);
-        }, 100);
-      })
-      .catch((err) => {
-        console.log("오류남");
-      });
+    if (userInfo === null) {
+      console.log(userInfo);
+      navigate("/login");
+    } else {
+      createReComment(content, id)
+        .then(() => {
+          console.log("답글추가됨");
+          document
+            .querySelector(`.comment_${idx}`)
+            ?.querySelectorAll(".recomment")!
+            .forEach((data) => {
+              data.remove();
+            });
+          setTimeout(() => {
+            reCommentLoad(id, idx);
+          }, 100);
+        })
+        .catch((err) => {
+          console.log("오류남");
+        });
+    }
   };
   useEffect(() => {
     const apiGet = async () => {

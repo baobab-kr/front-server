@@ -28,6 +28,9 @@ export default function Header(): JSX.Element {
   const navagateLogin = () => {
     navigate("/login");
   };
+  const navagateSignup = () => {
+    navigate("/signup");
+  };
 
   const navagateMy = () => {
     if (userInfo !== null) navigate(`/@${userInfo.username}`, props);
@@ -68,7 +71,7 @@ export default function Header(): JSX.Element {
           <>
             <Button onClick={navagateLogin}>로그인</Button>
             &nbsp;|&nbsp;
-            <Button>회원가입</Button>
+            <Button onClick={navagateSignup}>회원가입</Button>
           </>
         ) : (
           <UserContainer onClick={toggleUserInfo}>
