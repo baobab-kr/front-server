@@ -168,10 +168,13 @@ export default function PersonPage(): JSX.Element {
               <Content>
                 <InfiniteScroll loadFnc={getBoardInfo} data={board} isLast={mainState}>
                   {board.map((blogInfo: Board, index: number) => {
-                    return <Card key={index} board={blogInfo} width={"650px"} height={"500px"} isMyHome={isMyHome} deleteBoard={deleteHandler} />;
+                    return (
+                      <Card key={index} board={blogInfo} width={"650px"} height={"500px"} imgHeight={"280px"} isMyHome={isMyHome} deleteBoard={deleteHandler} />
+                    );
                   })}
                 </InfiniteScroll>
               </Content>
+              <div style={{ height: "80px" }}>{""}</div>
             </div>
             <div>
               <Input alt="검색어" placeholder="검색어를 입력해주세요" />

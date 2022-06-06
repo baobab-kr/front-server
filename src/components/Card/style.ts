@@ -6,13 +6,17 @@ type cardInit = {
   isHover: boolean;
 };
 
+type imgInit = {
+  imgHeight: string;
+};
+
 export const CardWrapper = styled.div<cardInit>`
   position: relative;
   width: ${(props) => props.width};
   max-height: ${(props) => props.height};
   display: flex;
   flex-direction: column;
-  border-radius: 18px;
+  border-radius: 8px;
   background: ${({ theme }) => theme.backgroundColor.card};
   color: ${({ theme }) => theme.fontColor.color};
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.9);
@@ -37,11 +41,11 @@ export const CardWrapper = styled.div<cardInit>`
   }
 `;
 
-export const CardImage = styled.img`
+export const CardImage = styled.img<imgInit>`
   object-fit: cover;
-  height: 55%;
+  height: ${(props) => props.imgHeight};
   width: 100%;
-  border-radius: 18px 18px 0px 0px;
+  border-radius: 8px 8px 0px 0px;
 `;
 
 export const CardText = styled.div`

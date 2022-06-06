@@ -234,7 +234,6 @@ export default function IndexPage() {
             })}
           </div>
           <div className="writer">{decodeURI(board_witer).slice(0, -1)}</div>
-          <div className="description">{indexPageData.description}</div>
           <div className="line"></div>
         </Top>
         <Content>

@@ -6,11 +6,13 @@ import { timeForToday } from "../../util/date";
 import { touchLikes, DeleteBoard } from "../../api/board";
 
 import DefaultAvator from "../../assets/defaultAvator.png";
+// import de from "../../baobab-data/develop1.jpg";
 
 type Props = {
   board: Board;
   width: string;
   height: string;
+  imgHeight: string;
   isMyHome: boolean;
   deleteBoard: (id: number) => void;
 };
@@ -23,15 +25,14 @@ type tUesrId = {
   userId: number;
 };
 
-export default function Card({ board, width, height, isMyHome, deleteBoard }: Props): JSX.Element {
+export default function Card({ board, width, height, isMyHome, deleteBoard, imgHeight }: Props): JSX.Element {
   const navigate = useNavigate();
   const location = useLocation();
   const state: tState = { state: { userId: board.writer!.id } };
   const [likeState, setLikeState] = useState<string>("");
+
   const navigateIndex = () => {
-    if (location.pathname === "/") {
-      navigate(`/@${board.writer!.username}/${board.id}`);
-    }
+    navigate(`/@${board.writer!.username}/${board.id}`);
   };
   const navigatePerson = () => {
     if (location.pathname === "/") {
@@ -68,10 +69,12 @@ export default function Card({ board, width, height, isMyHome, deleteBoard }: Pr
     else if (count > 100) setLikeState(`🌴 ${count}`);
     else return setLikeState(`🍃 ${count}`);
   };
+  //
 
   return (
     <CardWrapper width={width} height={height} isHover={location.pathname === "/"}>
-      {board.thumbnail !== "" && <CardImage onClick={navigateIndex} src={board.thumbnail} alt="이미지"></CardImage>}
+      {/* {board.thumbnail !== "" && <CardImage onClick={navigateIndex} src={board.thumbnail} alt="이미지"></CardImage>} */}
+      <CardImage onClick={navigateIndex} imgHeight={imgHeight} src={require(`../../baobab-data/develop${board.id % 15}.jpg`)} alt="이미지"></CardImage>
 
       <CardText>
         <div style={{ height: "1.5rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
