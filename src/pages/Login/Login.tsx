@@ -32,6 +32,7 @@ const LoginForm = (props: any) => {
       })
       .catch((err) => {
         console.log(err);
+        alert("로그인 실패");
       });
   };
 

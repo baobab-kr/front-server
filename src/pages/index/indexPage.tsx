@@ -233,7 +233,7 @@ export default function IndexPage() {
               return <div key={idx}>{data.tag_name}</div>;
             })}
           </div>
-          <div className="writer">{decodeURI(board_witer).slice(0, -1)}</div>
+          <div className="writer">{decodeURI(board_witer).substring(1)}</div>
           <div className="line"></div>
         </Top>
         <Content>
