@@ -32,7 +32,7 @@ export default function Card({ board, width, height, isMyHome, deleteBoard, imgH
   const [likeState, setLikeState] = useState<string>("");
 
   const navigateIndex = () => {
-    navigate(`/@${board.writer!.username}/${board.id}`);
+    navigate(`/@${board.writer!.username}/${board.id}`, state);
   };
   const navigatePerson = () => {
     if (location.pathname === "/") {

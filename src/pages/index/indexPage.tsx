@@ -7,10 +7,15 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { createComment, createReComment, getBoardDetail, getComments, getReComments, patchDeleteComment, patchDeleteReComment } from "../../api/indexPage";
 import moment from "moment";
 import { user } from "@src/Types/user";
-
+type tState = {
+  userId: number;
+};
 export default function IndexPage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const userId = location.state as tState;
+  console.log(userId.userId);
+
   const board_witer = location.pathname.split("/")[1];
   const board_id = location.pathname.split("/")[2];
   const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
@@ -233,7 +238,9 @@ export default function IndexPage() {
               return <div key={idx}>{data.tag_name}</div>;
             })}
           </div>
-          <div className="writer">{decodeURI(board_witer).substring(1)}</div>
+          <div className="writer" onClick={() => navigate(`/@${decodeURI(board_witer).substring(1)}`, { state: { userId: userId.userId } })}>
+            {decodeURI(board_witer).substring(1)}
+          </div>
           <div className="line"></div>
         </Top>
         <Content>
@@ -254,7 +261,12 @@ export default function IndexPage() {
             return (
               <>
                 <div className={`comment comment_${idx}`} key={idx}>
-                  <div className="nickname">{data.writer.username}</div>
+                  <div
+                    className="nickname"
+                    onClick={() => navigate(`/@${decodeURI(data.writer.username).substring(1)}`, { state: { userId: data.writer.id } })}
+                  >
+                    {data.writer.username}
+                  </div>
                   <div className="date">{moment(data.date).format("YYYY년 MM월 DD일")}</div>
                   <div className="comment_description">{data.content}</div>
                   <button
