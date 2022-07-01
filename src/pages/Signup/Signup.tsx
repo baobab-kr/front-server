@@ -5,6 +5,7 @@ import { ID_MIN_LENGTH, ID_MAX_LENGTH, PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH 
 import { Form, Input, Button, notification, Select } from "antd";
 import { checkUsername, checkId, emailRegisterCode, users_register, checkEmail } from "../../api/signup";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const Signup = () => {
   const Navigate = useNavigate();
@@ -86,12 +87,12 @@ const Signup = () => {
     console.log(signupRequest);
     users_register(id.value, email.value, name.value, password.value, emailCode.value)
       .then((response) => {
-        console.log("회원가입 성공");
+        Swal.fire("회원가입 되었습니다.");
         Navigate("/login");
       })
       .catch((error) => {
         console.log(error);
-        console.log("회원가입 실패");
+        Swal.fire("회원가입에 실패했습니다.");
       });
   };
 
@@ -236,8 +237,9 @@ const Signup = () => {
       })
       .catch((err) => {
         setIsName(false);
-        setName({ value: name.value, validateStatus: "error", errorMsg: "이름이 중복되었습니다" });
-        console.log(err + "_____err 중복됨");
+        setName({ value: name.value, validateStatus: "error", errorMsg: "" });
+
+        Swal.fire("이름이 중복되었습니다.");
       });
   };
 
@@ -249,14 +251,15 @@ const Signup = () => {
       })
       .catch((err) => {
         setIsName(false);
-        setId({ value: id.value, validateStatus: "error", errorMsg: "아이디가 중복되었습니다" });
-        console.log(err);
+        setId({ value: id.value, validateStatus: "error", errorMsg: "" });
+        Swal.fire("아이디가 중복되었습니다.");
       });
   };
 
   const registerCode = async (name: any, emails: any) => {
     await checkEmail(emails.value)
       .then(async (data) => {
+        Swal.fire("이메일로 코드가 전송되었습니다.");
         setIsEmail(true);
         await emailRegisterCode(name.value, emails.value)
           .then((data) => {
@@ -268,8 +271,8 @@ const Signup = () => {
       })
       .catch((err) => {
         setIsEmail(false);
-        setEmail({ value: email.value, validateStatus: "error", errorMsg: "이메일이 중복되었습니다" });
-        console.log(err);
+        setEmail({ value: email.value, validateStatus: "error", errorMsg: "" });
+        Swal.fire("이메일이 중복되었습니다.");
       });
   };
 

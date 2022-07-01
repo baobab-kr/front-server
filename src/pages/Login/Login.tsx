@@ -5,6 +5,7 @@ import * as S from "./loginStyle";
 import { loginAPI } from "../../api/login";
 import { useNavigate } from "react-router-dom";
 import API from "../../api";
+import Swal from "sweetalert2";
 export default function Login(props: any) {
   return (
     <div className="loginPage">
@@ -32,7 +33,7 @@ const LoginForm = (props: any) => {
       })
       .catch((err) => {
         console.log(err);
-        alert("로그인 실패");
+        Swal.fire("로그인에 실패하였습니다.");
       });
   };
 
