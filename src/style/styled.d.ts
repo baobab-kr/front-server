@@ -11,10 +11,11 @@ declare module "styled-components" {
     mainColor: {
       main: string;
       filter: string;
+      tag: string;
     };
     backgroundColor: {
       bg: string;
-      card: string;
+      subColor: string;
     };
   }
 }

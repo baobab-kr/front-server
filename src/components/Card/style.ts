@@ -17,9 +17,9 @@ export const CardWrapper = styled.div<cardInit>`
   display: flex;
   flex-direction: column;
   border-radius: 8px;
-  background: ${({ theme }) => theme.backgroundColor.card};
+  background: ${({ theme }) => theme.backgroundColor.subColor};
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9);
   color: ${({ theme }) => theme.fontColor.color};
-  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.9);
   text-align: justify;
   cursor: pointer;
   transition: 0.4s;
@@ -29,6 +29,7 @@ export const CardWrapper = styled.div<cardInit>`
       ? ` &:hover {
             transform: translate(0px, -15px);
             transition: 0.4s;
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.9);
           }`
       : ""};
 

@@ -11,10 +11,17 @@ import Setting from "./pages/setting/Setting";
 import StyleRoot from "./style/StyleRoot";
 import { getUserInfo } from "./api/user";
 import Signup from "./pages/Signup/Signup";
+import ThemeSwitch from "./components/ThemeSwitch/ThemeSwitch";
+import { useRecoilState } from "recoil";
+import Darkmode from "./store/store.theme";
 
 export default function App(): JSX.Element {
+  const [_, setDarkMode] = useRecoilState<boolean>(Darkmode);
+
   useEffect(() => {
     getUserInfoFnc();
+    const theme = localStorage.getItem("Theme");
+    setDarkMode(theme ? (theme === "dark" ? true : false) : false);
   }, []);
 
   const getUserInfoFnc = async () => {
@@ -31,12 +38,12 @@ export default function App(): JSX.Element {
     <StyleRoot>
       <BrowserRouter>
         <Header />
+        <ThemeSwitch />
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="/@:id" element={<PrivateRoute authentication={true} component={PersonPage} />} />
           <Route path="/@:id/:boardid" element={<PrivateRoute authentication={false} component={IndexPage} />} />
           <Route path="/editor" element={<PrivateRoute authentication={false} component={EditorPage} />} />
-          <Route path="/login" element={<PrivateRoute authentication={false} component={Login} />} />
           <Route path="/Signup" element={<PrivateRoute authentication={false} component={Signup} path="signup" />} />
           <Route path="/login" element={<PrivateRoute authentication={false} component={Login} path="login" />} />
           <Route path="/setting" element={<PrivateRoute authentication={true} component={Setting} />} />
