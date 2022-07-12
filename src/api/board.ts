@@ -76,7 +76,6 @@ export function DeleteBoard(board_id: number): Promise<string> {
   return new Promise<string>((resolve, reject) => {
     API.patch("/board/BoardDelete", { board_id: board_id })
       .then((res) => {
-        console.log("DeleteBoard", res.statusText);
         resolve("OK");
       })
       .catch((err) => {
@@ -89,7 +88,6 @@ export function getBoardPersonalTagCount(user_id: number): Promise<TagCount[]> {
   return new Promise<TagCount[]>((resolve, reject) => {
     API.post("/board/boardPersonalTagCount", { user_id: user_id })
       .then((res) => {
-        console.log("getBoardPersonalTagCount", res.data);
         resolve(res.data);
       })
       .catch((err) => {

@@ -24,19 +24,16 @@ export default function MainPage(): JSX.Element {
     await getMainBoard(page)
       .then((data) => {
         setPage(page + 1);
-        // console.log(...data);
         if (data.length - 1 === 2) data[2].thumbnail = "";
         setBoard((curInfoArray) => [...curInfoArray, ...data]); // state에 추가
       })
       .catch((err) => {
         setMainState(true);
-        console.log("마지막 페이지", err);
       });
   };
 
   const filterHandler = () => {
     const refresh = Cookies.get("RefreshToken");
-    console.log(refresh);
   };
 
   const fallback = () => {

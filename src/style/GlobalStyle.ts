@@ -10,6 +10,7 @@ const GlobalStyle = createGlobalStyle`
     margin:0;
     text-decoration : none;
     list-style: none;
+
   }
 
   html {
@@ -28,6 +29,9 @@ const GlobalStyle = createGlobalStyle`
     padding: 80px 0px 0px 0px;
     width: 100%;
     height: 100%;
+
+    transition:0.3s;
+
   }
 
   /* input 기본 스타일 초기화 */
