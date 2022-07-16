@@ -96,8 +96,6 @@ export default function PersonPage(): JSX.Element {
 
     await getBoardPersonalTagCount(userId.userId)
       .then((data) => {
-        console.log("getTagCount", data);
-
         setTag(data);
       })
       .catch((err) => {

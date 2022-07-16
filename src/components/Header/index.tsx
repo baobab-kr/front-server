@@ -54,7 +54,6 @@ export default function Header(): JSX.Element {
   };
 
   const toggleUserInfo = () => {
-    console.log("asdasd", Number(!toggleUser));
     setToggleUser(Number(!toggleUser));
   };
 
