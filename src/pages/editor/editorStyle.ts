@@ -5,16 +5,17 @@ const popup = styled.div`
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: #2f2f2f;
+  background-color: rgba(0, 0, 0, 0.5);
   z-index: 990;
 `;
 
 const popupInner = styled.div`
   position: absolute;
-  top: 5%;
-  width: 100%;
-  height: 95%;
-  background-color: #2f2f2f;
+  top: 17%;
+  left: 20%;
+  width: 60%;
+  height: 70%;
+  background-color: ${({ theme }) => theme.backgroundColor.bg};
   opacity: 1;
 
   .title {
@@ -33,7 +34,7 @@ const popupInner = styled.div`
 
 const postImage = styled.div`
   position: absolute;
-  left: 30%;
+  left: 10vw;
   top: 20%;
   width: 285px;
   .image {
@@ -45,7 +46,7 @@ const postImage = styled.div`
     width: 100%;
     height: 285px;
     margin-bottom: 5px;
-    background: rgb(100, 100, 100);
+    background: ${({ theme }) => theme.backgroundColor.subColor};
     color: #fff;
     .defaultImage {
       position: absolute;
@@ -73,7 +74,7 @@ const description = styled.div`
     width: 100%;
     height: 300px;
     resize: none;
-    background: rgb(100, 100, 100);
+    background: ${({ theme }) => theme.backgroundColor.subColor};
     color: #fff;
     &:focus {
       outline: none;
@@ -117,16 +118,16 @@ const titleInput = styled.input`
   height: 40px;
   font-size: 35px;
   margin-bottom: 20px;
-  background: rgba(255, 255, 255, 0);
-  color: #fff;
+  background: ${({ theme }) => theme.backgroundColor.subColor};
+  color: ${({ theme }) => theme.fontColor.color};
   &:focus {
     outline: none;
   }
 `;
 const saveBtn = styled.button`
   padding: 8px 16px;
-  background: transparent;
-  color: #ffffff;
+  background: ${({ theme }) => theme.backgroundColor.subColor};
+  color: ${({ theme }) => theme.fontColor.color};
   border: 1px solid #ffffff;
   border-radius: 3px;
 `;
