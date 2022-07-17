@@ -1,11 +1,11 @@
 import React, { Suspense, useEffect, useState } from "react";
-import { Container, TagPlace, UserInfo, Content, Input } from "./style";
+import { Wrapper, DivFlex, Properties, ThemeText, TagPlace, UserInfo, Content, Input, TagList, UserDiscrtprion } from "./style";
 import Card from "../../components/Card/index";
 import DefaultAvator from "../../assets/defaultAvator.png";
 import { Board, TagCount, Writer } from "../../Types/main";
 import { getPersonalBoard, getBoardPersonalTag, DeleteBoard, getBoardPersonalTagCount, getBoardPersonalWriter } from "../../api/board";
 import InfiniteScroll from "../../components/InfiniteScroll";
-import { useLocation } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { PuffLoader } from "react-spinners";
 import { user } from "@src/Types/user";
 
@@ -24,6 +24,7 @@ export default function PersonPage(): JSX.Element {
 
   const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
   const location = useLocation();
+  const [searchParams] = useSearchParams();
 
   const modeSelector = async (mode: string) => {
     setTagMode(mode);
@@ -104,6 +105,7 @@ export default function PersonPage(): JSX.Element {
   };
 
   useEffect(() => {
+    console.log(searchParams.get("tag")); // ▶ URLSearchParams {}
     window.scrollTo({ top: 0 });
     getWriter();
     getTagCount();
@@ -129,57 +131,76 @@ export default function PersonPage(): JSX.Element {
 
   return (
     <Suspense fallback={() => fallback()}>
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-        <div style={{ width: "1324px" }}>
-          <UserInfo>
-            <div style={{ width: "150px", height: "150px", borderRadius: "70%", overflow: "hidden", justifySelf: "start" }}>
+      <Wrapper>
+        <UserInfo>
+          <div style={{ flexBasis: "15%" }}>
+            <div style={{ width: "150px", height: "150px", borderRadius: "70%", overflow: "hidden" }}>
               <img src={DefaultAvator} style={{ width: "100%", height: "100%", objectFit: "cover" }} alt="avator"></img>
             </div>
-            <div style={{ display: "flex", gap: "10px", flexDirection: "column" }}>
-              <div style={{ color: "black" }}>
-                <h1 style={{ fontSize: "40px", color: "white" }}>{writer?.username ?? ""}</h1>
-              </div>
-              <hr />
-              <div style={{ marginTop: "10px" }}>
-                <h3 style={{ color: "darkgray" }}>{writer?.description ?? ""}</h3>
-              </div>
-            </div>
-          </UserInfo>
+          </div>
+          <div style={{ display: "flex", gap: "10px", flexDirection: "column", flexBasis: "85%" }}>
+            <ThemeText style={{ fontSize: "30px", fontWeight: "bold" }}>{writer?.username ?? ""}</ThemeText>
+            <UserDiscrtprion>
+              <DivFlex direction="row" style={{ marginTop: "20px", gap: "15px" }}>
+                <DivFlex direction="column" style={{ gap: "15px", flexBasis: "50%" }}>
+                  <div style={{ color: "#999999" }}>DATA Analtst</div>
+                  <ThemeText>{writer?.description ?? "데이터 분석을 통한 프로덕트 성장에 관심있습니다."}</ThemeText>
+                </DivFlex>
+                <DivFlex direction="row" style={{ gap: "15px", flexBasis: "50%" }}>
+                  <DivFlex direction="column" style={{ gap: "15px", flexBasis: "50%" }}>
+                    <div style={{ color: "#999999" }}>Expertise</div>
+                    <ThemeText>{writer?.description ?? ""}</ThemeText>
+                  </DivFlex>
 
-          <Container>
+                  <DivFlex direction="column" style={{ gap: "15px", flexBasis: "50%" }}>
+                    <div style={{ color: "#999999" }}>Social Media</div>
+                    <ThemeText>{writer?.description ?? ""}</ThemeText>
+                  </DivFlex>
+                </DivFlex>
+              </DivFlex>
+            </UserDiscrtprion>
+          </div>
+        </UserInfo>
+        <Properties>
+          <div>
+            <ThemeText style={{ width: "320px", gap: "5px", marginBottom: "8px" }} onClick={() => modeSelector("ALL")}>
+              태그 목록
+            </ThemeText>
+            <hr />
             <TagPlace>
-              <div style={{ margin: "0px 0px 8px 0px" }} onClick={() => modeSelector("ALL")}>
-                전체 태그
-              </div>
-              <hr />
-              <ul style={{ paddingTop: "8px" }}>
-                {tag.map((t: TagCount, index: number) => {
-                  return (
-                    <li key={index} style={{ margin: "8px 0px", cursor: "pointer" }} onClick={() => modeSelector(t.tag_name)}>
-                      {t.tag_name} &nbsp;{`(${t.tag_count})`}
-                    </li>
-                  );
-                })}
-              </ul>
+              {tag.map((t: TagCount, index: number) => {
+                return (
+                  <TagList key={index} onClick={() => modeSelector(t.tag_name)}>
+                    {t.tag_name} {`(${t.tag_count})`}
+                  </TagList>
+                );
+              })}
             </TagPlace>
-            <div>
-              <Content>
-                <InfiniteScroll loadFnc={getBoardInfo} data={board} isLast={mainState}>
-                  {board.map((blogInfo: Board, index: number) => {
-                    return (
-                      <Card key={index} board={blogInfo} width={"650px"} height={"500px"} imgHeight={"280px"} isMyHome={isMyHome} deleteBoard={deleteHandler} />
-                    );
-                  })}
-                </InfiniteScroll>
-              </Content>
-              <div style={{ height: "80px" }}>{""}</div>
-            </div>
-            <div>
-              <Input alt="검색어" placeholder="검색어를 입력해주세요" />
-            </div>
-          </Container>
-        </div>
-      </div>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
+            {/* <div>게시글2</div> */}
+            <Input alt="검색어" placeholder="검색어를 입력해주세요" />
+          </div>
+        </Properties>
+
+        <Content>
+          <InfiniteScroll loadFnc={getBoardInfo} data={board} isLast={mainState}>
+            {board.map((blogInfo: Board, index: number) => {
+              return (
+                <Card
+                  key={index}
+                  board={blogInfo}
+                  width={"calc(50% - 25px)"}
+                  height={"495px"}
+                  imgHeight={"280px"}
+                  isMyHome={isMyHome}
+                  deleteBoard={deleteHandler}
+                />
+              );
+            })}
+          </InfiniteScroll>
+        </Content>
+      </Wrapper>
     </Suspense>
   );
 }
