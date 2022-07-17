@@ -8,7 +8,7 @@ const fontColor = {
 const mainColor = {
   main: "#1d1d1d",
   filter: "#1d1d1d",
-  tag: "96F2D7",
+  tag: "#4f3aff",
 };
 
 const backgroundColor = {

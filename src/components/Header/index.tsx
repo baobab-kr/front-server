@@ -62,8 +62,9 @@ export default function Header(): JSX.Element {
       <Logo onClick={navagateHome}>
         <img src={LogoImg2} style={{ width: "50px", height: "25%", objectFit: "cover", overflow: "auto" }} alt="Logo"></img>
       </Logo>
+
       <SearchContainer>
-        <Search />
+        <Search placeholder="검색" />
       </SearchContainer>
       <Sign>
         {userInfo === null ? (

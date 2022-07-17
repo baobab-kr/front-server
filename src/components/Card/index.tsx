@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { CardWrapper, CardImage, CardText, Date, Content, Footer, User, TagWrapper, TagComponent, LikeComponent, DeleteButton } from "./style";
+import { CardWrapper, CardImage, CardText, Date, Title, Content, Footer, User, TagWrapper, TagComponent, LikeComponent, DeleteButton } from "./style";
 import { Board, Tag, Like } from "@src/Types/main";
 import { useNavigate, useLocation } from "react-router-dom";
 import { timeForToday } from "../../util/date";
@@ -74,31 +74,30 @@ export default function Card({ board, width, height, isMyHome, deleteBoard, imgH
       <CardImage onClick={navigateIndex} imgHeight={imgHeight} src={require(`../../baobab-data/develop${board.id % 15}.jpg`)} alt="이미지"></CardImage>
 
       <CardText>
-        <div style={{ height: "1.5rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <User onClick={navigatePerson}>
-            <div style={{ width: "1.5rem", height: "1.5rem", borderRadius: "50%", overflow: "hidden" }}>
-              <img src={DefaultAvator} style={{ width: "100%", height: "100%", objectFit: "cover" }} alt="avator"></img>
-            </div>
-            {board.writer!.username}
-          </User>
-          {isMyHome && (
-            <DeleteButton
-              onClick={() => {
-                deleteBoard(board.id);
-              }}
-            >
-              🗑
-            </DeleteButton>
-          )}
-          <Date>{timeForToday(board.date)}</Date>
-        </div>
-        <div onClick={navigateIndex} style={{ display: "flex", flexDirection: "column" }}>
-          <h2 style={{ margin: "15px 0px" }}>{board.title}</h2>
-          <Content>{board.description}</Content>
-        </div>
+        <Title>{board.title}</Title>
+        <Content>{board.description}</Content>
       </CardText>
 
+      <Date>{timeForToday(board.date)}</Date>
+
+      {isMyHome && (
+        <DeleteButton
+          onClick={() => {
+            deleteBoard(board.id);
+          }}
+        >
+          🗑
+        </DeleteButton>
+      )}
+
       <Footer>
+        <User onClick={navigatePerson}>
+          <div style={{ width: "1.5rem", height: "1.5rem", borderRadius: "50%", overflow: "hidden" }}>
+            <img src={DefaultAvator} style={{ width: "100%", height: "100%", objectFit: "cover" }} alt="avator"></img>
+          </div>
+          by {board.writer!.username}
+        </User>
+
         <TagWrapper>
           {board.tags.map((tag: Tag, index: number) => {
             return <TagComponent key={index}>{tag.tag_name}</TagComponent>;

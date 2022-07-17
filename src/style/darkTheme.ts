@@ -2,13 +2,13 @@ import { DefaultTheme } from "styled-components";
 
 const fontColor = {
   color: "#FFFFFF",
-  subColor: "#000000",
+  subColor: "#999999",
 };
 
 const mainColor = {
   main: "#F7F7F7",
   filter: "#F7F7F7",
-  tag: "96F2D7",
+  tag: "#96F2D7",
 };
 
 const backgroundColor = {

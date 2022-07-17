@@ -30,6 +30,8 @@ export default function App(): JSX.Element {
         localStorage.setItem("user", JSON.stringify(data));
       })
       .catch((err) => {
+        localStorage.removeItem("atexpires");
+        localStorage.removeItem("rtexpires");
         localStorage.removeItem("user");
       });
   };

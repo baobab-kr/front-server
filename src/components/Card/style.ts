@@ -13,22 +13,28 @@ type imgInit = {
 export const CardWrapper = styled.div<cardInit>`
   position: relative;
   width: ${(props) => props.width};
-  max-height: ${(props) => props.height};
+  height: ${(props) => props.height};
+  min-width: 320px;
+  min-height: 330px;
+  /* width: 320px;
+  height: 330px; */
   display: flex;
   flex-direction: column;
-  border-radius: 8px;
-  background: ${({ theme }) => theme.backgroundColor.subColor};
+  border-radius: 5px;
+  /* background: ${({ theme }) => theme.backgroundColor.subColor}; */
+  background-color: #3f3f3f;
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9);
-  color: ${({ theme }) => theme.fontColor.color};
+  /* color: ${({ theme }) => theme.fontColor.color}; */
+  color: #ffffff;
   text-align: justify;
   cursor: pointer;
-  transition: 0.4s;
+  transition: 0.2s;
 
   ${(props) =>
     props.isHover
       ? ` &:hover {
-            transform: translate(0px, -15px);
-            transition: 0.4s;
+            transform: translate(0px, -10px);
+            transition: 0.2s;
             box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.9);
           }`
       : ""};
@@ -43,19 +49,37 @@ export const CardWrapper = styled.div<cardInit>`
 `;
 
 export const CardImage = styled.img<imgInit>`
+  position: absolute;
   object-fit: cover;
-  height: ${(props) => props.imgHeight};
+  /* height: ${(props) => props.imgHeight}; */
+  height: 75%;
   width: 100%;
-  border-radius: 8px 8px 0px 0px;
+  border-radius: 5px 5px 0px 0px;
 `;
 
 export const CardText = styled.div`
-  margin: 25px;
-  transform: translateZ(30px);
+  position: absolute;
+  height: 75%;
+  width: 100%;
+  padding: 0px 20px;
+  background-color: rgba(0, 0, 0, 0.6);
+
+  z-index: 95;
+`;
+
+export const Title = styled.p`
+  position: absolute;
+  font-size: 25px;
+  font-weight: bold;
+
+  top: 45%;
 `;
 
 export const Content = styled.p`
-  margin-bottom: 25px;
+  position: absolute;
+  top: 65%;
+
+  width: calc(100% - 40px);
   height: 4.8rem;
   word-break: break-word;
   overflow-wrap: break-word;
@@ -68,20 +92,38 @@ export const Content = styled.p`
   text-overflow: ellipsis;
 `;
 
-export const Date = styled.span`
-  color: rgb(255, 7, 110);
+export const Date = styled.p`
+  position: absolute;
+  top: 15px;
+  right: 15px;
+
+  color: rgba(255, 7, 110, 1);
   font-size: 13px;
+  font-weight: bold;
+
+  z-index: 100;
 `;
 
 export const User = styled.span`
+  position: absolute;
+  top: 18%;
+  left: 18px;
+
   float: right;
   display: flex;
   gap: 15px;
   align-items: center;
+
+  color: ${({ theme }) => theme.fontColor.color};
+  font-size: 11px;
 `;
 
 export const TagWrapper = styled.div`
-  width: 80%;
+  position: absolute;
+  bottom: 10px;
+  left: 15px;
+
+  width: 95%;
   display: flex;
   gap: 10px;
   padding-bottom: 3px;
@@ -97,39 +139,49 @@ export const TagWrapper = styled.div`
 `;
 
 export const TagComponent = styled.div`
-  line-height: 1rem;
   display: flex;
   align-items: center;
-  background-color: ${({ theme }) => theme.mainColor.main};
-  color: ${({ theme }) => theme.fontColor.subColor};
-  border-radius: 1rem;
+  justify-content: center;
+  background-color: ${({ theme }) => theme.backgroundColor.subColor};
+  color: ${({ theme }) => theme.mainColor.tag};
+  border-radius: 5px;
 
   padding-left: 1rem;
   padding-right: 1rem;
   height: 1.5rem;
+  white-space: nowrap;
+  font-weight: 200;
 `;
 
 export const LikeComponent = styled.div`
+  position: absolute;
+  top: 18%;
+
+  right: 15px;
   display: flex;
   align-items: center;
   justify-content: end;
   width: 10%;
+
+  color: ${({ theme }) => theme.fontColor.subColor};
 `;
 
 export const Footer = styled.div`
   position: absolute;
-  padding: 0px 25px;
   transform: translateZ(30px);
   display: flex;
   justify-content: space-between;
-  bottom: 10px;
+  bottom: 0px;
   width: 100%;
+  height: 25%;
+
+  background-color: ${({ theme }) => theme.backgroundColor.bg};
 `;
 
 export const DeleteButton = styled.div`
   position: absolute;
-  top: -18px;
-  right: -60px;
+  top: 15px;
+  right: -25px;
   color: #fff;
   font-size: 20px;
 `;

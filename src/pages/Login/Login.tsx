@@ -5,6 +5,7 @@ import * as S from "./loginStyle";
 import { loginAPI } from "../../api/login";
 import { useNavigate } from "react-router-dom";
 import API from "../../api";
+
 export default function Login(props: any) {
   return (
     <div className="loginPage">
@@ -26,12 +27,12 @@ const LoginForm = (props: any) => {
   const handleSubmit = async () => {
     API.post("/users/login", { userid: loginRequest.id, password: loginRequest.password }, { withCredentials: true })
       .then((res) => {
-        console.log(res.data);
         localStorage.setItem("user", JSON.stringify(res.data));
+        localStorage.setItem("atexpires", JSON.stringify(res.headers.atexpires));
+        localStorage.setItem("rtexpires", JSON.stringify(res.headers.rtexpires));
         Navigate("/");
       })
       .catch((err) => {
-        console.log(err);
         alert("로그인 실패");
       });
   };

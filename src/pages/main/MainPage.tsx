@@ -69,7 +69,7 @@ export default function MainPage(): JSX.Element {
           <div style={{ margin: "0px auto", display: "flex", gap: "32px", flexWrap: "wrap" }}>
             <InfiniteScroll loadFnc={getInfo} data={board} isLast={mainState}>
               {board?.map((item: Board, index: number) => {
-                return <Card key={index} board={item} width={"420px"} height={"400px"} imgHeight={"45%"} isMyHome={false} deleteBoard={() => {}} />;
+                return <Card key={index} board={item} width={"320px"} height={"330px"} imgHeight={"45%"} isMyHome={false} deleteBoard={() => {}} />;
               })}
             </InfiniteScroll>
           </div>
