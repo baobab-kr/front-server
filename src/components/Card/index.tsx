@@ -5,7 +5,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { timeForToday } from "../../util/date";
 import { touchLikes, DeleteBoard } from "../../api/board";
 
-import DefaultAvator from "../../assets/defaultAvator.png";
+import Avator from "../Avator/Avator";
 // import de from "../../baobab-data/develop1.jpg";
 
 type Props = {
@@ -32,7 +32,7 @@ export default function Card({ board, width, height, isMyHome, deleteBoard, imgH
   const [likeState, setLikeState] = useState<string>("");
 
   const navigateIndex = () => {
-    navigate(`/@${board.writer!.username}/${board.id}`);
+    navigate(`/@${board.writer!.username}/${board.id}`, state);
   };
   const navigatePerson = () => {
     if (location.pathname === "/") {
@@ -42,6 +42,8 @@ export default function Card({ board, width, height, isMyHome, deleteBoard, imgH
 
   useEffect(() => {
     likeIcon(board.likes_count, board.likes);
+
+    console.log(width);
   }, []);
 
   const liking = async () => {
@@ -71,9 +73,9 @@ export default function Card({ board, width, height, isMyHome, deleteBoard, imgH
   return (
     <CardWrapper width={width} height={height} isHover={location.pathname === "/"}>
       {/* {board.thumbnail !== "" && <CardImage onClick={navigateIndex} src={board.thumbnail} alt="이미지"></CardImage>} */}
-      <CardImage onClick={navigateIndex} imgHeight={imgHeight} src={require(`../../baobab-data/develop${board.id % 15}.jpg`)} alt="이미지"></CardImage>
+      <CardImage imgHeight={imgHeight} src={require(`../../baobab-data/develop${board.id % 15}.jpg`)} alt="이미지"></CardImage>
 
-      <CardText>
+      <CardText onClick={navigateIndex}>
         <Title>{board.title}</Title>
         <Content>{board.description}</Content>
       </CardText>
@@ -92,9 +94,10 @@ export default function Card({ board, width, height, isMyHome, deleteBoard, imgH
 
       <Footer>
         <User onClick={navigatePerson}>
-          <div style={{ width: "1.5rem", height: "1.5rem", borderRadius: "50%", overflow: "hidden" }}>
+          {/* <div style={{ width: "1.5rem", height: "1.5rem", borderRadius: "50%", overflow: "hidden" }}>
             <img src={DefaultAvator} style={{ width: "100%", height: "100%", objectFit: "cover" }} alt="avator"></img>
-          </div>
+          </div> */}
+          <Avator userId={board.writer!.userid} width={"1.5rem"} height={"1.5rem"} />
           by {board.writer!.username}
         </User>
 

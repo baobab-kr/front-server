@@ -161,7 +161,7 @@ export const LikeComponent = styled.div`
   display: flex;
   align-items: center;
   justify-content: end;
-  width: 10%;
+  width: 12%;
 
   color: ${({ theme }) => theme.fontColor.subColor};
 `;

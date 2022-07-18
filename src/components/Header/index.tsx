@@ -5,6 +5,7 @@ import LogoImg2 from "../../assets/Logo2.png";
 import DefaultAvator from "../../assets/defaultAvator.png";
 import { userLogout } from "../../api/user";
 import { user } from "@src/Types/user";
+import Avator from "../Avator/Avator";
 
 type tState = {
   state: tUesrId;
@@ -76,7 +77,8 @@ export default function Header(): JSX.Element {
         ) : (
           <UserContainer onClick={toggleUserInfo}>
             <UserAvator>
-              <img src={DefaultAvator} style={{ width: "100%", height: "100%", objectFit: "cover" }} alt="avator"></img>
+              {/* <img src={DefaultAvator} style={{ width: "100%", height: "100%", objectFit: "cover" }} alt="avator"></img> */}
+              <Avator userId={userInfo.userid} height={"40px"} width={"40px"} />
             </UserAvator>
             <UserActionList scale={toggleUser}>
               <UserActionListItem onClick={navagateMy}>My Home</UserActionListItem>

@@ -6,7 +6,7 @@ type tUserActionList = {
 
 export const Wrapper = styled.div`
   display: flex;
-
+  width: 100%;
   flex-direction: column;
   padding: 0px 100px;
 
@@ -84,6 +84,8 @@ export const UserInfo = styled.div`
 export const UserDiscrtprion = styled.div``;
 
 export const Content = styled.div`
+  width: 100%;
+
   display: flex;
   align-items: center;
   justify-content: start;

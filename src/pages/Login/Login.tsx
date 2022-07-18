@@ -20,6 +20,7 @@ export default function Login(props: any) {
 }
 const LoginForm = (props: any) => {
   const Navigate = useNavigate();
+  const [myImage, setMyImage] = useState<any>();
 
   const [loginRequest, setLoginRequest] = useState({ id: "", password: "" });
   const [isEmptyPassword, setEmptyPassword] = useState(true);
@@ -30,6 +31,7 @@ const LoginForm = (props: any) => {
         localStorage.setItem("user", JSON.stringify(res.data));
         localStorage.setItem("atexpires", JSON.stringify(res.headers.atexpires));
         localStorage.setItem("rtexpires", JSON.stringify(res.headers.rtexpires));
+
         Navigate("/");
       })
       .catch((err) => {
