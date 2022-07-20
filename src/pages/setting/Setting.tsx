@@ -55,7 +55,7 @@ export default function Setting(): JSX.Element {
         <UserInfo>
           <div>
             {fileImage !== "" && (
-              <div style={{ width: "150px", height: "150px", borderRadius: "70%", overflow: "hidden", justifySelf: "start" }}>
+              <div style={{ maxWidth: "150px", maxHeight: "150px", width: "150px", height: "150px", borderRadius: "3%", overflow: "hidden" }}>
                 <img src={fileImage} style={{ width: "100%", height: "100%", objectFit: "cover" }} alt="avator"></img>
               </div>
             )}

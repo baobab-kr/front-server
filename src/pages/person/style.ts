@@ -69,15 +69,16 @@ export const UserInfo = styled.div`
   display: flex;
 
   width: 100%;
+  min-height: 160px;
   /* max-width: 960px; */
 
-  margin: 0px auto;
+  margin: 13px auto;
   margin-bottom: 20px;
 
   gap: 20px;
 
   /* background-color: #252525; */
-  padding: 15px 0px;
+  /* padding: 15px 0px; */
   /* height: 350px; */
 `;
 

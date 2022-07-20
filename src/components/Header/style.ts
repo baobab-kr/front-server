@@ -24,29 +24,19 @@ export const Logo = styled.div`
   cursor: pointer;
 `;
 
-export const SearchContainer = styled.div`
+export const ItemWrapper = styled.div`
   position: fixed;
   right: 150px;
-  padding: 7px 0px 0px 0px;
+  right: 20px;
 
-  /* &::before {
-    content: "검색";
-    color: ${({ theme }) => theme.fontColor.color};
-    line-height: 1;
-  } */
+  display: flex;
+  gap: 35px;
+  align-items: center;
+`;
 
-  @media screen and (max-width: 630px) {
-    /* 타블렛 가로 */
-    width: 13rem;
-
-    position: fixed;
-    right: 0px;
-    left: 50%;
-    transform: translate(-55%, 0);
-    &::before {
-      content: none;
-    }
-  }
+export const SearchContainer = styled.div`
+  padding: 5px 0px 0px 0px;
+  cursor: pointer;
 `;
 
 export const Search = styled.input`
@@ -66,8 +56,6 @@ export const Search = styled.input`
 
 export const Sign = styled.div`
   color: ${({ theme }) => theme.fontColor.color};
-  position: fixed;
-  right: 20px;
 `;
 
 export const Button = styled.button`
@@ -87,12 +75,27 @@ export const UserAvator = styled.div`
   justify-self: start;
 `;
 
+export const Arrow = styled.div<tUserActionList>`
+  position: absolute;
+  top: 40px;
+  right: 14px;
+  width: 12px;
+  height: 8px;
+  border-left: 6px solid transparent;
+  border-bottom: 8px solid hsl(230, 6%, 18%);
+  border-right: 6px solid transparent;
+  transform: scale(${(props) => props.scale});
+  transition: 0.4s cubic-bezier(0.65, 0.9, 0.3, 0.95);
+  /* background-color: #2f2f2f; */
+`;
+
 export const UserActionList = styled.ul<tUserActionList>`
   position: absolute;
-  left: -95px;
-  width: 135px;
+  top: 48px;
+  right: 0px;
+  width: 280px;
   background-color: #2f2f2f;
-  transform-origin: 85% 0;
+  transform-origin: 95% -3%;
   border-radius: 5px;
   transform: scale(${(props) => props.scale});
   transition: 0.4s cubic-bezier(0.65, 0.9, 0.3, 0.95);

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { HeaderContainer, Logo, SearchContainer, Search, Sign, Button, UserAvator, UserContainer, UserActionList, UserActionListItem } from "./style";
+import { HeaderContainer, Logo, SearchContainer, ItemWrapper, Sign, Button, UserContainer, Arrow, UserActionList, UserActionListItem } from "./style";
 import LogoImg2 from "../../assets/Logo2.png";
-import DefaultAvator from "../../assets/defaultAvator.png";
 import { userLogout } from "../../api/user";
 import { user } from "@src/Types/user";
+import SearchArea from "./SearchArea/SearchArea";
 import Avator from "../Avator/Avator";
+
+import { BsSearch } from "react-icons/bs";
 
 type tState = {
   state: tUesrId;
@@ -21,6 +23,7 @@ export default function Header(): JSX.Element {
 
   const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
   const [toggleUser, setToggleUser] = useState<number>(0);
+  const [open, setOpen] = useState<boolean>(false);
   const props: tState = { state: { userId: userInfo?.id || null } };
 
   const navagateHome = () => {
@@ -58,37 +61,47 @@ export default function Header(): JSX.Element {
     setToggleUser(Number(!toggleUser));
   };
 
+  const seachClick = () => {
+    setOpen(true);
+  };
+
   return (
     <HeaderContainer>
       <Logo onClick={navagateHome}>
         <img src={LogoImg2} style={{ width: "50px", height: "25%", objectFit: "cover", overflow: "auto" }} alt="Logo"></img>
       </Logo>
-
-      <SearchContainer>
-        <Search placeholder="검색" />
-      </SearchContainer>
-      <Sign>
-        {userInfo === null ? (
-          <>
-            <Button onClick={navagateLogin}>로그인</Button>
-            &nbsp;|&nbsp;
-            <Button onClick={navagateSignup}>회원가입</Button>
-          </>
-        ) : (
-          <UserContainer onClick={toggleUserInfo}>
-            <UserAvator>
-              {/* <img src={DefaultAvator} style={{ width: "100%", height: "100%", objectFit: "cover" }} alt="avator"></img> */}
-              <Avator userId={userInfo.userid} height={"40px"} width={"40px"} />
-            </UserAvator>
-            <UserActionList scale={toggleUser}>
-              <UserActionListItem onClick={navagateMy}>My Home</UserActionListItem>
-              <UserActionListItem onClick={navagateSetting}>설정</UserActionListItem>
-              <UserActionListItem onClick={navagateEditor}>글쓰기</UserActionListItem>
-              <UserActionListItem onClick={logout}>로그아웃</UserActionListItem>
-            </UserActionList>
-          </UserContainer>
-        )}
-      </Sign>
+      <ItemWrapper>
+        <SearchContainer>
+          <BsSearch onClick={seachClick} />
+          <SearchArea open={open} setOpen={setOpen} />
+        </SearchContainer>
+        <Sign>
+          {userInfo === null ? (
+            <>
+              <Button onClick={navagateLogin}>로그인</Button>
+              &nbsp;|&nbsp;
+              <Button onClick={navagateSignup}>회원가입</Button>
+            </>
+          ) : (
+            <div onClick={toggleUserInfo}>
+              <Arrow scale={toggleUser} />
+              <UserContainer>
+                <Avator userId={userInfo.userid} height={"40px"} width={"40px"} />
+                <UserActionList scale={toggleUser}>
+                  <div style={{ margin: "10px" }}>
+                    <Avator userId={userInfo.userid} height={"40px"} width={"40px"} />
+                  </div>
+                  <hr color="red" />
+                  <UserActionListItem onClick={navagateMy}>My Home</UserActionListItem>
+                  <UserActionListItem onClick={navagateSetting}>설정</UserActionListItem>
+                  <UserActionListItem onClick={navagateEditor}>글쓰기</UserActionListItem>
+                  <UserActionListItem onClick={logout}>로그아웃</UserActionListItem>
+                </UserActionList>
+              </UserContainer>
+            </div>
+          )}
+        </Sign>
+      </ItemWrapper>
     </HeaderContainer>
   );
 }

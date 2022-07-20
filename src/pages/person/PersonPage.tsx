@@ -8,6 +8,7 @@ import InfiniteScroll from "../../components/InfiniteScroll";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { PuffLoader } from "react-spinners";
 import { user } from "@src/Types/user";
+import Avator from "../../components/Avator/Avator";
 
 type tState = {
   userId: number;
@@ -134,9 +135,7 @@ export default function PersonPage(): JSX.Element {
       <Wrapper>
         <UserInfo>
           <div style={{ flexBasis: "15%" }}>
-            <div style={{ width: "150px", height: "150px", borderRadius: "70%", overflow: "hidden" }}>
-              <img src={DefaultAvator} style={{ width: "100%", height: "100%", objectFit: "cover" }} alt="avator"></img>
-            </div>
+            <Avator userId={userInfo!.userid.toString()} width={"100%"} height={"100%"} />
           </div>
           <div style={{ display: "flex", gap: "10px", flexDirection: "column", flexBasis: "85%" }}>
             <ThemeText style={{ fontSize: "30px", fontWeight: "bold" }}>{writer?.username ?? ""}</ThemeText>
