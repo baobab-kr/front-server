@@ -6,9 +6,9 @@ import * as E from "./editorStyle";
 import cancleImg from "./img/cancleBtn.png";
 import ReactTagInput from "@pathofdev/react-tag-input";
 
-import { ICreateBoard } from "@src/Types/main";
-import { CreateBoard } from "../../api/board";
-import { useNavigate } from "react-router-dom";
+import { ICreateBoard, IEditBoard } from "@src/Types/main";
+import { CreateBoard, EditBoard } from "../../api/board";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import "prismjs/themes/prism.css";
 import "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css";
@@ -22,9 +22,11 @@ type props = {
   onClose: React.Dispatch<React.SetStateAction<boolean>>;
   data: ICreateBoard;
   setData: React.Dispatch<React.SetStateAction<ICreateBoard>>;
+  boardId: string;
 };
 
-function Popup({ onClose, data, setData }: props) {
+function Popup({ onClose, data, setData, boardId }: props) {
+  console.log(boardId);
   const navigate = useNavigate();
 
   const saveFileImage = (e: any) => {
@@ -56,6 +58,19 @@ function Popup({ onClose, data, setData }: props) {
       });
   };
 
+  const onEdit = (data: IEditBoard) => {
+    console.log(data);
+    EditBoard(data)
+      .then((res) => {
+        console.log("Board 수정 성공", res);
+
+        navigate("/");
+      })
+      .catch((err) => {
+        console.log("Board 수정 실패", err);
+      });
+  };
+
   const onOnlyMe = () => {
     setData({ ...data, board_status: 1 });
     CreateBoard(data)
@@ -68,6 +83,7 @@ function Popup({ onClose, data, setData }: props) {
         console.log("Board 생성 실패", err);
       });
   };
+  const editdata = { title: data.title, content: data.content, description: data.description, tag_name: data.tag_name, board_id: parseInt(boardId) };
   return (
     <>
       <E.popup>
@@ -99,14 +115,22 @@ function Popup({ onClose, data, setData }: props) {
 
           <img className="cancleBtn" onClick={onClick} src={cancleImg} alt="cancle" />
 
-          <E.btnBox>
-            <button className="onlyMeBtn" onClick={onOnlyMe}>
-              나만보기
-            </button>
-            <button className="saveBtn" onClick={onSave}>
-              저장
-            </button>
-          </E.btnBox>
+          {boardId === "" ? (
+            <E.btnBox>
+              <button className="onlyMeBtn" onClick={onOnlyMe}>
+                나만보기
+              </button>
+              <button className="saveBtn" onClick={onSave}>
+                저장
+              </button>
+            </E.btnBox>
+          ) : (
+            <E.btnBox>
+              <button className="saveBtn" onClick={() => onEdit(editdata)}>
+                수정
+              </button>
+            </E.btnBox>
+          )}
         </E.popupInner>
       </E.popup>
     </>
@@ -118,16 +142,17 @@ export default function EditorPage() {
   const [windowHeight, setWindowHeight] = useState<number>(window.innerHeight);
   const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
 
+  const editorRef: any = React.createRef();
+
+  const location: any = useLocation();
   const [editor, setEditor] = useState<ICreateBoard>({
-    title: "",
-    description: "",
-    content: "",
+    title: location.state !== null ? location.state.data.title : "",
+    description: location.state !== null ? location.state.data.description : "",
+    content: location.state !== null ? location.state.data.content : "",
     board_status: 0,
     thumbnail: "",
     tag_name: [],
   });
-
-  const editorRef: any = React.createRef();
 
   const titleHandler = (e: any) => {
     setEditor({ ...editor, title: e.target.value });
@@ -177,23 +202,29 @@ export default function EditorPage() {
               onChange={(newTags) => tagHandler(newTags)}
             />
           </div>
-          <E.saveBtn className="btn_save" onClick={onClickEvent}>
-            SAVE
-          </E.saveBtn>
+          {location.state !== null ? (
+            <E.saveBtn className="btn_edit" onClick={onClickEvent}>
+              Edit
+            </E.saveBtn>
+          ) : (
+            <E.saveBtn className="btn_save" onClick={onClickEvent}>
+              SAVE
+            </E.saveBtn>
+          )}
         </div>
       </E.TitleWrpper>
       <Editor
         previewStyle={windowWidth > 720 ? "vertical" : "tab"}
-        theme="dark"
+        theme={localStorage.getItem("Theme") === "dark" ? "dark" : "light"}
         height={`${Math.max(windowHeight - 250, 300)}px`}
         initialEditType="markdown"
-        initialValue=""
+        initialValue={location.state !== null ? location.state.data.content : ""}
         ref={editorRef}
         onChange={handleChange}
         placeholder="당신의 바오밥 나무에 가지를 추가해보세요..."
         plugins={[[codeSyntaxHighlight, { highlighter: Prism }], colorSyntax]}
       />
-      {showPopup ? <Popup onClose={setShowPopup} data={editor} setData={setEditor} /> : null}
+      {showPopup ? <Popup onClose={setShowPopup} data={editor} setData={setEditor} boardId={location.state !== null ? location.state.id : ""} /> : null}
     </>
   );
 }

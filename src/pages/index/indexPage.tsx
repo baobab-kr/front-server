@@ -2,21 +2,30 @@ import "@toast-ui/editor/dist/toastui-editor.css";
 import "@toast-ui/editor/dist/theme/toastui-editor-dark.css";
 import React, { useEffect, useState } from "react";
 
-import { Content, CommentBox, Index, InputComment, Top } from "./indexPageStyle";
+import { Content, CommentBox, Index, InputComment, Top, Navigate } from "./indexPageStyle";
 import { useLocation, useNavigate } from "react-router-dom";
 import { createComment, createReComment, getBoardDetail, getComments, getReComments, patchDeleteComment, patchDeleteReComment } from "../../api/indexPage";
 import moment from "moment";
 import { user } from "@src/Types/user";
-
+import { timeForToday } from "../../util/date";
+import DefaultAvator from "../../assets/defaultAvator.png";
+type tState = {
+  userId: number;
+};
 export default function IndexPage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const userId = location.state as tState;
+  console.log(userId.userId);
+
   const board_witer = location.pathname.split("/")[1];
   const board_id = location.pathname.split("/")[2];
   const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
   const [indexPageData, setIndexPageData] = useState({ title: "", content: "", description: "", date: "" });
   const [indexPageTag, setIndexPageTag] = useState({ tag: [] });
   const [commentArray, setCommentArray] = useState<any>({ comments: [] });
+  const [navigateList, setNavigateList] = useState<String[]>([]);
+  // let navigateList: String[] = [];
 
   const [comment, setComment] = useState("");
 
@@ -69,6 +78,7 @@ export default function IndexPage() {
     const apiGet = async () => {
       await getBoardDetail(parseInt(board_id))
         .then((res) => {
+          console.log(res);
           getComments(parseInt(board_id))
             .then((res) => {
               setCommentArray({ comments: res });
@@ -79,6 +89,12 @@ export default function IndexPage() {
           setIndexPageData({ title: res.title, content: res.content, description: res.description, date: res.date });
           setIndexPageTag({ tag: res.tags });
           document.querySelector(".toastui-editor-contents")!.innerHTML = res.content;
+          let datas: String[] = [];
+          document.querySelectorAll<HTMLElement>(".toastui-editor-contents h1")!.forEach((data) => {
+            datas.push(data.innerHTML);
+            setNavigateList(datas);
+            console.log(navigateList);
+          });
         })
         .catch((err) => {
           console.log(err);
@@ -222,23 +238,54 @@ export default function IndexPage() {
         console.log("오류남");
       });
   };
-
+  console.log(localStorage.getItem("Theme"));
   return (
     <>
       <Index>
         <Top>
+          {userInfo !== null && decodeURI(board_witer).substring(1) === userInfo.username ? (
+            <button className="deleteComment" onClick={() => navigate("/editor", { state: { data: indexPageData, user: userInfo.username, id: board_id } })}>
+              수정
+            </button>
+          ) : null}
           <div className="title">{indexPageData.title}</div>
+          <div className="top_data_box">
+            <div className="profile">
+              <img src={DefaultAvator} style={{ width: "100%", height: "100%", objectFit: "cover" }} alt="avator"></img>
+            </div>
+            <div className="writer" onClick={() => navigate(`/@${decodeURI(board_witer).substring(1)}`, { state: { userId: userId.userId } })}>
+              {decodeURI(board_witer).substring(1)}
+            </div>
+            <div className="date">{timeForToday(indexPageData.date)}</div>
+          </div>
+          <div className="line"></div>
+        </Top>
+        <Navigate>
+          {navigateList.map((data, idx) => {
+            return (
+              <span className="naviData">
+                <span className="naviNum">{idx + 1}. </span>
+                <span
+                  className="navi data"
+                  onClick={() =>
+                    console.log(window.scrollTo(0, document.querySelectorAll<HTMLElement>(".toastui-editor-contents h1")[idx].getBoundingClientRect().y - 70))
+                  }
+                >
+                  {data}
+                </span>
+              </span>
+            );
+          })}
+        </Navigate>
+        <Content>
+          <div className={localStorage.getItem("Theme") === "dark" ? "toastui-editor-dark" : "toastui-editor"}>
+            <div className="toastui-editor-contents"></div>
+          </div>
+          <div className="line"></div>
           <div className="tag">
             {indexPageTag.tag.map((data: any, idx: number) => {
               return <div key={idx}>{data.tag_name}</div>;
             })}
-          </div>
-          <div className="writer">{decodeURI(board_witer).substring(1)}</div>
-          <div className="line"></div>
-        </Top>
-        <Content>
-          <div className="toastui-editor-dark">
-            <div className="toastui-editor-contents"></div>
           </div>
         </Content>
         <InputComment>
@@ -254,7 +301,12 @@ export default function IndexPage() {
             return (
               <>
                 <div className={`comment comment_${idx}`} key={idx}>
-                  <div className="nickname">{data.writer.username}</div>
+                  <div
+                    className="nickname"
+                    onClick={() => navigate(`/@${decodeURI(data.writer.username).substring(1)}`, { state: { userId: data.writer.id } })}
+                  >
+                    {data.writer.username}
+                  </div>
                   <div className="date">{moment(data.date).format("YYYY년 MM월 DD일")}</div>
                   <div className="comment_description">{data.content}</div>
                   <button

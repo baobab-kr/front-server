@@ -1,5 +1,5 @@
 import API from ".";
-import { Board, PersonalInfo, ICreateBoard, Like, TagCount, Writer } from "@src/Types/main";
+import { Board, PersonalInfo, ICreateBoard, Like, TagCount, Writer, IEditBoard } from "@src/Types/main";
 
 export function getMainBoard(page: number): Promise<Board[]> {
   return new Promise<Board[]>((resolve, reject) => {
@@ -72,11 +72,22 @@ export function CreateBoard(_createBoard: ICreateBoard): Promise<string> {
   });
 }
 
+export function EditBoard(_editBoard: IEditBoard): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
+    API.post("/board/BoardUpdate", _editBoard)
+      .then((res) => {
+        resolve(res.statusText);
+      })
+      .catch((err) => {
+        reject(err.response);
+      });
+  });
+}
+
 export function DeleteBoard(board_id: number): Promise<string> {
   return new Promise<string>((resolve, reject) => {
     API.patch("/board/BoardDelete", { board_id: board_id })
       .then((res) => {
-        console.log("DeleteBoard", res.statusText);
         resolve("OK");
       })
       .catch((err) => {
@@ -89,7 +100,6 @@ export function getBoardPersonalTagCount(user_id: number): Promise<TagCount[]> {
   return new Promise<TagCount[]>((resolve, reject) => {
     API.post("/board/boardPersonalTagCount", { user_id: user_id })
       .then((res) => {
-        console.log("getBoardPersonalTagCount", res.data);
         resolve(res.data);
       })
       .catch((err) => {

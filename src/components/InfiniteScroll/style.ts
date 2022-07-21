@@ -3,12 +3,12 @@ import styled from "styled-components";
 export const TopButton = styled.button`
   position: fixed;
   bottom: 40px;
-  right: 40px;
+  right: 20px;
   width: 45px;
   height: 45px;
   border-radius: 25px;
-  border: 1px solid #1d1d1d;
-  background: ${({ theme }) => theme.mainColor.main};
+  background-color: ${({ theme }) => theme.backgroundColor.subColor};
+  color: ${({ theme }) => theme.fontColor.color};
 
   display: flex;
   align-items: center;

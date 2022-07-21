@@ -32,7 +32,7 @@ export default function Card({ board, width, height, isMyHome, deleteBoard, imgH
   const [likeState, setLikeState] = useState<string>("");
 
   const navigateIndex = () => {
-    navigate(`/@${board.writer!.username}/${board.id}`);
+    navigate(`/@${board.writer!.username}/${board.id}`, state);
   };
   const navigatePerson = () => {
     if (location.pathname === "/") {
@@ -47,9 +47,7 @@ export default function Card({ board, width, height, isMyHome, deleteBoard, imgH
   const liking = async () => {
     await touchLikes(board.id)
       .then((res) => {
-        console.log("liking", res);
         Object.assign(board, { likes: [res] });
-        console.log("board.likes[0].likes_status", board.likes[0]);
         const count = board.likes[0].likes_status === 1 ? ++board.likes_count : --board.likes_count;
         likeIcon(count, board.likes);
       })
@@ -63,7 +61,6 @@ export default function Card({ board, width, height, isMyHome, deleteBoard, imgH
       setLikeState(`☘ ${count}`);
       return;
     }
-    console.log(state[0].likes_status);
 
     if (count > 50) setLikeState(`🌿 ${count}`);
     else if (count > 100) setLikeState(`🌴 ${count}`);
