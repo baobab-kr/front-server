@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import API from "../../api";
 import Swal from "sweetalert2";
 import bg from "../../assets/LoginBg.jpg";
+import LogoImg2 from "../../assets/Logo2.png";
 import Signup from "../Signup/Signup";
 export default function Login(props: any) {
   return (
@@ -48,7 +49,9 @@ const LoginForm = (props: any) => {
     setLoginRequest({ id: e.target.value, password: loginRequest.password });
     setEmptyId(e.target.value.length == 0 ? true : false);
   };
-
+  const navagateHome = () => {
+    Navigate("/");
+  };
   const changeIsLogin = () => {
     setIsLogin(true);
   };
@@ -65,6 +68,9 @@ const LoginForm = (props: any) => {
     <>
       {isLogin ? (
         <S.Login>
+          <div className="Logo" onClick={navagateHome}>
+            <img src={LogoImg2} style={{ width: "50px", height: "25%", objectFit: "cover", overflow: "auto" }} alt="Logo"></img>
+          </div>
           <Form name="basic" initialValues={{ remember: false }} onFinish={handleSubmit}>
             <Form.Item className="inputForm inputForm_id" name="username" rules={[{ required: false, message: "아이디를 입력해 주세요." }]}>
               <div>아이디</div>

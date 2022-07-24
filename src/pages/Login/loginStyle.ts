@@ -10,6 +10,13 @@ const Login = styled.div`
   height: 100%;
   border-radius: 0px;
   z-index: 1000;
+  
+  .Logo{
+    position: fixed;
+    right: 35px;
+    bottom: 20px;
+    cursor: pointer;
+  }
 }
 @media (min-width: 600px) {
   position: absolute;
@@ -22,6 +29,13 @@ const Login = styled.div`
   height: 600px;
   padding: 20px;
   z-index: 1000;
+  
+  .Logo{
+    position: fixed;
+    left: 35px;
+    bottom: 20px;
+    cursor: pointer;
+  }
 }
   
     .inputForm {
@@ -68,5 +82,4 @@ const Login = styled.div`
       font-size: 18px;
     }
 `;
-
 export { Login };

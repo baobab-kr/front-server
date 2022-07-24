@@ -30,6 +30,16 @@ export const Index = styled.div`
     right: 0px;
     top: 25px;
   }
+  .updateBtn {
+    position: absolute;
+    right: 0px;
+    top: 25px;
+    width: 70px;
+    background: ${({ theme }) => theme.backgroundColor.subColor};
+    color: ${({ theme }) => theme.fontColor.color};
+    border: 1px solid #ffffff;
+    border-radius: 3px;
+  }
 `;
 export const Top = styled.div`
   text-align: center;

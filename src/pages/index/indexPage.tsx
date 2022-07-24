@@ -244,7 +244,7 @@ export default function IndexPage() {
       <Index>
         <Top>
           {userInfo !== null && decodeURI(board_witer).substring(1) === userInfo.username ? (
-            <button className="deleteComment" onClick={() => navigate("/editor", { state: { data: indexPageData, user: userInfo.username, id: board_id } })}>
+            <button className="updateBtn" onClick={() => navigate("/editor", { state: { data: indexPageData, user: userInfo.username, id: board_id } })}>
               수정
             </button>
           ) : null}
