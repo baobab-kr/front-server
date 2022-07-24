@@ -17,6 +17,8 @@ import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight";
 
 import "tui-color-picker/dist/tui-color-picker.css";
 import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
+import Checkbox from "antd/lib/checkbox/Checkbox";
+import { Switch } from "antd";
 
 type props = {
   onClose: React.Dispatch<React.SetStateAction<boolean>>;
@@ -24,9 +26,11 @@ type props = {
   setData: React.Dispatch<React.SetStateAction<ICreateBoard>>;
   boardId: string;
 };
-
 function Popup({ onClose, data, setData, boardId }: props) {
-  console.log(boardId);
+  const [toggle, setToggle] = useState(false);
+  const clickedToggle = () => {
+    setToggle((prev) => !prev);
+  };
   const navigate = useNavigate();
 
   const saveFileImage = (e: any) => {
@@ -44,7 +48,13 @@ function Popup({ onClose, data, setData, boardId }: props) {
   const onClick = () => {
     onClose(false);
   };
-
+  const onSaveClick = () => {
+    if (toggle) {
+      onSave();
+    } else {
+      onOnlyMe();
+    }
+  };
   const onSave = () => {
     setData({ ...data, board_status: 0 });
     CreateBoard(data)
@@ -117,10 +127,8 @@ function Popup({ onClose, data, setData, boardId }: props) {
 
           {boardId === "" ? (
             <E.btnBox>
-              <button className="onlyMeBtn" onClick={onOnlyMe}>
-                나만보기
-              </button>
-              <button className="saveBtn" onClick={onSave}>
+              <Switch checkedChildren="공개" unCheckedChildren="비공개" defaultChecked onChange={clickedToggle} />
+              <button className="saveBtn" onClick={onSaveClick}>
                 저장
               </button>
             </E.btnBox>
