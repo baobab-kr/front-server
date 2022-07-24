@@ -30,6 +30,8 @@ export default function App(): JSX.Element {
         localStorage.setItem("user", JSON.stringify(data));
       })
       .catch((err) => {
+        localStorage.removeItem("atexpires");
+        localStorage.removeItem("rtexpires");
         localStorage.removeItem("user");
       });
   };
@@ -46,7 +48,7 @@ export default function App(): JSX.Element {
           <Route path="/editor" element={<PrivateRoute authentication={false} component={EditorPage} />} />
           <Route path="/Signup" element={<PrivateRoute authentication={false} component={Signup} path="signup" />} />
           <Route path="/login" element={<PrivateRoute authentication={false} component={Login} path="login" />} />
-          <Route path="/setting" element={<PrivateRoute authentication={true} component={Setting} />} />
+          <Route path="/setting" element={<Setting />} />
           <Route path="/editor" element={<PrivateRoute authentication={false} component={EditorPage} />} />
         </Routes>
       </BrowserRouter>

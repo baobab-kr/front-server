@@ -27,12 +27,25 @@ export const Logo = styled.div`
 export const SearchContainer = styled.div`
   position: fixed;
   right: 150px;
-  padding: 15px;
+  padding: 7px 0px 0px 0px;
 
-  &::before {
+  /* &::before {
     content: "검색";
     color: ${({ theme }) => theme.fontColor.color};
     line-height: 1;
+  } */
+
+  @media screen and (max-width: 630px) {
+    /* 타블렛 가로 */
+    width: 13rem;
+
+    position: fixed;
+    right: 0px;
+    left: 50%;
+    transform: translate(-55%, 0);
+    &::before {
+      content: none;
+    }
   }
 `;
 
@@ -42,6 +55,10 @@ export const Search = styled.input`
   border-radius: 8px;
   padding: 0px 30px 0px 15px;
   margin-left: 15px;
+
+  @media screen and (max-width: 630px) {
+    width: 13rem;
+  }
 
   /* background-image: url("../../data/search.jpg"); */
   /* background-repeat: no-repeat; */
