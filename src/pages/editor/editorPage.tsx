@@ -69,7 +69,6 @@ function Popup({ onClose, data, setData, boardId }: props) {
   };
 
   const onEdit = (data: IEditBoard) => {
-    console.log(data);
     EditBoard(data)
       .then((res) => {
         console.log("Board 수정 성공", res);
@@ -175,7 +174,6 @@ export default function EditorPage() {
   };
 
   const onClickEvent = () => {
-    console.log(editor);
     if (editor.title.replace(" ", "") === "") {
       alert("제목을 입력해주세요");
       return;

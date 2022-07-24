@@ -28,7 +28,6 @@ const LoginForm = (props: any) => {
   const [loginRequest, setLoginRequest] = useState({ id: "", password: "" });
   const [isEmptyPassword, setEmptyPassword] = useState(true);
   const [isEmptyId, setEmptyId] = useState(true);
-  console.log();
   const [isLogin, setIsLogin] = useState(location.state !== null ? false : true);
   const handleSubmit = async () => {
     API.post("/users/login", { userid: loginRequest.id, password: loginRequest.password }, { withCredentials: true })

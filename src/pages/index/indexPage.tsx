@@ -16,7 +16,6 @@ export default function IndexPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const userId = location.state as tState;
-  console.log(userId.userId);
 
   const board_witer = location.pathname.split("/")[1];
   const board_id = location.pathname.split("/")[2];
@@ -35,7 +34,6 @@ export default function IndexPage() {
 
   const onSaveComment = () => {
     if (userInfo === null) {
-      console.log(userInfo);
       navigate("/login");
     } else {
       createComment(comment, parseInt(board_id)).then(() => {
@@ -53,7 +51,6 @@ export default function IndexPage() {
 
   const onSaveReComment = (id: number, content: string, idx: number) => {
     if (userInfo === null) {
-      console.log(userInfo);
       navigate("/login");
     } else {
       createReComment(content, id)
@@ -128,9 +125,7 @@ export default function IndexPage() {
 
     btn.addEventListener("click", () => {
       const inputtest = document.querySelector(`.comment_${idx}`)!;
-      console.log(inputtest);
       const reCommentText = inputtest.querySelector("input")!;
-      console.log(reCommentText.value);
       onSaveReComment(id, reCommentText.value, idx);
       inputtest.querySelectorAll("input")[idx].value = "";
     });
