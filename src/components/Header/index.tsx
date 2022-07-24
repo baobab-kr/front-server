@@ -5,6 +5,7 @@ import LogoImg2 from "../../assets/Logo2.png";
 import DefaultAvator from "../../assets/defaultAvator.png";
 import { userLogout } from "../../api/user";
 import { user } from "@src/Types/user";
+import Avator from "../Avator/Avator";
 
 type tState = {
   state: tUesrId;
@@ -62,8 +63,9 @@ export default function Header(): JSX.Element {
       <Logo onClick={navagateHome}>
         <img src={LogoImg2} style={{ width: "50px", height: "25%", objectFit: "cover", overflow: "auto" }} alt="Logo"></img>
       </Logo>
+
       <SearchContainer>
-        <Search />
+        <Search placeholder="검색" />
       </SearchContainer>
       <Sign>
         {userInfo === null ? (
@@ -75,7 +77,8 @@ export default function Header(): JSX.Element {
         ) : (
           <UserContainer onClick={toggleUserInfo}>
             <UserAvator>
-              <img src={DefaultAvator} style={{ width: "100%", height: "100%", objectFit: "cover" }} alt="avator"></img>
+              {/* <img src={DefaultAvator} style={{ width: "100%", height: "100%", objectFit: "cover" }} alt="avator"></img> */}
+              <Avator userId={userInfo.userid} height={"40px"} width={"40px"} />
             </UserAvator>
             <UserActionList scale={toggleUser}>
               <UserActionListItem onClick={navagateMy}>My Home</UserActionListItem>
