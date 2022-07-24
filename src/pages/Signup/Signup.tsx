@@ -7,8 +7,9 @@ import { checkUsername, checkId, emailRegisterCode, users_register, checkEmail }
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
-const Signup = () => {
+const Signup = (props: any) => {
   const Navigate = useNavigate();
+  const [signIdx, setSignIdx] = useState(0);
   const [name, setName] = useState({
     value: "",
     validateStatus: "",
@@ -29,6 +30,11 @@ const Signup = () => {
     validateStatus: "",
     errorMsg: "",
   });
+  const [rePassword, setRePassword] = useState({
+    value: "",
+    validateStatus: "",
+    errorMsg: "",
+  });
   const [emailCode, setEmailCode] = useState({
     value: "",
     validateStatus: "error",
@@ -45,6 +51,13 @@ const Signup = () => {
     );
   };
 
+  const idNameBtnDis = () => {
+    return !(name.validateStatus === "success" && id.validateStatus === "success");
+  };
+  const passwordBtnDis = () => {
+    return !(password.validateStatus === "success" && rePassword.validateStatus === "success");
+  };
+
   const [isId, setIsId] = useState(false);
   const [isName, setIsName] = useState(false);
   const [isEmail, setIsEmail] = useState(false);
@@ -53,10 +66,8 @@ const Signup = () => {
     const target = event.target;
     const inputName = target.name;
     const inputValue = target.value;
-    console.log(inputName);
     switch (inputName) {
       case "name":
-        console.log(inputValue);
         setName({ value: inputValue, validateStatus: "", errorMsg: "" });
         break;
       case "emailCode":
@@ -71,6 +82,9 @@ const Signup = () => {
       case "password":
         setPassword({ value: inputValue, validateStatus: "", errorMsg: "" });
         break;
+      case "rePassword":
+        setRePassword({ value: inputValue, validateStatus: "", errorMsg: "" });
+        break;
       default:
         console.log("404 check input Id");
     }
@@ -84,7 +98,6 @@ const Signup = () => {
       password: password.value,
       inputVerifyCode: emailCode.value,
     };
-    console.log(signupRequest);
     users_register(id.value, email.value, name.value, password.value, emailCode.value)
       .then((response) => {
         Swal.fire("회원가입 되었습니다.");
@@ -151,6 +164,20 @@ const Signup = () => {
     }
   };
 
+  const validateRePassword = (pwd: string) => {
+    if (pwd !== password.value) {
+      return {
+        validateStatus: "error",
+        errorMsg: "비밀번호가 같지 않습니다.",
+      };
+    } else {
+      return {
+        validateStatus: "success",
+        errorMsg: null,
+      };
+    }
+  };
+
   const validateEmail = (emails: string) => {
     if (!/([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/g.test(emails)) {
       return {
@@ -168,7 +195,6 @@ const Signup = () => {
   const validateUsernameAvailability = (name: any) => {
     const idValue = name.target.value;
     const idValidation = validateName(idValue);
-    console.log();
     if (idValidation.validateStatus === "error") {
       setName({ value: idValue, validateStatus: idValidation.validateStatus, errorMsg: idValidation.errorMsg === null ? "" : idValidation.errorMsg });
       return;
@@ -179,7 +205,6 @@ const Signup = () => {
   const validateEmailAvailability = (email: any) => {
     const emailValue = email.target.value;
     const emailValidation = validateEmail(emailValue);
-    console.log();
     if (emailValidation.validateStatus === "error") {
       setEmail({
         value: emailValue,
@@ -200,6 +225,22 @@ const Signup = () => {
     }
 
     setPassword({ value: pwdValue, validateStatus: "success", errorMsg: "" });
+  };
+
+  const validateRePasswordAvailability = (rePwd: any) => {
+    const rePwdValue = rePwd.target.value;
+    const rePwdValidation = validateRePassword(rePwdValue);
+
+    if (rePwdValidation.validateStatus === "error") {
+      setRePassword({
+        value: rePwdValue,
+        validateStatus: rePwdValidation.validateStatus,
+        errorMsg: rePwdValidation.errorMsg === null ? "" : rePwdValidation.errorMsg,
+      });
+      return;
+    }
+
+    setRePassword({ value: rePwdValue, validateStatus: "success", errorMsg: "" });
   };
 
   const validateIdAvailability = (id: any) => {
@@ -275,129 +316,169 @@ const Signup = () => {
         Swal.fire("이메일이 중복되었습니다.");
       });
   };
+  const onClickEv = () => {
+    props.changeIsLogin();
+  };
 
   return (
     <S.Signup className="signup">
-      <div className="header">
-        {/* <Button className="btn_back" onClick={() => props.history.push("/")} /> */}
-        <h1 className="title">회원가입</h1>
-      </div>
       <S.Body className="body">
         <Form layout={"vertical"} className="signup-form">
-          <Form.Item
-            label="이름"
-            name="name"
-            hasFeedback
-            validateStatus={name.validateStatus === "" ? "" : name.validateStatus === "success" ? "success" : "error"}
-            help={name.errorMsg}
-            rules={[{ required: true, message: "이름을 입력해 주세요" }]}
-          >
-            <Input
-              size="large"
-              name="name"
-              autoComplete="off"
-              spellCheck="false"
-              // placeholder="A unique email"
-              value={name.value}
-              onBlur={validateUsernameAvailability}
-              onChange={changeInput}
-            />
-            <button className="nameBtn" onClick={() => checkName(name)}>
-              중복 확인
-            </button>
-          </Form.Item>
-          <Form.Item
-            label="아이디"
-            name="id"
-            hasFeedback
-            validateStatus={id.validateStatus === "" ? "" : id.validateStatus === "success" ? "success" : "error"}
-            help={id.errorMsg}
-            rules={[{ required: true, message: "아이디를 입력해 주세요" }]}
-          >
-            <Input
-              size="large"
-              name="id"
-              autoComplete="off"
-              spellCheck="false"
-              maxLength={ID_MAX_LENGTH}
-              // placeholder="A unique id"
-              value={id.value}
-              onBlur={validateIdAvailability}
-              onChange={changeInput}
-            />
-            <button className="idBtn" onClick={() => checkedId(id)}>
-              중복 확인
-            </button>
-          </Form.Item>
-          <Form.Item
-            label="비밀번호"
-            name="password"
-            hasFeedback
-            validateStatus={password.validateStatus === "" ? "" : password.validateStatus === "success" ? "success" : "error"}
-            help={password.errorMsg}
-            rules={[{ required: true, message: "비밀번호를 입력해 주세요" }]}
-          >
-            <Input.Password
-              size="large"
-              name="password"
-              type="password"
-              autoComplete="off"
-              spellCheck="true"
-              maxLength={PASSWORD_MAX_LENGTH}
-              // placeholder="A password between 6 to 20 characters"
-              value={password.value}
-              onBlur={validatePasswordAvailability}
-              onChange={changeInput}
-            />
-          </Form.Item>
-          <Form.Item
-            label="Email"
-            name="email"
-            hasFeedback
-            validateStatus={email.validateStatus === "" ? "" : email.validateStatus === "success" ? "success" : "error"}
-            help={email.errorMsg}
-            rules={[
-              {
-                type: "email",
-                required: true,
-                message: "이메일을 입력해 주세요",
-              },
-            ]}
-          >
-            <Input
-              size="large"
-              name="email"
-              type="email"
-              autoComplete="off"
-              spellCheck="false"
-              value={email.value}
-              onChange={changeInput}
-              onBlur={validateEmailAvailability}
-            />
-            <button className="emailBtn" onClick={() => registerCode(name, email)}>
-              이메일 인증
-            </button>
-          </Form.Item>
-          <Form.Item
-            label="인증코드"
-            name="emailCode"
-            hasFeedback
-            validateStatus={emailCode.validateStatus === "" ? "" : emailCode.validateStatus === "success" ? "success" : "error"}
-            help={emailCode.errorMsg}
-            rules={[
-              {
-                type: "number",
-                required: true,
-                message: "인증코드를 입력해주세요",
-              },
-            ]}
-          >
-            <Input size="large" name="emailCode" type="number" autoComplete="off" spellCheck="false" value={emailCode.value} onChange={changeInput} />
-          </Form.Item>
+          {signIdx === 0 ? (
+            <>
+              <Form.Item
+                label="이름"
+                name="name"
+                hasFeedback
+                validateStatus={name.validateStatus === "" ? "" : name.validateStatus === "success" ? "success" : "error"}
+                help={name.errorMsg}
+                rules={[{ required: true, message: "이름을 입력해 주세요" }]}
+              >
+                <Input
+                  size="large"
+                  name="name"
+                  autoComplete="off"
+                  spellCheck="false"
+                  // placeholder="A unique email"
+                  value={name.value}
+                  onBlur={validateUsernameAvailability}
+                  onChange={changeInput}
+                />
+                <button className="nameBtn" onClick={() => checkName(name)}>
+                  중복 확인
+                </button>
+              </Form.Item>
+              <Form.Item
+                label="아이디"
+                name="id"
+                hasFeedback
+                validateStatus={id.validateStatus === "" ? "" : id.validateStatus === "success" ? "success" : "error"}
+                help={id.errorMsg}
+                rules={[{ required: true, message: "아이디를 입력해 주세요" }]}
+              >
+                <Input
+                  size="large"
+                  name="id"
+                  autoComplete="off"
+                  spellCheck="false"
+                  maxLength={ID_MAX_LENGTH}
+                  // placeholder="A unique id"
+                  value={id.value}
+                  onBlur={validateIdAvailability}
+                  onChange={changeInput}
+                />
+                <button className="idBtn" onClick={() => checkedId(id)}>
+                  중복 확인
+                </button>
+              </Form.Item>
+              <S.next_form_button type="submit" className="signup-form-button" onClick={() => setSignIdx(1)} disabled={idNameBtnDis()}>
+                다음
+              </S.next_form_button>
+            </>
+          ) : signIdx === 1 ? (
+            <>
+              <Form.Item
+                label="비밀번호"
+                name="password"
+                hasFeedback
+                validateStatus={password.validateStatus === "" ? "" : password.validateStatus === "success" ? "success" : "error"}
+                help={password.errorMsg}
+                rules={[{ required: true, message: "비밀번호를 입력해 주세요" }]}
+              >
+                <Input.Password
+                  size="large"
+                  name="password"
+                  type="password"
+                  autoComplete="off"
+                  spellCheck="true"
+                  maxLength={PASSWORD_MAX_LENGTH}
+                  // placeholder="A password between 6 to 20 characters"
+                  value={password.value}
+                  onBlur={validatePasswordAvailability}
+                  onChange={changeInput}
+                />
+              </Form.Item>
+              <Form.Item
+                label="Re비밀번호"
+                name="rePassword"
+                hasFeedback
+                validateStatus={rePassword.validateStatus === "" ? "" : rePassword.validateStatus === "success" ? "success" : "error"}
+                help={rePassword.errorMsg}
+                rules={[{ required: true, message: "비밀번호를 다시 입력해 주세요" }]}
+              >
+                <Input.Password
+                  size="large"
+                  name="rePassword"
+                  type="rePassword"
+                  autoComplete="off"
+                  spellCheck="true"
+                  maxLength={PASSWORD_MAX_LENGTH}
+                  value={rePassword.value}
+                  onBlur={validateRePasswordAvailability}
+                  onChange={changeInput}
+                />
+              </Form.Item>
+              <S.next_form_button type="submit" className="signup-form-button" onClick={() => setSignIdx(2)} disabled={passwordBtnDis()}>
+                다음
+              </S.next_form_button>
+            </>
+          ) : signIdx === 2 ? (
+            <>
+              <Form.Item
+                label="Email"
+                name="email"
+                hasFeedback
+                validateStatus={email.validateStatus === "" ? "" : email.validateStatus === "success" ? "success" : "error"}
+                help={email.errorMsg}
+                rules={[
+                  {
+                    type: "email",
+                    required: true,
+                    message: "이메일을 입력해 주세요",
+                  },
+                ]}
+              >
+                <Input
+                  size="large"
+                  name="email"
+                  type="email"
+                  autoComplete="off"
+                  spellCheck="false"
+                  value={email.value}
+                  onChange={changeInput}
+                  onBlur={validateEmailAvailability}
+                />
+                <button className="emailBtn" onClick={() => registerCode(name, email)}>
+                  이메일 인증
+                </button>
+              </Form.Item>
+              <Form.Item
+                label="인증코드"
+                name="emailCode"
+                hasFeedback
+                validateStatus={emailCode.validateStatus === "" ? "" : emailCode.validateStatus === "success" ? "success" : "error"}
+                help={emailCode.errorMsg}
+                rules={[
+                  {
+                    type: "number",
+                    required: true,
+                    message: "인증코드를 입력해주세요",
+                  },
+                ]}
+              >
+                <Input size="large" name="emailCode" type="number" autoComplete="off" spellCheck="false" value={emailCode.value} onChange={changeInput} />
+              </Form.Item>
+
+              <S.signup_form_button type="submit" className="signup-form-button" onClick={handleSubmit} disabled={summitBtnDis()}>
+                회원가입
+              </S.signup_form_button>
+            </>
+          ) : null}
+
           <Form.Item>
-            <S.signup_form_button type="submit" className="signup-form-button" onClick={handleSubmit} disabled={summitBtnDis()}>
-              회원가입
-            </S.signup_form_button>
+            <S.login_form_button type="button" className="login-form-button" onClick={() => onClickEv()}>
+              로그인
+            </S.login_form_button>
           </Form.Item>
         </Form>
       </S.Body>
