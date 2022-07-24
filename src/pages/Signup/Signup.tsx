@@ -6,6 +6,7 @@ import { Form, Input, Button, notification, Select } from "antd";
 import { checkUsername, checkId, emailRegisterCode, users_register, checkEmail } from "../../api/signup";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import LogoImg2 from "../../assets/Logo2.png";
 
 const Signup = (props: any) => {
   const Navigate = useNavigate();
@@ -109,6 +110,9 @@ const Signup = (props: any) => {
       });
   };
 
+  const navagateHome = () => {
+    Navigate("/");
+  };
   const validateId = (id: string) => {
     if (id.length < ID_MIN_LENGTH || id.length > ID_MAX_LENGTH) {
       return {
@@ -324,6 +328,9 @@ const Signup = (props: any) => {
     <S.Signup className="signup">
       <S.Body className="body">
         <Form layout={"vertical"} className="signup-form">
+          <div className="Logo" onClick={navagateHome}>
+            <img src={LogoImg2} style={{ width: "50px", height: "25%", objectFit: "cover", overflow: "auto" }} alt="Logo"></img>
+          </div>
           {signIdx === 0 ? (
             <>
               <Form.Item

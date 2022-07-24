@@ -10,6 +10,9 @@ const Login = styled.div`
   height: 100%;
   border-radius: 0px;
   z-index: 1000;
+  padding-top: 200px;
+  padding-left: 100px;
+  top: 0px;
   
   .Logo{
     position: fixed;

@@ -23,11 +23,13 @@ export default function Login(props: any) {
 }
 const LoginForm = (props: any) => {
   const Navigate = useNavigate();
+  const location = useLocation();
 
   const [loginRequest, setLoginRequest] = useState({ id: "", password: "" });
   const [isEmptyPassword, setEmptyPassword] = useState(true);
   const [isEmptyId, setEmptyId] = useState(true);
-  const [isLogin, setIsLogin] = useState(true);
+  console.log();
+  const [isLogin, setIsLogin] = useState(location.state !== null ? false : true);
   const handleSubmit = async () => {
     API.post("/users/login", { userid: loginRequest.id, password: loginRequest.password }, { withCredentials: true })
       .then((res) => {
@@ -66,6 +68,9 @@ const LoginForm = (props: any) => {
   }, []);
   return (
     <>
+      <div className="Logo" onClick={navagateHome}>
+        <img src={LogoImg2} style={{ width: "50px", height: "25%", objectFit: "cover", overflow: "auto" }} alt="Logo"></img>
+      </div>
       {isLogin ? (
         <S.Login>
           <div className="Logo" onClick={navagateHome}>

@@ -8,6 +8,15 @@ const Signup = styled.div`
     width: 100%;
     height: 100%;
     border-radius: 0px;
+    padding-top: 200px;
+    padding-left: 100px;
+    top: 0px;
+    .Logo {
+      position: fixed;
+      right: 35px;
+      bottom: 20px;
+      cursor: pointer;
+    }
   }
   @media (min-width: 600px) {
     position: absolute;
@@ -19,6 +28,12 @@ const Signup = styled.div`
     right: 30px;
     height: 600px;
     padding: 20px;
+    .Logo {
+      position: fixed;
+      left: 35px;
+      bottom: 20px;
+      cursor: pointer;
+    }
   }
 `;
 
