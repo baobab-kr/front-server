@@ -30,7 +30,7 @@ export default function Header(): JSX.Element {
     navigate("/login");
   };
   const navagateSignup = () => {
-    navigate("/signup");
+    navigate("/login", { state: { isLogin: false } });
   };
 
   const navagateMy = () => {

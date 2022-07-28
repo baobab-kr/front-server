@@ -5,16 +5,17 @@ const popup = styled.div`
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: #2f2f2f;
+  background-color: rgba(0, 0, 0, 0.5);
   z-index: 990;
 `;
 
 const popupInner = styled.div`
   position: absolute;
-  top: 5%;
-  width: 100%;
-  height: 95%;
-  background-color: #2f2f2f;
+  top: 17%;
+  left: 20%;
+  width: 60%;
+  height: 70%;
+  background-color: ${({ theme }) => theme.backgroundColor.bg};
   opacity: 1;
 
   .title {
@@ -33,7 +34,7 @@ const popupInner = styled.div`
 
 const postImage = styled.div`
   position: absolute;
-  left: 30%;
+  left: 10vw;
   top: 20%;
   width: 285px;
   .image {
@@ -45,7 +46,7 @@ const postImage = styled.div`
     width: 100%;
     height: 285px;
     margin-bottom: 5px;
-    background: rgb(100, 100, 100);
+    background: ${({ theme }) => theme.backgroundColor.subColor};
     color: #fff;
     .defaultImage {
       position: absolute;
@@ -73,7 +74,7 @@ const description = styled.div`
     width: 100%;
     height: 300px;
     resize: none;
-    background: rgb(100, 100, 100);
+    background: ${({ theme }) => theme.backgroundColor.subColor};
     color: #fff;
     &:focus {
       outline: none;
@@ -101,6 +102,91 @@ const btnBox = styled.div`
     background: rgb(100, 100, 100);
     color: #fff;
   }
+  .ant-switch {
+    margin: 0;
+    padding: 0;
+    color: #1d1d1d;
+    font-size: 14px;
+    padding-right: 10px;
+    text-align: right;
+    font-variant: tabular-nums;
+    line-height: 1.5715;
+    list-style: none;
+    font-feature-settings: "tnum";
+    position: absolute;
+    display: inline-block;
+    box-sizing: border-box;
+    min-width: 100px;
+    height: 40px;
+    line-height: 22px;
+    vertical-align: middle;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)), linear-gradient(to right, #fff, #fff);
+    border: 0;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.2s;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  .ant-switch-handle {
+    position: absolute;
+    top: 2px;
+    left: 4px;
+    width: 35px;
+    height: 35px;
+    transition: all 0.2s ease-in-out;
+    :: before {
+      position: absolute;
+      inset: 0;
+      background-color: #252525;
+      border-radius: 20px;
+      box-shadow: 0 2px 4px #00230b33;
+      transition: all 0.2s ease-in-out;
+      content: "";
+    }
+  }
+  .ant-switch-checked {
+    margin: 0;
+    padding: 0;
+    color: #1d1d1d;
+    font-size: 14px;
+    font-variant: tabular-nums;
+    line-height: 1.5715;
+    list-style: none;
+    padding-left: 10px;
+    text-align: left;
+    font-feature-settings: "tnum";
+    position: absolute;
+    display: inline-block;
+    box-sizing: border-box;
+    min-width: 100px;
+    height: 40px;
+    line-height: 22px;
+    vertical-align: middle;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)), linear-gradient(to right, #fff, #fff);
+    border: 0;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.2s;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    .ant-switch-handle {
+      left: calc(100% - 40px);
+      :before {
+        position: absolute;
+        inset: 0;
+        background-color: #252525;
+        border-radius: 20px;
+        box-shadow: 0 2px 4px #00230b33;
+        transition: all 0.2s ease-in-out;
+        content: "";
+      }
+    }
+  }
 `;
 
 const TitleWrpper = styled.div`
@@ -117,17 +203,103 @@ const titleInput = styled.input`
   height: 40px;
   font-size: 35px;
   margin-bottom: 20px;
-  background: rgba(255, 255, 255, 0);
-  color: #fff;
+  background: ${({ theme }) => theme.backgroundColor.subColor};
+  color: ${({ theme }) => theme.fontColor.color};
   &:focus {
     outline: none;
   }
 `;
 const saveBtn = styled.button`
   padding: 8px 16px;
-  background: transparent;
-  color: #ffffff;
+  background: ${({ theme }) => theme.backgroundColor.subColor};
+  color: ${({ theme }) => theme.fontColor.color};
   border: 1px solid #ffffff;
   border-radius: 3px;
+`;
+const ToggleBtn = styled.button`
+  width: 130px;
+  height: 50px;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.5s ease-in-out;
+`;
+const Circle = styled.div`
+  background-color: white;
+  width: 38px;
+  height: 38px;
+  border-radius: 50px;
+  position: absolute;
+  left: 5%;
+  transition: all 0.5s ease-in-out;
+`;
+
+const Wrapper = styled.div`
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  z-index: 0;
+`;
+
+const CheckBox = styled.input`
+  z-index: 1;
+  width: 5rem;
+  height: 2rem;
+  background: var(--second);
+  border-radius: 2em;
+  /* 선택X 텍스트 */
+  ::before {
+    position: absolute;
+    padding-left: 1em;
+    width: 5rem;
+    height: 2rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-weight: var(--bold);
+    font-size: var(--small);
+    /* 텍스트 트랜지션 */
+    transition: all 0.2s ease-in-out;
+  }
+  /* 선택X 원 */
+  ::after {
+    position: relative;
+    content: "";
+    display: block;
+    width: 1.6em;
+    height: 1.6em;
+    top: calc((2rem - 1.6em) / 2);
+    left: calc(5rem - 1.9em);
+    border-radius: 50%;
+    /* 원 이동 트랜지션 */
+    transition: all 0.2s ease-in-out;
+  }
+  &:checked {
+    /* 배경색 변경 트랜지션 */
+    transition: all 0.2s ease-in-out;
+    /* 선택 O 텍스트 */
+    ::before {
+      position: absolute;
+      padding-right: 1em;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    /* 선택 O 원 */
+    ::after {
+      content: "";
+      z-index: 2;
+      top: calc((2rem - 1.6em) / 2);
+      left: calc((2rem - 1.6em) / 2);
+      width: 1.6em;
+      height: 1.6em;
+      display: block;
+      border-radius: 50%;
+      position: relative;
+    }
+  }
 `;
 export { popup, popupInner, postImage, description, btnBox, TitleWrpper, titleInput, saveBtn };
