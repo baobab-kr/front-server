@@ -165,10 +165,6 @@ export default function EditorPage() {
     setEditor({ ...editor, title: e.target.value });
   };
 
-  const handleChange = () => {
-    setEditor({ ...editor, content: editorRef.current.getInstance().getHTML() });
-  };
-
   const tagHandler = (tag: string[]) => {
     setEditor({ ...editor, tag_name: [...tag] });
   };
@@ -178,6 +174,7 @@ export default function EditorPage() {
       alert("제목을 입력해주세요");
       return;
     }
+    setEditor({ ...editor, content: editorRef.current.getInstance().getHTML() });
     setShowPopup(true);
   };
 
@@ -187,6 +184,9 @@ export default function EditorPage() {
   };
 
   useEffect(() => {
+    if (location.state !== null) {
+      editorRef.current?.getInstance().setHTML(location.state.data.content);
+    }
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
@@ -205,6 +205,7 @@ export default function EditorPage() {
               editable={true}
               readOnly={false}
               removeOnBackspace={true}
+              maxTags={14}
               onChange={(newTags) => tagHandler(newTags)}
             />
           </div>
@@ -224,9 +225,7 @@ export default function EditorPage() {
         theme={localStorage.getItem("Theme") === "dark" ? "dark" : "light"}
         height={`${Math.max(windowHeight - 250, 300)}px`}
         initialEditType="markdown"
-        initialValue={location.state !== null ? location.state.data.content : ""}
         ref={editorRef}
-        onChange={handleChange}
         placeholder="당신의 바오밥 나무에 가지를 추가해보세요..."
         plugins={[[codeSyntaxHighlight, { highlighter: Prism }], colorSyntax]}
       />

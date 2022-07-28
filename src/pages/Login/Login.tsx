@@ -67,12 +67,9 @@ const LoginForm = (props: any) => {
   }, []);
   return (
     <>
-      <div className="Logo" onClick={navagateHome}>
-        <img src={LogoImg2} style={{ width: "50px", height: "25%", objectFit: "cover", overflow: "auto" }} alt="Logo"></img>
-      </div>
       {isLogin ? (
         <S.Login>
-          <div className="Logo" onClick={navagateHome}>
+          <div className="HomeLogo" onClick={navagateHome}>
             <img src={LogoImg2} style={{ width: "50px", height: "25%", objectFit: "cover", overflow: "auto" }} alt="Logo"></img>
           </div>
           <Form name="basic" initialValues={{ remember: false }} onFinish={handleSubmit}>

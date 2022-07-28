@@ -53,7 +53,7 @@ const Signup = (props: any) => {
   };
 
   const idNameBtnDis = () => {
-    return !(name.validateStatus === "success" && id.validateStatus === "success");
+    return !(name.validateStatus === "success" && id.validateStatus === "success" && isName && isId);
   };
   const passwordBtnDis = () => {
     return !(password.validateStatus === "success" && rePassword.validateStatus === "success");
@@ -70,6 +70,7 @@ const Signup = (props: any) => {
     switch (inputName) {
       case "name":
         setName({ value: inputValue, validateStatus: "", errorMsg: "" });
+        setIsName(false);
         break;
       case "emailCode":
         setEmailCode({ value: inputValue, validateStatus: "success", errorMsg: "" });
@@ -79,6 +80,7 @@ const Signup = (props: any) => {
         break;
       case "id":
         setId({ value: inputValue, validateStatus: "", errorMsg: "" });
+        setIsId(false);
         break;
       case "password":
         setPassword({ value: inputValue, validateStatus: "", errorMsg: "" });
@@ -158,7 +160,7 @@ const Signup = (props: any) => {
     } else if (!/(^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$)/g.test(pwd)) {
       return {
         validateStatus: "error",
-        errorMsg: "암호는 대문자, 소문자, 숫자, 특수문자를 조합하여야 합니다. 특수문자는 !, @, $, %, *, &만 사용할 수 있습니다.",
+        errorMsg: "영문 대 소문자, 숫자, 특수문자(!, @, $, %, *, &)를 사용하세요.",
       };
     } else {
       return {
@@ -328,7 +330,7 @@ const Signup = (props: any) => {
     <S.Signup className="signup">
       <S.Body className="body">
         <Form layout={"vertical"} className="signup-form">
-          <div className="Logo" onClick={navagateHome}>
+          <div className="HomeLogo" onClick={navagateHome}>
             <img src={LogoImg2} style={{ width: "50px", height: "25%", objectFit: "cover", overflow: "auto" }} alt="Logo"></img>
           </div>
           {signIdx === 0 ? (
@@ -337,7 +339,7 @@ const Signup = (props: any) => {
                 label="이름"
                 name="name"
                 hasFeedback
-                validateStatus={name.validateStatus === "" ? "" : name.validateStatus === "success" ? "success" : "error"}
+                validateStatus={name.validateStatus === "" ? "" : name.validateStatus === "success" && isName ? "success" : "error"}
                 help={name.errorMsg}
                 rules={[{ required: true, message: "이름을 입력해 주세요" }]}
               >
@@ -359,7 +361,7 @@ const Signup = (props: any) => {
                 label="아이디"
                 name="id"
                 hasFeedback
-                validateStatus={id.validateStatus === "" ? "" : id.validateStatus === "success" ? "success" : "error"}
+                validateStatus={id.validateStatus === "" ? "" : id.validateStatus === "success" && isId ? "success" : "error"}
                 help={id.errorMsg}
                 rules={[{ required: true, message: "아이디를 입력해 주세요" }]}
               >
@@ -406,7 +408,7 @@ const Signup = (props: any) => {
                 />
               </Form.Item>
               <Form.Item
-                label="Re비밀번호"
+                label="비밀번호 확인"
                 name="rePassword"
                 hasFeedback
                 validateStatus={rePassword.validateStatus === "" ? "" : rePassword.validateStatus === "success" ? "success" : "error"}
@@ -435,7 +437,7 @@ const Signup = (props: any) => {
                 label="Email"
                 name="email"
                 hasFeedback
-                validateStatus={email.validateStatus === "" ? "" : email.validateStatus === "success" ? "success" : "error"}
+                validateStatus={email.validateStatus === "" ? "" : email.validateStatus === "success" && isEmail ? "success" : "error"}
                 help={email.errorMsg}
                 rules={[
                   {
@@ -455,7 +457,11 @@ const Signup = (props: any) => {
                   onChange={changeInput}
                   onBlur={validateEmailAvailability}
                 />
-                <button className="emailBtn" onClick={() => registerCode(name, email)}>
+                <button
+                  className="emailBtn"
+                  onClick={() => registerCode(name, email)}
+                  disabled={!/([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/g.test(email.value)}
+                >
                   이메일 인증
                 </button>
               </Form.Item>

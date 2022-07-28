@@ -1,7 +1,35 @@
 import styled from "styled-components";
 
 const Login = styled.div`
-@media (max-width: 599px) {
+@media (max-width: 390px) {
+  /* 모바일 세로 */
+  position: fixed !important;
+  padding: 20px;
+  position: absolute;
+  background-color: #f7f7f7;
+  width: 120%;
+  height: 120%;
+  border-radius: 0px;
+  z-index: 1000;
+  padding-top: 20vw;
+  padding-left: 10vw;
+  top: 0px;
+  
+  .HomeLogo{
+    position: fixed;
+    right: 2vw;
+    bottom: 2vw;
+    cursor: pointer;
+  }
+  .signup {
+    position: fixed;
+    bottom: 10vw;
+    left: 20px;
+    color: #000000;
+    font-size: 18px;
+  }
+}
+@media (min-width: 390px) and ( max-width: 599px){
   /* 모바일 세로 */
   padding: 20px;
   position: absolute;
@@ -10,15 +38,22 @@ const Login = styled.div`
   height: 100%;
   border-radius: 0px;
   z-index: 1000;
-  padding-top: 200px;
-  padding-left: 100px;
+  padding-top: 20vw;
+  padding-left: 10vw;
   top: 0px;
   
-  .Logo{
+  .HomeLogo{
     position: fixed;
-    right: 35px;
-    bottom: 20px;
+    right: 2vw;
+    bottom: 2vw;
     cursor: pointer;
+  }
+  .signup {
+    position: fixed;
+    bottom: 10vw;
+    left: 20px;
+    color: #000000;
+    font-size: 18px;
   }
 }
 @media (min-width: 600px) {
@@ -33,11 +68,18 @@ const Login = styled.div`
   padding: 20px;
   z-index: 1000;
   
-  .Logo{
+  .HomeLogo{
     position: fixed;
     left: 35px;
     bottom: 20px;
     cursor: pointer;
+  }
+  .signup {
+    position: absolute;
+    bottom: 3vw;
+    left: 20px;
+    color: #000000;
+    font-size: 18px;
   }
 }
   
@@ -51,8 +93,10 @@ const Login = styled.div`
       width: 350px;
     }
     .ant-input {
+      max-width : 350px;
+      min-width : 200px;
       padding-left: 10px;
-      width: 350px;
+      width: 25vw;
       height: 40px;
       margin-top: 10px;
       border-radius: 5px;
@@ -76,13 +120,6 @@ const Login = styled.div`
         font-weight: 500;
         font-size: 18px;
       }
-    }
-    .signup {
-      position: absolute;
-      bottom: 30px;
-      left: 20px;
-      color: #000000;
-      font-size: 18px;
     }
 `;
 export { Login };
