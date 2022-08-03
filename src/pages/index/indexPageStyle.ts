@@ -30,44 +30,90 @@ export const Index = styled.div`
     right: 0px;
     top: 25px;
   }
+  .updateBtn {
+    position: absolute;
+    right: 0px;
+    top: 25px;
+    width: 70px;
+    background: ${({ theme }) => theme.backgroundColor.subColor};
+    color: ${({ theme }) => theme.fontColor.color};
+    border: 1px solid #ffffff;
+    border-radius: 3px;
+  }
 `;
 export const Top = styled.div`
   text-align: center;
+  color: ${({ theme }) => theme.fontColor.color};
   .title {
     font-size: 50px;
   }
-  .tag {
-    position: absolute;
-    right: -100px;
-    div {
-      width: min-content;
-      line-height: 1rem;
-      display: flex;
-      align-items: center;
-      background-color: ${({ theme }) => theme.mainColor.main};
-      color: ${({ theme }) => theme.fontColor.subColor};
-      border-radius: 1rem;
-
-      padding-left: 1rem;
-      padding-right: 1rem;
-      height: 1.5rem;
-      margin-bottom: 10px;
+  .top_data_box {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-left: 5px solid;
+    padding-left: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    .writer {
+      font-size: 24px;
+      text-align: left;
+      margin-top: -60px;
+      margin-left: 80px;
+    }
+    .date {
+      text-align: left;
+      color: rgb(255, 7, 110);
+      font-size: 20px;
+      margin-top: 10px;
+      margin-left: 80px;
+    }
+    .profile {
+      width: 70px;
+      height: 70px;
+      border-radius: 70%;
+      overflow: hidden;
+      justify-self: start;
     }
   }
-  .writer {
-    position: absolute;
-    right: 0px;
-  }
+
   .description {
     margin-top: 60px;
     font-size: 30px;
     text-align: left;
   }
 `;
+
+export const Navigate = styled.div`
+  width: 40vw;
+  font-size: 22px;
+  line-height: normal;
+  .naviData {
+    margin-right: 20px;
+  }
+`;
 export const Content = styled.div`
   position: relative;
   width: 40vw;
   word-break: break-all;
+  .tag {
+    display: block;
+    word-break: keep-all;
+    div {
+      display: inline-block;
+      width: min-content;
+      line-height: 1rem;
+      align-items: center;
+      background-color: ${({ theme }) => theme.mainColor.main};
+      color: ${({ theme }) => theme.fontColor.subColor};
+      border-radius: 1rem;
+      padding-left: 1rem;
+      padding-right: 1rem;
+      margin-right: 10px;
+      margin-top: 10px;
+      height: 1.5rem;
+      margin-bottom: 10px;
+    }
+  }
 `;
 
 export const CommentBox = styled.div`

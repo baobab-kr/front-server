@@ -52,3 +52,10 @@ export interface ICreateBoard {
   thumbnail: string;
   tag_name: string[];
 }
+export interface IEditBoard {
+  title: string;
+  description: string;
+  content: string;
+  board_id: number;
+  tag_name: string[];
+}
