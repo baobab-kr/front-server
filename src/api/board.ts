@@ -1,5 +1,5 @@
 import API from ".";
-import { Board, PersonalInfo, ICreateBoard, Like, TagCount, Writer } from "@src/Types/main";
+import { Board, PersonalInfo, ICreateBoard, Like, TagCount, Writer, IEditBoard } from "@src/Types/main";
 
 export function getMainBoard(page: number): Promise<Board[]> {
   return new Promise<Board[]>((resolve, reject) => {
@@ -63,6 +63,18 @@ export function touchLikes(board_id: number): Promise<Like> {
 export function CreateBoard(_createBoard: ICreateBoard): Promise<string> {
   return new Promise<string>((resolve, reject) => {
     API.post("/board/CreateBoard", _createBoard)
+      .then((res) => {
+        resolve(res.statusText);
+      })
+      .catch((err) => {
+        reject(err.response);
+      });
+  });
+}
+
+export function EditBoard(_editBoard: IEditBoard): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
+    API.patch("/board/BoardUpdate", _editBoard)
       .then((res) => {
         resolve(res.statusText);
       })
