@@ -3,20 +3,56 @@ import InfiniteScroll from "../../components/InfiniteScroll";
 import { Board } from "@src/Types/main";
 import Card from "../../components/Card";
 import { getMainBoard } from "../../api/board";
+import BannerImage from "../../assets/banner2.jpg";
+import {
+  Wrapper,
+  WrapperInner,
+  NavArea,
+  ContentArea,
+  MainBanner,
+  BannerTitle,
+  BannerDesc,
+  BannerImageArea,
+  HeadWrapper,
+  HeadCategoryArea,
+  ItemTitleArea,
+  ItemArea,
+  JobArea,
+  JobHeader,
+  JobList,
+  JobCard,
+} from "./style";
 
-import { Wrapper, FilterContainer, Filter } from "./style";
-
-import ReactTagInput from "@pathofdev/react-tag-input";
+import { IoBusinessSharp } from "react-icons/io5";
+import { SiTesla, SiFacebook, SiNaver } from "react-icons/si";
+// import ReactTagInput from "@pathofdev/react-tag-input";
 import "../../style/tagInputStyle.css";
 import { PuffLoader } from "react-spinners";
+import Category from "./Category/Category";
 
-import Cookies from "js-cookie";
+function getWindowSize() {
+  const { innerWidth, innerHeight } = window;
+  return { innerWidth, innerHeight };
+}
 
 export default function MainPage(): JSX.Element {
+  const [windowSize, setWindowSize] = useState(getWindowSize());
   const [board, setBoard] = useState<Board[]>([]);
-  const [tags, setTags] = useState<string[]>([]);
+  // const [tags, setTags] = useState<string[]>([]);
   const [page, setPage] = useState<number>(0);
   const [mainState, setMainState] = useState<boolean>(false);
+
+  useEffect(() => {
+    function handleWindowResize() {
+      setWindowSize(getWindowSize());
+    }
+
+    window.addEventListener("resize", handleWindowResize);
+
+    return () => {
+      window.removeEventListener("resize", handleWindowResize);
+    };
+  }, []);
 
   const getInfo = async () => {
     if (mainState) return;
@@ -32,10 +68,6 @@ export default function MainPage(): JSX.Element {
       });
   };
 
-  const filterHandler = () => {
-    const refresh = Cookies.get("RefreshToken");
-  };
-
   const fallback = () => {
     return (
       <div style={{ height: "150px", textAlign: "center", color: "black" }}>
@@ -46,34 +78,99 @@ export default function MainPage(): JSX.Element {
 
   return (
     <Suspense fallback={() => fallback()}>
-      <div style={{ width: "100%" }}>
-        <Wrapper>
-          <FilterContainer>
-            <Filter>
-              <button onClick={filterHandler}>최신순</button>
-              &nbsp;|&nbsp;
-              <button onClick={filterHandler}>정렬기준</button>
-            </Filter>
-            <div>
-              <ReactTagInput
-                tags={tags}
-                placeholder="태그를 입력하세요"
-                maxTags={4}
-                editable={true}
-                readOnly={false}
-                removeOnBackspace={true}
-                onChange={(newTags) => setTags(newTags)}
+      <div style={{ zIndex: "1", height: "100%" }}>
+        <MainBanner>
+          <div>
+            <BannerImageArea>
+              <img
+                style={{ backfaceVisibility: "hidden", height: "100%", objectFit: "cover", objectPosition: "center", width: "100%" }}
+                src={BannerImage}
+                alt="banner"
               />
-            </div>
-          </FilterContainer>
-          <div style={{ margin: "0px auto", display: "flex", gap: "32px", flexWrap: "wrap" }}>
-            <InfiniteScroll loadFnc={getInfo} data={board} isLast={mainState}>
-              {board?.map((item: Board, index: number) => {
-                return <Card key={index} board={item} width={"320px"} height={"330px"} imgHeight={"45%"} isMyHome={false} deleteBoard={() => {}} />;
-              })}
-            </InfiniteScroll>
+            </BannerImageArea>
+            <BannerTitle>
+              <h1 style={{ fontSize: "45px" }}>매일 성장하고</h1>
+              <h1 style={{ fontSize: "45px" }}>더 멋지게 일하세요</h1>
+              <p style={{ marginTop: "20px" }}>이제 바오밥에서 커리어를 쌓아보세요.</p>
+            </BannerTitle>
+            <BannerDesc>
+              <h1>Spotify - Moved by Music</h1>
+              <p>by BAOBAB</p>
+            </BannerDesc>
           </div>
-          <div style={{ height: "80px" }}>{""}</div>
+        </MainBanner>
+        <Wrapper>
+          <WrapperInner>
+            <NavArea>
+              <Category />
+            </NavArea>
+            <ContentArea>
+              <div>
+                <ItemTitleArea>
+                  <span>최신 아티클</span>
+                </ItemTitleArea>
+                <ItemArea>
+                  <InfiniteScroll loadFnc={getInfo} data={board} isLast={mainState}>
+                    {board?.map((item: Board, index: number) => {
+                      return (
+                        <Card
+                          key={index}
+                          board={item}
+                          width={windowSize.innerWidth > 1810 ? "320px" : "300px"}
+                          height={windowSize.innerWidth > 1810 ? "330px" : "310px"}
+                          imgHeight={"45%"}
+                          isMyHome={false}
+                          deleteBoard={() => {}}
+                        />
+                      );
+                    })}
+                  </InfiniteScroll>
+                  <JobArea>
+                    <div style={{ height: "100%" }}>
+                      {windowSize.innerWidth > 1260 && (
+                        <JobHeader>
+                          <IoBusinessSharp />
+                          새로운 채용 공고
+                        </JobHeader>
+                      )}
+                      <JobList>
+                        <JobCard>
+                          <div style={{ width: "70px", display: "flex", justifyContent: "center" }}>
+                            <SiTesla size={45} />
+                          </div>
+                          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                            <p>[Tesla] Field Service Engineer</p>
+                            <p style={{ fontSize: "12px" }}>Tesla</p>
+                            <p style={{ fontSize: "12px" }}>경력 (3년이상), 대졸이상</p>
+                          </div>
+                        </JobCard>
+                        <JobCard>
+                          <div style={{ width: "70px", display: "flex", justifyContent: "center" }}>
+                            <SiFacebook size={45} />
+                          </div>
+                          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                            <p>[Facebook] Agency Partner</p>
+                            <p style={{ fontSize: "12px" }}>Facebook</p>
+                            <p style={{ fontSize: "12px" }}>경력 (8년이상)</p>
+                          </div>
+                        </JobCard>
+                        <JobCard>
+                          <div style={{ width: "70px", display: "flex", justifyContent: "center" }}>
+                            <SiNaver size={45} />
+                          </div>
+                          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                            <p>[Naver] Front-end Engineer</p>
+                            <p style={{ fontSize: "12px" }}>Naver</p>
+                            <p style={{ fontSize: "12px" }}>신입, 대졸이상</p>
+                          </div>
+                        </JobCard>
+                      </JobList>
+                    </div>
+                  </JobArea>
+                </ItemArea>
+              </div>
+            </ContentArea>
+          </WrapperInner>
         </Wrapper>
       </div>
     </Suspense>

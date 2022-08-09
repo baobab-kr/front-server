@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { CardWrapper, CardImage, CardText, Date, Title, Content, Footer, User, TagWrapper, TagComponent, LikeComponent, DeleteButton } from "./style";
+import { Overlay, CardWrapper, CardImage, CardText, Date, Title, Content, Footer, User, TagWrapper, TagComponent, LikeComponent, DeleteButton } from "./style";
 import { Board, Tag, Like } from "@src/Types/main";
 import { useNavigate, useLocation } from "react-router-dom";
 import { timeForToday } from "../../util/date";
@@ -30,6 +30,7 @@ export default function Card({ board, width, height, isMyHome, deleteBoard, imgH
   const location = useLocation();
   const state: tState = { state: { userId: board.writer!.id } };
   const [likeState, setLikeState] = useState<string>("");
+  const [isListHover, setIsListHover] = useState<boolean>(false);
 
   const navigateIndex = () => {
     navigate(`/@${board.writer!.username}/${board.id}`, state);
@@ -71,7 +72,17 @@ export default function Card({ board, width, height, isMyHome, deleteBoard, imgH
   //
 
   return (
-    <CardWrapper width={width} height={height} isHover={location.pathname === "/"}>
+    <CardWrapper
+      width={width}
+      height={height}
+      isHover={location.pathname === "/"}
+      onMouseEnter={() => {
+        setIsListHover(true);
+      }} // 마우스엔터 이벤트이면 hide가 false가 된다.
+      onMouseLeave={() => {
+        setIsListHover(false);
+      }}
+    >
       {/* {board.thumbnail !== "" && <CardImage onClick={navigateIndex} src={board.thumbnail} alt="이미지"></CardImage>} */}
       <CardImage imgHeight={imgHeight} src={require(`../../baobab-data/develop${board.id % 15}.jpg`)} alt="이미지"></CardImage>
 
@@ -81,6 +92,17 @@ export default function Card({ board, width, height, isMyHome, deleteBoard, imgH
       </CardText>
 
       <Date>{timeForToday(board.date)}</Date>
+
+      {isListHover && (
+        <>
+          <Overlay onClick={navigateIndex} />
+          <TagWrapper>
+            {board.tags.map((tag: Tag, index: number) => {
+              return <TagComponent key={index}># {tag.tag_name}</TagComponent>;
+            })}
+          </TagWrapper>
+        </>
+      )}
 
       {isMyHome && (
         <DeleteButton
@@ -100,13 +122,6 @@ export default function Card({ board, width, height, isMyHome, deleteBoard, imgH
           <Avator userId={board.writer!.userid} width={"1.5rem"} height={"1.5rem"} />
           by {board.writer!.username}
         </User>
-
-        <TagWrapper>
-          {board.tags.map((tag: Tag, index: number) => {
-            return <TagComponent key={index}>{tag.tag_name}</TagComponent>;
-          })}
-        </TagWrapper>
-
         <LikeComponent onClick={liking}>{likeState}</LikeComponent>
         {/* 🍃->🌿->🌴  => 추후 좋아요 수에 따라 이모티콘 변경 예정*/}
       </Footer>

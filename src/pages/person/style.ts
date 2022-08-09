@@ -60,8 +60,13 @@ export const TagPlace = styled.div`
   display: flex;
 
   margin-top: 8px;
-  max-height: 96px;
   overflow-y: auto;
+  flex-wrap: wrap;
+
+  @media screen and (max-width: 830px) {
+    /* 모바일 세로 */
+    width: 320px;
+  }
 `;
 
 export const UserInfo = styled.div`
@@ -69,15 +74,16 @@ export const UserInfo = styled.div`
   display: flex;
 
   width: 100%;
+  min-height: 160px;
   /* max-width: 960px; */
 
-  margin: 0px auto;
+  margin: 13px auto;
   margin-bottom: 20px;
 
   gap: 20px;
 
   /* background-color: #252525; */
-  padding: 15px 0px;
+  /* padding: 15px 0px; */
   /* height: 350px; */
 `;
 
@@ -112,6 +118,7 @@ export const TagList = styled.div`
   cursor: pointer;
   float: left;
   gap: 15px;
+  white-space: nowrap;
 
   color: ${({ theme }) => theme.fontColor.color};
 `;

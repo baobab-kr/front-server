@@ -18,7 +18,7 @@ export const SwitchContainer = styled.div`
 
   justify-content: space-evenly;
   align-items: center;
-  z-index: 200;
+  z-index: 999;
 `;
 
 export const Divider = styled.span`

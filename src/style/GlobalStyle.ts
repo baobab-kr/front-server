@@ -4,6 +4,13 @@ import reset from "styled-reset";
 const GlobalStyle = createGlobalStyle`
   ${reset}
   
+@font-face {
+    font-family: 'twayair';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_tway@1.0/twayair.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
   *, *::before, *::after {
     box-sizing: border-box;
     padding:0;
@@ -22,7 +29,8 @@ const GlobalStyle = createGlobalStyle`
     line-height: 1;
     color: white;
     background-attachment: fixed;
-    font-family: "Noto Sans CJK KR", sans-serif !important;
+    /* font-family: LL Circular,Apple SD Gothic Neo,sans-serif; */
+    font-family: 'twayair';
 
     background-color:${({ theme }) => theme.backgroundColor.bg};
     margin: 0;
@@ -46,6 +54,14 @@ const GlobalStyle = createGlobalStyle`
     appearance: none;
   }
 
+  input {
+    border: none;
+    border-bottom: 1px solid black;
+    &:focus {
+      outline: none;
+    }
+  } 
+
   button{
     cursor: pointer;
     border: none;
@@ -53,7 +69,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body::-webkit-scrollbar {
-    width: 8px;  /* 스크롤바의 너비 */
+    width: 6px;  /* 스크롤바의 너비 */
   }
 
   body::-webkit-scrollbar-thumb {
