@@ -96,7 +96,7 @@ export const UserActionList = styled.ul<tUserActionList>`
   width: 280px;
   background-color: #2f2f2f;
   transform-origin: 95% -3%;
-  border-radius: 5px;
+  border-radius: 8px;
   transform: scale(${(props) => props.scale});
   transition: 0.4s cubic-bezier(0.65, 0.9, 0.3, 0.95);
 `;

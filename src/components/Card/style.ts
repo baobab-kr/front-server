@@ -10,12 +10,20 @@ type imgInit = {
   imgHeight: string;
 };
 
+export const Overlay = styled.span`
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  height: 85%;
+`;
+
 export const CardWrapper = styled.div<cardInit>`
   position: relative;
   width: ${(props) => props.width};
   height: ${(props) => props.height};
-  min-width: 320px;
-  min-height: 330px;
+  min-width: 300px;
+  min-height: 310px;
   /* width: 320px;
   height: 330px; */
   display: flex;
@@ -52,14 +60,14 @@ export const CardImage = styled.img<imgInit>`
   position: absolute;
   object-fit: cover;
   /* height: ${(props) => props.imgHeight}; */
-  height: 75%;
+  height: 85%;
   width: 100%;
   border-radius: 5px 5px 0px 0px;
 `;
 
 export const CardText = styled.div`
   position: absolute;
-  height: 75%;
+  height: 85%;
   width: 100%;
   padding: 0px 20px;
   background-color: rgba(0, 0, 0, 0.6);
@@ -106,7 +114,7 @@ export const Date = styled.p`
 
 export const User = styled.span`
   position: absolute;
-  top: 18%;
+  top: 50%;
   left: 18px;
 
   float: right;
@@ -116,26 +124,28 @@ export const User = styled.span`
 
   color: ${({ theme }) => theme.fontColor.color};
   font-size: 11px;
+
+  transform: translateY(-50%);
 `;
 
 export const TagWrapper = styled.div`
   position: absolute;
-  bottom: 10px;
-  left: 15px;
+  /* bottom: 10px; */
+  /* height: 85%; */
+  width: 100%;
 
-  width: 95%;
   display: flex;
-  gap: 10px;
-  padding-bottom: 3px;
-  overflow-y: auto;
+  align-items: flex-end;
+  flex-wrap: wrap;
 
-  &::-webkit-scrollbar {
-    height: 5px;
-  }
-  &::-webkit-scrollbar-thumb {
-    border-radius: 3px;
-    background: #ddd;
-  }
+  bottom: 15%;
+
+  gap: 10px;
+  padding: 15px;
+
+  max-height: 85%;
+  overflow-y: hidden;
+  /* overflow-y: auto; */
 `;
 
 export const TagComponent = styled.div`
@@ -150,12 +160,14 @@ export const TagComponent = styled.div`
   padding-right: 1rem;
   height: 1.5rem;
   white-space: nowrap;
-  font-weight: 200;
+  font-weight: 100;
+
+  z-index: 110;
 `;
 
 export const LikeComponent = styled.div`
   position: absolute;
-  top: 18%;
+  top: 50%;
 
   right: 15px;
   display: flex;
@@ -164,6 +176,8 @@ export const LikeComponent = styled.div`
   width: 12%;
 
   color: ${({ theme }) => theme.fontColor.subColor};
+
+  transform: translateY(-50%);
 `;
 
 export const Footer = styled.div`
@@ -173,7 +187,7 @@ export const Footer = styled.div`
   justify-content: space-between;
   bottom: 0px;
   width: 100%;
-  height: 25%;
+  height: 15%;
 
   background-color: ${({ theme }) => theme.backgroundColor.bg};
 `;

@@ -6,13 +6,14 @@ type tOpen = {
 
 export const SearchOverlay = styled.div<tOpen>`
   position: fixed;
-  display: ${(props) => (props.open ? "flex" : "none")};
   left: 0px;
   top: 60px;
   width: 100%;
   height: calc(100% - 60px);
   background-color: rgba(0, 0, 0, 0.5);
-  transition: all 0.3s;
+  opacity: ${(props) => (props.open ? 1 : 0)};
+  visibility: ${(props) => (props.open ? "visible" : "hidden")};
+  transition: 0.3s cubic-bezier(0.65, 0.9, 0.3, 0.95);
 `;
 
 export const SearchContainer = styled.div`

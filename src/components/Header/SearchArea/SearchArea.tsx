@@ -20,7 +20,6 @@ export default function SearchArea({ open, setOpen }: tOpen): JSX.Element {
   };
 
   const cancle = () => {
-    console.log("asd");
     setSearchWord("");
   };
 
