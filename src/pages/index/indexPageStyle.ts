@@ -193,8 +193,8 @@ export const InputComment = styled.div`
       border-top: 1px solid black;
     }
   }
-
-  top: 20px;
+  padding-top: 10px;
+  top: 60px;
   right: 16px;
   position: fixed;
   height: 150px;
@@ -215,12 +215,12 @@ export const InputComment = styled.div`
   }
   .saveComment {
     position: absolute;
-    top: 170px;
+    top: 140px;
     right: 10px;
   }
   .closeComment {
     position: absolute;
-    top: 50px;
+    top: 0px;
     right: 0px;
   }
 `;
@@ -277,7 +277,7 @@ export const CommentComponent = styled.div`
   overflow-y: scroll;
   overflow-x: hidden;
   padding-top: 170px;
-  z-index: 2;
+  z-index: 1000;
   .line {
     background: #ddd;
     width: 34vw;

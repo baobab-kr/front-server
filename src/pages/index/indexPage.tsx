@@ -357,7 +357,6 @@ export default function IndexPage() {
       {commentView ? (
         <CommentComponent>
           <InputComment>
-            <div className="line"></div>
             <div className="comment_write">댓글 작성</div>
             <input placeholder="댓글을 입력해주세요" onChange={handleChange} value={comment}></input>
             <button className="saveComment" onClick={() => onSaveComment()}>
