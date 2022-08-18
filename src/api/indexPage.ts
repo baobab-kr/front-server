@@ -12,9 +12,9 @@ export function getBoardDetail(_board_id: number): Promise<IndexPage> {
       });
   });
 }
-export function getComments(_board_id: number): Promise<getComment> {
+export function getComments(_board_id: number, _page: number): Promise<getComment> {
   return new Promise<getComment>((resolve, reject) => {
-    API.post("/board/Comment", { board_id: _board_id })
+    API.post("/board/Comment", { board_id: _board_id, page: _page })
       .then((res) => {
         resolve(res.data);
       })
@@ -23,9 +23,9 @@ export function getComments(_board_id: number): Promise<getComment> {
       });
   });
 }
-export function getReComments(_commemt_id: number): Promise<getReComment> {
+export function getReComments(_commemt_id: number, _page: number): Promise<getReComment> {
   return new Promise<getReComment>((resolve, reject) => {
-    API.post("/board/ReComment", { comment_id: _commemt_id })
+    API.post("/board/ReComment", { comment_id: _commemt_id, page: _page })
       .then((res) => {
         resolve(res.data);
       })
