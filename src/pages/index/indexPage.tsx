@@ -1,6 +1,6 @@
 import "@toast-ui/editor/dist/toastui-editor.css";
 import "@toast-ui/editor/dist/theme/toastui-editor-dark.css";
-import React, { useEffect, useState } from "react";
+import React, { createElement, useEffect, useState } from "react";
 
 import { Content, CommentBox, Index, InputComment, Top, Navigate, CommentComponent, CommentViewBtn } from "./indexPageStyle";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -10,6 +10,7 @@ import cancleImg from "./img/comment.png";
 import { user } from "@src/Types/user";
 import { timeForToday } from "../../util/date";
 import DefaultAvator from "../../assets/defaultAvator.png";
+import Avator from "../../components/Avator/Avator";
 type tState = {
   userId: number;
 };
@@ -31,6 +32,7 @@ export default function IndexPage() {
   const [pageNation, setPageNation] = useState(0);
   const [rePageNation, setRePageNation] = useState(0);
   const [commentView, setCommentView] = useState(false);
+  const [isCommentView, setIsCommentView] = useState(false);
   const [testIdx, setTestIdx] = useState(0);
   const [testId, setTestId] = useState(0);
 
@@ -86,7 +88,6 @@ export default function IndexPage() {
   useEffect(() => {
     let newArray = [...commentArray.comments, ...commentArrayNew.comments];
     setCommentArray({ comments: newArray });
-    console.log("12312312312312?????");
   }, [commentArrayNew]);
   const onSaveReComment = (id: number, content: string, idx: number) => {
     if (userInfo === null) {
@@ -117,6 +118,7 @@ export default function IndexPage() {
           console.log(res);
           getComments(parseInt(board_id), pageNation)
             .then((res) => {
+              console.log("comment", res);
               setCommentArray({ comments: res });
             })
             .catch((err) => {
@@ -129,7 +131,6 @@ export default function IndexPage() {
           document.querySelectorAll<HTMLElement>(".toastui-editor-contents h1")!.forEach((data) => {
             datas.push(data.innerHTML);
             setNavigateList(datas);
-            console.log(navigateList);
           });
         })
         .catch((err) => {
@@ -180,28 +181,44 @@ export default function IndexPage() {
       setRePageNation(rePageNation + 1);
       setTestId(id);
       setTestIdx(idx);
-      console.log(rePageNation);
     });
     return moreBtn;
   };
 
   useEffect(() => {
-    console.log(testId);
-    console.log(testIdx);
-    console.log("rePageNation", rePageNation);
     reCommentLoad(testId, testIdx);
   }, [testId]);
+
+  useEffect(() => {
+    console.log("commentView", commentView);
+  }, [commentView]);
 
   const reCommentLoad = (id: number, idx: number) => {
     setTimeout(() => {
       getReComments(id, rePageNation)
         .then((res) => {
           const reCommentObj: any = { comments: res };
-          console.log("res", res);
           reCommentObj.comments.map((data: any) => {
             const recomment = document.createElement("div");
             recomment.className = "recomment";
 
+            const avator = document.createElement("div");
+            const avator_img = document.createElement("img");
+            avator.style.width = "40px";
+            avator.style.height = "40px";
+            avator.style.objectFit = "cover";
+            avator_img.src = `${process.env.REACT_APP_API_ROOT}users/read-profile?userid="${data.writer.userid}"`;
+            // avator_img.src = DefaultAvator;
+            avator_img.alt = "avator";
+            avator_img.style.width = "100%";
+            avator_img.style.height = "100%";
+            avator_img.style.objectFit = "cover";
+            avator_img.style.backfaceVisibility = "hidden";
+
+            avator.appendChild(avator_img);
+
+            const userDataInfo = document.createElement("div");
+            userDataInfo.className = "userDataInfo";
             const nickname = document.createElement("div");
             nickname.className = "re_nickname";
             nickname.textContent = data.writer.username;
@@ -226,8 +243,18 @@ export default function IndexPage() {
             const comment = document.querySelector(`.comment_${idx} .recommentBox`)!;
             comment.appendChild(recomment);
 
-            recomment.appendChild(nickname);
-            recomment.appendChild(date);
+            userDataInfo.appendChild(avator);
+            userDataInfo.appendChild(nickname);
+
+            if ((userInfo !== null && data.writer.username) === userInfo!.username) {
+              const my = document.createElement("div");
+              my.className = "My";
+              my.textContent = "My";
+              nickname.appendChild(my);
+            }
+
+            userDataInfo.appendChild(date);
+            recomment.appendChild(userDataInfo);
             recomment.appendChild(recomment_description);
 
             setTimeout(() => {
@@ -248,12 +275,21 @@ export default function IndexPage() {
   };
 
   const recommentView = async (id: number, idx: number) => {
-    document.querySelector(`.comment_${idx} button`)!.innerHTML = "댓글 숨기기";
     const comment = document.querySelector(`.comment_${idx} .recommentBox`)!;
     if (comment?.childElementCount >= 1) {
       document.querySelector(`.comment_${idx} button`)!.innerHTML = "댓글 보기";
       comment.innerHTML = "";
     } else {
+      const recommentEls = document.querySelectorAll<HTMLElement>(".recommentView")!;
+      recommentEls.forEach((data) => {
+        data.innerHTML = "댓글 보기";
+      });
+      const recommentBoxEls = document.querySelectorAll<HTMLElement>(".recommentBox")!;
+      recommentBoxEls.forEach((data) => {
+        data.innerHTML = "";
+      });
+      setRePageNation(0);
+      document.querySelector(`.comment_${idx} button`)!.innerHTML = "댓글 숨기기";
       reCommentLoad(id, idx);
       setTimeout(() => {
         const recommentInput = writeRecomment(id, idx);
@@ -264,13 +300,15 @@ export default function IndexPage() {
   const deleteComment = (id: number, idx: number) => {
     patchDeleteComment(id);
     if (pageNation === 0) {
-      getComments(parseInt(board_id), pageNation)
-        .then((res) => {
-          setCommentArray({ comments: res });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      setTimeout(() => {
+        getComments(parseInt(board_id), pageNation)
+          .then((res) => {
+            setCommentArray({ comments: res });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }, 300);
     } else {
       setTimeout(() => {
         setCommentArray({ comments: [] });
@@ -283,7 +321,7 @@ export default function IndexPage() {
               console.log(err);
             });
         }
-      }, 200);
+      }, 300);
     }
   };
   const deleteReComment = (re_id: number, id: number, idx: number) => {
@@ -298,7 +336,7 @@ export default function IndexPage() {
           });
         setTimeout(() => {
           reCommentLoad(id, idx);
-        }, 200);
+        }, 300);
       })
       .catch((err) => {
         console.log("오류남");
@@ -355,14 +393,22 @@ export default function IndexPage() {
         </Content>
       </Index>
       {commentView ? (
-        <CommentComponent>
+        <CommentComponent className={`${isCommentView ? "comment_view on" : "comment_view off"}`}>
           <InputComment>
             <div className="comment_write">댓글 작성</div>
             <input placeholder="댓글을 입력해주세요" onChange={handleChange} value={comment}></input>
             <button className="saveComment" onClick={() => onSaveComment()}>
               댓글 작성
             </button>
-            <button className="closeComment" onClick={() => setCommentView(!commentView)}>
+            <button
+              className="closeComment"
+              onClick={() => {
+                setIsCommentView(!commentView);
+                setTimeout(() => {
+                  setCommentView(!commentView);
+                }, 1000);
+              }}
+            >
               뒤로가기
             </button>
           </InputComment>
@@ -371,13 +417,19 @@ export default function IndexPage() {
               return (
                 <>
                   <div className={`comment comment_${idx}`} key={idx}>
-                    <div
-                      className="nickname"
-                      onClick={() => navigate(`/@${decodeURI(data.writer.username).substring(1)}`, { state: { userId: data.writer.id } })}
-                    >
-                      {data.writer.username}
+                    <div className="userDataInfo">
+                      <div className="avator" style={{ width: "40px", height: "40px" }}>
+                        <Avator userId={data.writer.id.toString()} width={"100%"} height={"100%"} />
+                      </div>
+                      <div
+                        className="nickname"
+                        onClick={() => navigate(`/@${decodeURI(data.writer.username).substring(1)}`, { state: { userId: data.writer.id } })}
+                      >
+                        {data.writer.username}
+                        {userInfo !== null && data.writer.username === userInfo.username ? <div className="My">My</div> : null}
+                      </div>
+                      <div className="date">{moment(data.date).format("YYYY년 MM월 DD일")}</div>
                     </div>
-                    <div className="date">{moment(data.date).format("YYYY년 MM월 DD일")}</div>
                     <div className="comment_description">{data.content}</div>
                     <button
                       className="recommentView"
@@ -412,7 +464,13 @@ export default function IndexPage() {
           </CommentBox>
         </CommentComponent>
       ) : null}
-      <CommentViewBtn src={cancleImg} onClick={() => setCommentView(!commentView)} />
+      <CommentViewBtn
+        src={cancleImg}
+        onClick={() => {
+          setCommentView(!commentView);
+          setIsCommentView(!commentView);
+        }}
+      />
     </>
   );
 }

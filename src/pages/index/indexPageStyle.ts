@@ -1,4 +1,21 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+const on = keyframes` 
+0% {
+  transform: translateX(100%);
+}
+100% {
+  transform: translateX(0%);
+}
+  `;
+const off = keyframes` 
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+    `;
 
 export const Index = styled.div`
   position: absolute;
@@ -122,23 +139,57 @@ export const CommentBox = styled.div`
     .recomment {
       width: 90% !important;
     }
+    .writeRecommentBox {
+      position: relative;
+      top: 20px;
+      input {
+        width: 86vw !important;
+        height: 70px;
+        margin-bottom: 10px;
+      }
+    }
   }
   position: relative;
   bottom: 0px;
-  width: 36vw;
+  width: 25vw;
   height: 100px;
   color: #999999;
   margin-left: 15px;
   margin-right: 15px;
+  .userDataInfo {
+    margin-top: 50px;
+    margin-bottom: 20px;
+    .avator {
+      width: 70px;
+      height: 70px;
+      border-radius: 70%;
+      overflow: hidden;
+      justify-self: start;
+    }
+  }
   .comment {
     margin-bottom: 20px;
     color: ${({ theme }) => theme.fontColor.subColor};
   }
   .date {
-    position: relative;
-    top: 10px;
-    right: 0px;
+    text-align: left;
+    margin-top: -15px;
+    margin-left: 50px;
     color: ${({ theme }) => theme.fontColor.subColor};
+  }
+  .nickname {
+    width: max-content;
+    text-align: left;
+    margin-top: -40px;
+    margin-left: 50px;
+  }
+  .My {
+    position: relative;
+    top: -20px;
+    right: -55px;
+    border: 2px red solid;
+    border-radius: 50px;
+    text-align: center;
   }
   .comment_description {
     margin-top: 20px;
@@ -148,15 +199,32 @@ export const CommentBox = styled.div`
   .recomment {
     position: relative;
     bottom: 0px;
-    width: calc(36vw - 40px);
+    width: calc(25vw - 40px);
     height: auto;
     color: #999999;
     left: 30px;
     margin-top: 20px;
+    .userDataInfo {
+      margin-top: 20px;
+      margin-bottom: 20px;
+      .avator {
+        width: 70px;
+        height: 70px;
+        border-radius: 70%;
+        overflow: hidden;
+        justify-self: start;
+      }
+    }
     .re_date {
-      position: absolute;
-      top: 0px;
-      right: 0px;
+      text-align: left;
+      margin-top: -15px;
+      margin-left: 50px;
+    }
+    .re_nickname {
+      width: max-content;
+      text-align: left;
+      margin-top: -40px;
+      margin-left: 50px;
     }
     .recomment_description {
       margin-top: 10px;
@@ -167,17 +235,19 @@ export const CommentBox = styled.div`
     .writeRecommentBox {
       position: relative;
       top: 20px;
+      width: 100%;
       .comment_write {
         margin-bottom: 10px;
       }
       input {
-        width: 40vw;
+        width: 25vw;
         height: 70px;
         margin-bottom: 10px;
       }
       button {
         position: relative;
         color: #000;
+        top: 0px;
         right: 0px;
       }
     }
@@ -186,19 +256,19 @@ export const CommentBox = styled.div`
 
 export const InputComment = styled.div`
   @media (max-width: 390px) {
-    width: 100%;
+    width: 90%;
     input {
       width: 100% !important;
       height: 70px;
       border-top: 1px solid black;
     }
   }
-  padding-top: 10px;
+  // padding-top: 10px;
   top: 60px;
   right: 16px;
   position: fixed;
   height: 150px;
-  padding-right: 20px;
+  // padding-right: 20px;
   color: ${({ theme }) => theme.fontColor.subColor};
   background-color: ${({ theme }) => theme.fontColor.color};
   z-index: 2;
@@ -207,7 +277,7 @@ export const InputComment = styled.div`
     margin-bottom: 20px;
   }
   input {
-    width: 36vw;
+    width: 25vw;
     height: 70px;
     border-top: 1px solid black;
     color: ${({ theme }) => theme.fontColor.subColor};
@@ -278,6 +348,16 @@ export const CommentComponent = styled.div`
   overflow-x: hidden;
   padding-top: 170px;
   z-index: 1000;
+  &.none {
+    display: none;
+  }
+  &.on {
+    display: block;
+    animation: ${on} 1s forwards;
+  }
+  &.off {
+    animation: ${off} 1s forwards;
+  }
   .line {
     background: #ddd;
     width: 34vw;
