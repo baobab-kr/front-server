@@ -293,7 +293,7 @@ export const CommentBox = styled.div`
       textarea {
         color: ${({ theme }) => theme.fontColor.subColor};
         background-color: #fff;
-        width: 25vw;
+        width: calc(25vw - 20px);
         height: 70px;
         margin-bottom: 10px;
         resize: none;
@@ -442,8 +442,18 @@ export const CommentComponent = styled.div`
   overflow-y: auto;
   padding-top: 170px;
   z-index: 1000;
-  scrollbar-color: #6969dd #e0e0e0;
-  scrollbar-width: thin;
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: #e4e4e4;
+    border-radius: 100px;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 100px;
+    background-image: linear-gradient(180deg, #999999 0%, #999999 99%);
+    box-shadow: inset 2px 2px 5px 0 rgba(#fff, 0.5);
+  }
   // -ms-overflow-style: 2px; /* IE and Edge */
   // scrollbar-width: 2px; /* Firefox */
   // &::-webkit-scrollbar {
