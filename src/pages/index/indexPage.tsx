@@ -430,6 +430,7 @@ export default function IndexPage() {
             }}
           />
           <CommentBox id="commentBox">
+            <div className="line"></div>
             {commentArray.comments.map((data: any, idx: number) => {
               return (
                 <>

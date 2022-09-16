@@ -139,6 +139,9 @@ export const CommentBox = styled.div`
     width: 95%;
     .recomment {
       width: 90% !important;
+      .line {
+        width: 82vw !important;
+      }
     }
     .writeRecommentBox {
       position: relative;
