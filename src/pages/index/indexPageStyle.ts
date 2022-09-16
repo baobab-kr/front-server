@@ -164,8 +164,6 @@ export const CommentBox = styled.div`
       }
     }
   }
-  overflow-y: auto;
-  overflow-x: hidden;
   position: relative;
   bottom: -90px;
   width: 25vw;
@@ -173,11 +171,6 @@ export const CommentBox = styled.div`
   color: #999999;
   margin-left: 15px;
   margin-right: 15px;
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-  &::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera*/
-  }
   .userDataInfo {
     margin-top: 20px;
     margin-bottom: 20px;
@@ -446,9 +439,16 @@ export const CommentComponent = styled.div`
   box-shadow: -1px 4px 5px 5px grey;
   color: ${({ theme }) => theme.fontColor.subColor};
   overflow-x: hidden;
-  overflow-y: hidden;
+  overflow-y: auto;
   padding-top: 170px;
   z-index: 1000;
+  scrollbar-color: #6969dd #e0e0e0;
+  scrollbar-width: thin;
+  // -ms-overflow-style: 2px; /* IE and Edge */
+  // scrollbar-width: 2px; /* Firefox */
+  // &::-webkit-scrollbar {
+  //   display: none; /* Chrome, Safari, Opera*/
+  // }
   &.none {
     display: none;
   }
