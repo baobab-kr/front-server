@@ -106,6 +106,7 @@ export const Navigate = styled.div`
   line-height: normal;
   .naviData {
     margin-right: 20px;
+    color: ${({ theme }) => theme.fontColor.subColor};
   }
 `;
 export const Content = styled.div`
@@ -142,22 +143,43 @@ export const CommentBox = styled.div`
     .writeRecommentBox {
       position: relative;
       top: 20px;
-      input {
+      textarea {
+        color: ${({ theme }) => theme.fontColor.subColor};
+        background-color: #e1e1e1;
         width: 86vw !important;
         height: 70px;
         margin-bottom: 10px;
+        resize: none;
+        &:focus {
+          outline: 0;
+        }
+      }
+      .saveComment {
+        position: absolute;
+        top: 160px;
+        right: 10px;
+        border-radius: 20px;
+        color: #fff;
+        background-color: #3a9700;
       }
     }
   }
+  overflow-y: auto;
+  overflow-x: hidden;
   position: relative;
-  bottom: 0px;
+  bottom: -90px;
   width: 25vw;
-  height: 100px;
+  height: 88%;
   color: #999999;
   margin-left: 15px;
   margin-right: 15px;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+  }
   .userDataInfo {
-    margin-top: 50px;
+    margin-top: 20px;
     margin-bottom: 20px;
     .avator {
       width: 70px;
@@ -166,16 +188,32 @@ export const CommentBox = styled.div`
       overflow: hidden;
       justify-self: start;
     }
+    .deleteComment {
+      position: relative;
+      width: 30px;
+      height: 20px;
+      top: -37px;
+      margin-left: 90%;
+      color: ${({ theme }) => theme.fontColor.subColor};
+    }
   }
   .comment {
     margin-bottom: 20px;
     color: ${({ theme }) => theme.fontColor.subColor};
+    .recommentView {
+      text-align: left;
+      margin-left: 0px;
+      background: none;
+    }
   }
   .date {
     text-align: left;
-    margin-top: -15px;
+    margin-top: 3px;
     margin-left: 50px;
     color: ${({ theme }) => theme.fontColor.subColor};
+    &.mydate {
+      margin-top: -15px;
+    }
   }
   .nickname {
     width: max-content;
@@ -192,17 +230,17 @@ export const CommentBox = styled.div`
     text-align: center;
   }
   .comment_description {
-    margin-top: 20px;
+    margin-top: -20px;
     margin-bottom: 20px;
+    word-break: break-all;
     color: ${({ theme }) => theme.fontColor.subColor};
   }
   .recomment {
     position: relative;
     bottom: 0px;
-    width: calc(25vw - 40px);
+    width: calc(25vw - 20px);
     height: auto;
     color: #999999;
-    left: 30px;
     margin-top: 20px;
     .userDataInfo {
       margin-top: 20px;
@@ -217,8 +255,11 @@ export const CommentBox = styled.div`
     }
     .re_date {
       text-align: left;
-      margin-top: -15px;
+      margin-top: 3px;
       margin-left: 50px;
+      &.mydate {
+        margin-top: -15px;
+      }
     }
     .re_nickname {
       width: max-content;
@@ -227,22 +268,48 @@ export const CommentBox = styled.div`
       margin-left: 50px;
     }
     .recomment_description {
+      word-break: break-all;
       margin-top: 10px;
     }
   }
   .recommentBox {
+    border-left: 3px solid #a9a9a9;
+    padding-left: 10px;
     position: relative;
     .writeRecommentBox {
+      margin-top: 20px;
+      border-radius: 10px;
+      background-color: #fff;
       position: relative;
       top: 20px;
       width: 100%;
+      height: 150px;
       .comment_write {
         margin-bottom: 10px;
+        padding-top: 10px;
+        padding-left: 10px;
       }
-      input {
+      .saveComment {
+        position: absolute;
+        top: 110px;
+        right: 10px;
+        border-radius: 20px;
+        color: #fff;
+        background-color: #3a9700;
+      }
+      textarea {
+        color: ${({ theme }) => theme.fontColor.subColor};
+        background-color: #fff;
         width: 25vw;
         height: 70px;
         margin-bottom: 10px;
+        resize: none;
+        border: none;
+        padding-left: 10px;
+        padding-right: 10px;
+        &:focus {
+          outline: 0;
+        }
       }
       button {
         position: relative;
@@ -251,47 +318,79 @@ export const CommentBox = styled.div`
         right: 0px;
       }
     }
+    .reComment_more_btn {
+      position: relative;
+      top: 20px;
+      left: 30%;
+    }
   }
 `;
 
 export const InputComment = styled.div`
   @media (max-width: 390px) {
     width: 90%;
-    input {
+    textarea {
+      color: ${({ theme }) => theme.fontColor.subColor};
+      background-color: #ffffff;
       width: 100% !important;
       height: 70px;
-      border-top: 1px solid black;
+      resize: none;
+      &:focus {
+        outline: 0;
+      }
     }
   }
-  // padding-top: 10px;
+
   top: 60px;
   right: 16px;
   position: fixed;
-  height: 150px;
-  // padding-right: 20px;
+  height: 200px;
+  border-radius: 10px;
   color: ${({ theme }) => theme.fontColor.subColor};
-  background-color: ${({ theme }) => theme.fontColor.color};
+  background-color: #ffffff;
   z-index: 2;
+  .writer_info {
+    margin-top: 20px;
+    margin-bottom: 30px;
+    .avator {
+      margin-left: 10px;
+    }
+    .comment_write {
+      width: -webkit-max-content;
+      width: -moz-max-content;
+      width: max-content;
+      text-align: left;
+      margin-top: -40px;
+      margin-left: 60px;
+    }
+  }
   .comment_write {
+    margin-top: 10px;
+    margin-left: 10px;
     font-size: 20px;
     margin-bottom: 20px;
   }
-  input {
+  textarea {
+    display: block;
     width: 25vw;
-    height: 70px;
-    border-top: 1px solid black;
+    height: 80px;
     color: ${({ theme }) => theme.fontColor.subColor};
-    background-color: ${({ theme }) => theme.fontColor.color};
+    background-color: #ffffff;
+    border: none;
+    resize: none;
+    &:focus {
+      outline: 0;
+    }
+    padding-left: 10px;
+    padding-right: 10px;
   }
   .saveComment {
     position: absolute;
-    top: 140px;
+    top: 160px;
     right: 10px;
-  }
-  .closeComment {
-    position: absolute;
-    top: 0px;
-    right: 0px;
+    border-radius: 20px;
+    color: #fff;
+    background-color: #3a9700;
   }
 `;
 
@@ -313,9 +412,10 @@ export const CommentComponent = styled.div`
       color: ${({ theme }) => theme.fontColor.subColor};
     }
     .deleteComment {
-      position: absolute;
+      position: relative;
       width: 30px;
       height: 20px;
+      top: 0px;
       right: 0px;
       color: ${({ theme }) => theme.fontColor.subColor};
     }
@@ -332,7 +432,7 @@ export const CommentComponent = styled.div`
       right: 0px;
       top: 25px;
       width: 70px;
-      background: ${({ theme }) => theme.backgroundColor.subColor};
+      background: #e1e1e1;
       color: ${({ theme }) => theme.fontColor.color};
       border: 1px solid #ffffff;
       border-radius: 3px;
@@ -342,10 +442,11 @@ export const CommentComponent = styled.div`
   right: 0px;
   height: 94%;
   position: fixed;
-  background-color: ${({ theme }) => theme.fontColor.color};
+  background-color: #e1e1e1;
+  box-shadow: -1px 4px 5px 5px grey;
   color: ${({ theme }) => theme.fontColor.subColor};
-  overflow-y: scroll;
   overflow-x: hidden;
+  overflow-y: hidden;
   padding-top: 170px;
   z-index: 1000;
   &.none {
@@ -359,9 +460,9 @@ export const CommentComponent = styled.div`
     animation: ${off} 1s forwards;
   }
   .line {
-    background: #ddd;
+    background: #c9c9c9;
     width: 34vw;
-    height: 1px;
+    height: 2px;
     margin-top: 2rem;
     margin-bottom: 1.5rem;
   }
@@ -369,13 +470,6 @@ export const CommentComponent = styled.div`
     background: white;
     width: 100px;
     height: 30px;
-    color: ${({ theme }) => theme.fontColor.subColor};
-  }
-  .deleteComment {
-    position: absolute;
-    width: 30px;
-    height: 20px;
-    right: 0px;
     color: ${({ theme }) => theme.fontColor.subColor};
   }
   .deleteReComment {
@@ -398,6 +492,15 @@ export const CommentComponent = styled.div`
   }
   .moreBtn {
     margin-bottom: 20px;
+    position: relative;
+    left: 30%;
+  }
+  .closeComment {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
   }
 `;
 export const CommentViewBtn = styled.img`

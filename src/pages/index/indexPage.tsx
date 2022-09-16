@@ -7,6 +7,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { createComment, createReComment, getBoardDetail, getComments, getReComments, patchDeleteComment, patchDeleteReComment } from "../../api/indexPage";
 import moment from "moment";
 import cancleImg from "./img/comment.png";
+import closeIcon from "./img/closeIcon.png";
 import { user } from "@src/Types/user";
 import { timeForToday } from "../../util/date";
 import DefaultAvator from "../../assets/defaultAvator.png";
@@ -145,14 +146,14 @@ export default function IndexPage() {
     recommentInput.className = "writeRecommentBox";
     const line = document.createElement("div");
     line.className = "line";
-    recommentInput.appendChild(line);
+    // recommentInput.appendChild(line);
 
     const comment_write = document.createElement("div");
     comment_write.className = "comment_write";
     comment_write.textContent = "답글 작성";
     recommentInput.appendChild(comment_write);
 
-    const input = document.createElement("input");
+    const input = document.createElement("textarea");
     input.placeholder = "답글을 입력해주세요";
     input.className = `input_${idx}`;
     input.name = `input_${idx}`;
@@ -165,9 +166,9 @@ export default function IndexPage() {
 
     btn.addEventListener("click", () => {
       const inputtest = document.querySelector(`.comment_${idx}`)!;
-      const reCommentText = inputtest.querySelector("input")!;
+      const reCommentText = inputtest.querySelector("textarea")!;
       onSaveReComment(id, reCommentText.value, idx);
-      inputtest.querySelectorAll("input")[idx].value = "";
+      inputtest.querySelectorAll("textarea")[idx].value = "";
     });
     recommentInput.appendChild(btn);
     return recommentInput;
@@ -199,6 +200,9 @@ export default function IndexPage() {
         .then((res) => {
           const reCommentObj: any = { comments: res };
           reCommentObj.comments.map((data: any) => {
+            console.log(data);
+            const line = document.createElement("div");
+            line.className = "line";
             const recomment = document.createElement("div");
             recomment.className = "recomment";
 
@@ -230,8 +234,8 @@ export default function IndexPage() {
             const recomment_description = document.createElement("div");
             recomment_description.className = "recomment_description";
             recomment_description.textContent = data.content;
-            if ((userInfo !== null && data.writer.username) === userInfo!.username) {
-              const recomment_delete = document.createElement("button");
+            if (userInfo !== null && data.writer.username === userInfo!.username) {
+              const recomment_delete = document.createElement("div");
               recomment_delete.className = "deleteReComment";
               recomment_delete.textContent = "삭제";
               recomment.appendChild(recomment_delete);
@@ -242,14 +246,16 @@ export default function IndexPage() {
             }
             const comment = document.querySelector(`.comment_${idx} .recommentBox`)!;
             comment.appendChild(recomment);
+            recomment.appendChild(line);
 
             userDataInfo.appendChild(avator);
             userDataInfo.appendChild(nickname);
 
-            if ((userInfo !== null && data.writer.username) === userInfo!.username) {
+            if (userInfo !== null && data.writer.username === userInfo!.username) {
               const my = document.createElement("div");
               my.className = "My";
               my.textContent = "My";
+              date.className = "re_date mydate";
               nickname.appendChild(my);
             }
 
@@ -395,23 +401,34 @@ export default function IndexPage() {
       {commentView ? (
         <CommentComponent className={`${isCommentView ? "comment_view on" : "comment_view off"}`}>
           <InputComment>
-            <div className="comment_write">댓글 작성</div>
-            <input placeholder="댓글을 입력해주세요" onChange={handleChange} value={comment}></input>
+            {userInfo !== null ? (
+              <div className="writer_info">
+                <div className="avator" style={{ width: "40px", height: "40px" }}>
+                  <Avator userId={userInfo?.userid.toString()} width={"100%"} height={"100%"} />
+                </div>
+                <div className="comment_write">{userInfo?.username}</div>
+              </div>
+            ) : (
+              <>
+                <div className="comment_write">로그인을 해주세요</div>
+              </>
+            )}
+
+            <textarea placeholder="댓글을 입력해주세요" onChange={handleChange} value={comment}></textarea>
             <button className="saveComment" onClick={() => onSaveComment()}>
               댓글 작성
             </button>
-            <button
-              className="closeComment"
-              onClick={() => {
-                setIsCommentView(!commentView);
-                setTimeout(() => {
-                  setCommentView(!commentView);
-                }, 1000);
-              }}
-            >
-              뒤로가기
-            </button>
           </InputComment>
+          <img
+            src={closeIcon}
+            className="closeComment"
+            onClick={() => {
+              setIsCommentView(!commentView);
+              setTimeout(() => {
+                setCommentView(!commentView);
+              }, 1000);
+            }}
+          />
           <CommentBox id="commentBox">
             {commentArray.comments.map((data: any, idx: number) => {
               return (
@@ -428,7 +445,14 @@ export default function IndexPage() {
                         {data.writer.username}
                         {userInfo !== null && data.writer.username === userInfo.username ? <div className="My">My</div> : null}
                       </div>
-                      <div className="date">{moment(data.date).format("YYYY년 MM월 DD일")}</div>
+                      <div className={`date${userInfo !== null && data.writer.username === userInfo.username ? " mydate" : ""}`}>
+                        {moment(data.date).format("YYYY년 MM월 DD일")}
+                      </div>
+                      {userInfo !== null && data.writer.username === userInfo.username ? (
+                        <div className="deleteComment" onClick={() => deleteComment(data.id, idx)}>
+                          삭제
+                        </div>
+                      ) : null}
                     </div>
                     <div className="comment_description">{data.content}</div>
                     <button
@@ -437,13 +461,8 @@ export default function IndexPage() {
                         recommentView(data.id, idx);
                       }}
                     >
-                      댓글 보기
+                      답글 보기
                     </button>
-                    {userInfo !== null && data.writer.username === userInfo.username ? (
-                      <button className="deleteComment" onClick={() => deleteComment(data.id, idx)}>
-                        삭제
-                      </button>
-                    ) : null}
                     <div className="recommentBox"></div>
                   </div>
                   <div className="line"></div>
