@@ -270,6 +270,7 @@ export const CommentBox = styled.div`
     padding-left: 10px;
     position: relative;
     .writeRecommentBox {
+      box-shadow: 0px 2px 2px 2px grey;
       margin-top: 20px;
       border-radius: 10px;
       background-color: #fff;
@@ -342,6 +343,7 @@ export const InputComment = styled.div`
   color: ${({ theme }) => theme.fontColor.subColor};
   background-color: #ffffff;
   z-index: 2;
+  box-shadow: 0px 2px 2px 2px grey;
   .writer_info {
     margin-top: 20px;
     margin-bottom: 30px;
@@ -435,7 +437,7 @@ export const CommentComponent = styled.div`
   right: 0px;
   height: 94%;
   position: fixed;
-  background-color: #e1e1e1;
+  background-color: #ffffff;
   box-shadow: -1px 4px 5px 5px grey;
   color: ${({ theme }) => theme.fontColor.subColor};
   overflow-x: hidden;
