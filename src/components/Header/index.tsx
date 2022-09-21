@@ -1,14 +1,30 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { HeaderContainer, Logo, SearchContainer, ItemWrapper, Sign, Button, UserContainer, Arrow, UserActionList, UserActionListItem } from "./style";
+import {
+  HeaderContainer,
+  Logo,
+  TabArea,
+  Tabs,
+  SearchContainer,
+  ItemWrapper,
+  Sign,
+  Button,
+  UserContainer,
+  Arrow,
+  UserActionList,
+  UserActionListItem,
+} from "./style";
 import LogoImg2 from "../../assets/Logo2.png";
 import { userLogout } from "../../api/user";
 import { user } from "@src/Types/user";
 import SearchArea from "./SearchArea/SearchArea";
 import Avator from "../Avator/Avator";
-import Modal from "./Modal/Modal ";
 
 import { BsSearch } from "react-icons/bs";
+import LoginForm from "./LoginForm/LoginForm";
+import SignupForm from "./SignupForm/SignupForm";
+
+import { TITLE_TAB } from "../../constants/index";
 
 type tState = {
   state: tUesrId;
@@ -25,9 +41,11 @@ export default function Header(): JSX.Element {
 
   const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
   const [toggleUser, setToggleUser] = useState<number>(0);
-  const [isModal, setIsModal] = useState<boolean>(false);
+  const [loginModal, setLoginModal] = useState<boolean>(false);
+  const [signupModal, setSignupModal] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
   const props: tState = { state: { userId: userInfo?.id || null } };
+  const [tab, setTab] = useState<string>(TITLE_TAB.MAIN);
 
   const handleCloseModal = (e: any) => {
     if (!wrapperRef.current || !wrapperRef.current.contains(e.target)) setToggleUser(0);
@@ -43,10 +61,12 @@ export default function Header(): JSX.Element {
     navigate("/");
   };
   const navagateLogin = () => {
-    navigate("/login");
+    setLoginModal(true);
+    setSignupModal(false);
   };
   const navagateSignup = () => {
-    navigate("/login", { state: { isLogin: false } });
+    setSignupModal(true);
+    setLoginModal(false);
   };
 
   const navagateMy = () => {
@@ -59,6 +79,10 @@ export default function Header(): JSX.Element {
 
   const navagateEditor = () => {
     navigate("/editor");
+  };
+
+  const navagateJob = () => {
+    navigate("/jobs");
   };
 
   const logout = async () => {
@@ -78,23 +102,43 @@ export default function Header(): JSX.Element {
     setOpen(true);
   };
 
+  useEffect(() => {
+    console.log(location.pathname);
+    if (location.pathname === "/") {
+      setTab(TITLE_TAB.MAIN);
+    } else if (location.pathname === "/jobs") {
+      setTab(TITLE_TAB.JOB);
+    } else {
+      setTab(TITLE_TAB.NOT);
+    }
+  }, [location.pathname]);
+
   return (
     <HeaderContainer>
       <Logo onClick={navagateHome}>
-        <img src={LogoImg2} style={{ width: "50px", height: "25%", objectFit: "cover", overflow: "auto" }} alt="Logo"></img>
+        <img src={LogoImg2} style={{ width: "30px", height: "25%", objectFit: "cover", overflow: "auto" }} alt="Logo"></img>
       </Logo>
+      <TabArea>
+        <Tabs onClick={navagateHome} current={tab === TITLE_TAB.MAIN}>
+          홈 피드
+        </Tabs>
+        <Tabs onClick={navagateJob} current={tab === TITLE_TAB.JOB}>
+          채용
+        </Tabs>
+      </TabArea>
       <ItemWrapper>
         <SearchContainer>
           <BsSearch onClick={seachClick} />
           <SearchArea open={open} setOpen={setOpen} />
         </SearchContainer>
+        <LoginForm open={loginModal} setOpen={setLoginModal} />
+        <SignupForm open={signupModal} setOpen={setSignupModal} />
         <Sign>
           {userInfo === null ? (
-            <>
+            <div style={{ display: "flex", gap: "15px" }}>
               <Button onClick={navagateLogin}>로그인</Button>
-              &nbsp;|&nbsp;
               <Button onClick={navagateSignup}>회원가입</Button>
-            </>
+            </div>
           ) : (
             <div ref={wrapperRef} onClick={toggleUserInfo}>
               <Arrow scale={toggleUser} />

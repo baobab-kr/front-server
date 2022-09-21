@@ -31,7 +31,7 @@ export const Mode = styled.p<tSelected>`
   writing-mode: vertical-rl;
   font-size: 14px;
   font-weight: bold;
-  color: ${({ theme, isSelected }) => (isSelected ? "#3858F6" : theme.fontColor.color)};
+  color: ${({ theme, isSelected }) => (isSelected ? "#3858F6" : theme.fontColor.subColor)};
 
   cursor: pointer;
 `;

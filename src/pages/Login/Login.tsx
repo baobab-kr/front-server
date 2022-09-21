@@ -65,6 +65,7 @@ const LoginForm = (props: any) => {
     bgEl.style.width = "100%";
     bgEl.style.height = "100%";
   }, []);
+
   return (
     <>
       {isLogin ? (

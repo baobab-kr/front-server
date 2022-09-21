@@ -43,8 +43,6 @@ export default function Card({ board, width, height, isMyHome, deleteBoard, imgH
 
   useEffect(() => {
     likeIcon(board.likes_count, board.likes);
-
-    console.log(width);
   }, []);
 
   const liking = async () => {
