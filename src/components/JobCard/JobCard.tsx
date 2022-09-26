@@ -1,5 +1,4 @@
 import React from "react";
-import { Board, Tag, Like } from "Types/main";
 import { CardWrapper, CardImageArea, CardImage, CardFooter, CardLogo, CardLogoImg, CardTitle, CardName, CardIntro, CardDetail } from "./style";
 import de from "../../baobab-data/develop1.jpg";
 import teslalogo from "../../baobab-data/tesla128.png";

@@ -1,6 +1,6 @@
 import React from "react";
 import { MainJobCardWrapper } from "./style";
-import { SiTesla, SiFacebook, SiNaver } from "react-icons/si";
+import { SiTesla } from "react-icons/si";
 
 export default function MainJobCard(): JSX.Element {
   return (

@@ -1,17 +1,14 @@
 import React, { useState } from "react";
 import { UserInfo, ImageButton, EditButton } from "./style";
-import DefaultAvator from "../../assets/defaultAvator.png";
 import { user } from "Types/user";
-import { Navigate } from "react-router";
 import styled from "styled-components";
-import API from "../../api";
-import Avator from "../../components/Avator/Avator";
+import API from "api";
+import Avator from "components/Avator/Avator";
 
 export default function Setting(): JSX.Element {
   const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
   const [fileImage, setFileImage] = useState<string>("");
   const [fileList, setFileList] = useState<FileList>();
-  // let fileList: FileList | null = null;
 
   const saveInfo = async (e: any) => {
     e.preventDefault();

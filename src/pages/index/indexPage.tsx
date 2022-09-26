@@ -4,11 +4,11 @@ import React, { useEffect, useState } from "react";
 
 import { Content, CommentBox, Index, InputComment, Top, Navigate } from "./indexPageStyle";
 import { useLocation, useNavigate } from "react-router-dom";
-import { createComment, createReComment, getBoardDetail, getComments, getReComments, patchDeleteComment, patchDeleteReComment } from "../../api/indexPage";
+import { createComment, createReComment, getBoardDetail, getComments, getReComments, patchDeleteComment, patchDeleteReComment } from "api/indexPage";
 import moment from "moment";
 import { user } from "Types/user";
-import { timeForToday } from "../../util/date";
-import DefaultAvator from "../../assets/defaultAvator.png";
+import { timeForToday } from "util/date";
+import DefaultAvator from "assets/defaultAvator.png";
 type tState = {
   userId: number;
 };

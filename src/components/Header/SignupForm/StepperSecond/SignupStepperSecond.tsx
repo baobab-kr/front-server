@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { JOB_GROUP, USER_TYPE, USER_TYPE_SELECT } from "../../../../constants/index";
 
 import Select from "react-select";

@@ -137,7 +137,7 @@ const btnBox = styled.div`
     width: 35px;
     height: 35px;
     transition: all 0.2s ease-in-out;
-    :: before {
+    ::before {
       position: absolute;
       inset: 0;
       background-color: #252525;
@@ -216,90 +216,5 @@ const saveBtn = styled.button`
   border: 1px solid #ffffff;
   border-radius: 3px;
 `;
-const ToggleBtn = styled.button`
-  width: 130px;
-  height: 50px;
-  border-radius: 30px;
-  border: none;
-  cursor: pointer;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: all 0.5s ease-in-out;
-`;
-const Circle = styled.div`
-  background-color: white;
-  width: 38px;
-  height: 38px;
-  border-radius: 50px;
-  position: absolute;
-  left: 5%;
-  transition: all 0.5s ease-in-out;
-`;
 
-const Wrapper = styled.div`
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  z-index: 0;
-`;
-
-const CheckBox = styled.input`
-  z-index: 1;
-  width: 5rem;
-  height: 2rem;
-  background: var(--second);
-  border-radius: 2em;
-  /* 선택X 텍스트 */
-  ::before {
-    position: absolute;
-    padding-left: 1em;
-    width: 5rem;
-    height: 2rem;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    font-weight: var(--bold);
-    font-size: var(--small);
-    /* 텍스트 트랜지션 */
-    transition: all 0.2s ease-in-out;
-  }
-  /* 선택X 원 */
-  ::after {
-    position: relative;
-    content: "";
-    display: block;
-    width: 1.6em;
-    height: 1.6em;
-    top: calc((2rem - 1.6em) / 2);
-    left: calc(5rem - 1.9em);
-    border-radius: 50%;
-    /* 원 이동 트랜지션 */
-    transition: all 0.2s ease-in-out;
-  }
-  &:checked {
-    /* 배경색 변경 트랜지션 */
-    transition: all 0.2s ease-in-out;
-    /* 선택 O 텍스트 */
-    ::before {
-      position: absolute;
-      padding-right: 1em;
-      align-items: center;
-      justify-content: flex-end;
-    }
-    /* 선택 O 원 */
-    ::after {
-      content: "";
-      z-index: 2;
-      top: calc((2rem - 1.6em) / 2);
-      left: calc((2rem - 1.6em) / 2);
-      width: 1.6em;
-      height: 1.6em;
-      display: block;
-      border-radius: 50%;
-      position: relative;
-    }
-  }
-`;
 export { popup, popupInner, postImage, description, btnBox, TitleWrpper, titleInput, saveBtn };

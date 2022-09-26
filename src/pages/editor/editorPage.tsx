@@ -17,7 +17,6 @@ import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight";
 
 import "tui-color-picker/dist/tui-color-picker.css";
 import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
-import Checkbox from "antd/lib/checkbox/Checkbox";
 import { Switch } from "antd";
 
 type props = {

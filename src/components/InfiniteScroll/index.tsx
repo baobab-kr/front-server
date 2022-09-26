@@ -16,7 +16,7 @@ type Props = {
 };
 export default function InfiniteScroll({ loadFnc, data, children, isLast }: Props): JSX.Element {
   const [isTopButton, setIsTopButton] = useState<boolean>(false);
-  const [darkMode, _] = useRecoilState<boolean>(Darkmode);
+  const [darkMode] = useRecoilState<boolean>(Darkmode);
 
   // ref
   const observerRef = useRef<IntersectionObserver>();

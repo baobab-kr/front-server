@@ -1,8 +1,8 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { InputWrapper, CustomInput, ConfirmButton, StepperFirst, VisibilityBtnArea } from "./style";
-import { ID_MIN_LENGTH, ID_MAX_LENGTH, PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH } from "../../../../constants/index";
+import { ID_MIN_LENGTH, ID_MAX_LENGTH, PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH } from "constants/index";
 import { MdVisibilityOff, MdVisibility } from "react-icons/md";
-import { checkUsername, checkId, emailRegisterCode, users_register, checkEmail } from "../../../../api/signup";
+import { checkUsername, checkId, emailRegisterCode, users_register, checkEmail } from "api/signup";
 import Swal from "sweetalert2";
 
 type tConfirm = {

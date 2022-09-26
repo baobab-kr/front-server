@@ -1,5 +1,5 @@
 import { user } from "Types/user";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Navigate } from "react-router-dom";
 
 interface Props {

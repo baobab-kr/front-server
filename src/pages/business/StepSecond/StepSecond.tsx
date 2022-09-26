@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import Swal from "sweetalert2";
 
 import InputText from "../Custominput/InputText";
