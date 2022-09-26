@@ -3,7 +3,7 @@ import { PuffLoader } from "react-spinners";
 import { useRecoilState } from "recoil";
 import Darkmode from "../../store/store.theme";
 
-import { Board } from "@src/Types/main";
+import { Board } from "Types/main";
 import { TopButton } from "./style";
 
 import { FiArrowUp } from "react-icons/fi";

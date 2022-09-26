@@ -8,7 +8,7 @@ import InputContainer from "../Custominput/InputContainer";
 import TemplateSection from "../TemplateSection/TemplateSection";
 
 import { TemplateSectionFooter, InputWrap, LabelArea, CustomButton, InputAreaFooter, BackButton } from "./style";
-import { tStepSecond } from "@src/Types/Business";
+import { tStepSecond } from "Types/Business";
 import { AiFillLeftCircle } from "react-icons/ai";
 type tProps = {
   value: tStepSecond;

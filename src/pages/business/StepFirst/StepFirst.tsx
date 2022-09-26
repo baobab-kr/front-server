@@ -6,7 +6,7 @@ import InputContainer from "../Custominput/InputContainer";
 import TemplateSection from "../TemplateSection/TemplateSection";
 
 import { TemplateSectionFooter, InputWrap, LabelArea, CustomButton, InputAreaFooter } from "./style";
-import { tStepFirst } from "@src/Types/Business";
+import { tStepFirst } from "Types/Business";
 
 type tProps = {
   value: tStepFirst;

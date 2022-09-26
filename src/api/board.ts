@@ -1,5 +1,5 @@
 import API from ".";
-import { Board, PersonalInfo, ICreateBoard, Like, TagCount, Writer, IEditBoard } from "@src/Types/main";
+import { Board, PersonalInfo, ICreateBoard, Like, TagCount, Writer, IEditBoard } from "Types/main";
 
 export function getMainBoard(page: number): Promise<Board[]> {
   return new Promise<Board[]>((resolve, reject) => {

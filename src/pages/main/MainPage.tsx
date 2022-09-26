@@ -1,7 +1,8 @@
 import React, { useState, useEffect, Suspense } from "react";
 import InfiniteScroll from "../../components/InfiniteScroll";
-import { Board } from "@src/Types/main";
+import { Board } from "Types/main";
 import Card from "../../components/Card";
+import MainJobCard from "../../components/JobCard/MainJobCard";
 import { getMainBoard } from "../../api/board";
 import BannerImage from "../../assets/banner2.jpg";
 import {
@@ -13,19 +14,14 @@ import {
   BannerTitle,
   BannerDesc,
   BannerImageArea,
-  HeadWrapper,
-  HeadCategoryArea,
   ItemTitleArea,
   ItemArea,
   JobArea,
   JobHeader,
   JobList,
-  JobCard,
 } from "./style";
 
 import { IoBusinessSharp } from "react-icons/io5";
-import { SiTesla, SiFacebook, SiNaver } from "react-icons/si";
-// import ReactTagInput from "@pathofdev/react-tag-input";
 import "../../style/tagInputStyle.css";
 import { PuffLoader } from "react-spinners";
 import Category from "./Category/Category";
@@ -46,7 +42,6 @@ export default function MainPage(): JSX.Element {
     function handleWindowResize() {
       setWindowSize(getWindowSize());
     }
-
     window.addEventListener("resize", handleWindowResize);
 
     return () => {
@@ -134,7 +129,7 @@ export default function MainPage(): JSX.Element {
                         </JobHeader>
                       )}
                       <JobList>
-                        <JobCard>
+                        {/* <JobCard>
                           <div style={{ width: "70px", display: "flex", justifyContent: "center" }}>
                             <SiTesla size={45} />
                           </div>
@@ -143,27 +138,10 @@ export default function MainPage(): JSX.Element {
                             <p style={{ fontSize: "12px" }}>Tesla</p>
                             <p style={{ fontSize: "12px" }}>경력 (3년이상), 대졸이상</p>
                           </div>
-                        </JobCard>
-                        <JobCard>
-                          <div style={{ width: "70px", display: "flex", justifyContent: "center" }}>
-                            <SiFacebook size={45} />
-                          </div>
-                          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                            <p>[Facebook] Agency Partner</p>
-                            <p style={{ fontSize: "12px" }}>Facebook</p>
-                            <p style={{ fontSize: "12px" }}>경력 (8년이상)</p>
-                          </div>
-                        </JobCard>
-                        <JobCard>
-                          <div style={{ width: "70px", display: "flex", justifyContent: "center" }}>
-                            <SiNaver size={45} />
-                          </div>
-                          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                            <p>[Naver] Front-end Engineer</p>
-                            <p style={{ fontSize: "12px" }}>Naver</p>
-                            <p style={{ fontSize: "12px" }}>신입, 대졸이상</p>
-                          </div>
-                        </JobCard>
+                        </JobCard> */}
+                        <MainJobCard />
+                        <MainJobCard />
+                        <MainJobCard />
                       </JobList>
                     </div>
                   </JobArea>

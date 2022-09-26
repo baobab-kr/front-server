@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { UserInfo, ImageButton, EditButton } from "./style";
 import DefaultAvator from "../../assets/defaultAvator.png";
-import { user } from "@src/Types/user";
+import { user } from "Types/user";
 import { Navigate } from "react-router";
 import styled from "styled-components";
 import API from "../../api";

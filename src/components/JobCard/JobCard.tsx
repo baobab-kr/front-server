@@ -1,11 +1,11 @@
 import React from "react";
-import { Board, Tag, Like } from "@src/Types/main";
+import { Board, Tag, Like } from "Types/main";
 import { CardWrapper, CardImageArea, CardImage, CardFooter, CardLogo, CardLogoImg, CardTitle, CardName, CardIntro, CardDetail } from "./style";
 import de from "../../baobab-data/develop1.jpg";
 import teslalogo from "../../baobab-data/tesla128.png";
 
 type Props = {
-  board: Board;
+  board: string;
   width: string;
   height: string;
   imgHeight: string;

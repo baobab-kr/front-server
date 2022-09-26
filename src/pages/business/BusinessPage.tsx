@@ -18,8 +18,11 @@ import {
 import StepFirst from "./StepFirst/StepFirst";
 import StepSecond from "./StepSecond/StepSecond";
 import StepThird from "./StepThird/StepThird";
+import JobCard from "../../components/JobCard/JobCard";
+// import MainJobCard from "../../components/JobCard/MainJobCard";
+import MainJobCard from "components/JobCard/MainJobCard";
 
-import { tStepFirst, tStepSecond } from "@src/Types/Business";
+import { tStepFirst, tStepSecond } from "Types/Business";
 
 export default function BusinessPage(): JSX.Element {
   const [stepper, setStepper] = useState<number>(0);
@@ -55,7 +58,7 @@ export default function BusinessPage(): JSX.Element {
   return (
     <JobsBusinessWrap>
       <div>
-        <HeaderLocalComp>
+        {/* <HeaderLocalComp>
           <ul>
             <li className="active">
               <div>광고 신청</div>
@@ -64,16 +67,18 @@ export default function BusinessPage(): JSX.Element {
               <div>신청 내역</div>
             </li>
           </ul>
-        </HeaderLocalComp>
+        </HeaderLocalComp> */}
         <div className="container">
           <TemplateOneSidebar>
             <ColumnLeft>
               <PreviewJobsWrap>
                 <PreviewJobsBanner>
-                  <h5>홈피드 배너 미리보기</h5>
+                  <h5 style={{ marginBottom: "15px" }}>홈피드 배너 미리보기</h5>
+                  <JobCard board={"item"} width={"300px"} height={"310px"} imgHeight={"45%"} isMyHome={false} deleteBoard={() => {}} />
                 </PreviewJobsBanner>
                 <PreviewJobsCard>
-                  <h5>채용 탭 카드 미리보기</h5>
+                  <h5 style={{ marginBottom: "15px" }}>채용 탭 카드 미리보기</h5>
+                  <MainJobCard />
                 </PreviewJobsCard>
               </PreviewJobsWrap>
             </ColumnLeft>

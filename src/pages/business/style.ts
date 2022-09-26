@@ -78,7 +78,7 @@ export const ColumnLeft = styled.div`
 
 export const PreviewJobsWrap = styled.div`
   display: inline-block;
-  margin-top: 96px;
+  margin-top: 75px;
   position: sticky;
   top: 90px;
   vertical-align: top;

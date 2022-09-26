@@ -16,7 +16,7 @@ import {
 } from "./style";
 import LogoImg2 from "../../assets/Logo2.png";
 import { userLogout } from "../../api/user";
-import { user } from "@src/Types/user";
+import { user } from "Types/user";
 import SearchArea from "./SearchArea/SearchArea";
 import Avator from "../Avator/Avator";
 

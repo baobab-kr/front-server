@@ -7,7 +7,7 @@ import { getPersonalBoard, getBoardPersonalTag, DeleteBoard, getBoardPersonalTag
 import InfiniteScroll from "../../components/InfiniteScroll";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { PuffLoader } from "react-spinners";
-import { user } from "@src/Types/user";
+import { user } from "Types/user";
 import Avator from "../../components/Avator/Avator";
 
 type tState = {

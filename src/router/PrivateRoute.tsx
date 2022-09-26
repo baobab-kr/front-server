@@ -1,4 +1,4 @@
-import { user } from "@src/Types/user";
+import { user } from "Types/user";
 import React, { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 

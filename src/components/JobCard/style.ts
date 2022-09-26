@@ -136,3 +136,19 @@ export const CardDetail = styled.div`
     }
   }
 `;
+
+export const MainJobCardWrapper = styled.div`
+  width: 100%;
+  height: 100px;
+  background-color: #1d1d1d;
+  box-shadow: 2px 2px 8px rgb(0 0 0 / 90%);
+  border-radius: 5px;
+
+  display: flex;
+
+  padding: 10px 0px;
+
+  @media screen and (max-width: 1810px) {
+    height: 90px;
+  }
+`;

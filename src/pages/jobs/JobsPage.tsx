@@ -4,7 +4,7 @@ import { PuffLoader } from "react-spinners";
 import { MainBanner, BannerTitle, BannerDesc, BannerImageArea, LinkBtn, Wrapper, WrapperInner, NavArea, ContentArea, ItemTitleArea, ItemArea } from "./style";
 import BannerImage from "../../assets/JobBanner.jpg";
 
-import { Board } from "@src/Types/main";
+import { Board } from "Types/main";
 import InfiniteScroll from "../../components/InfiniteScroll";
 import Category from "./Category/Category";
 import { getMainBoard } from "../../api/board";
@@ -97,7 +97,7 @@ export default function JobsPage(): JSX.Element {
                       return (
                         <JobCard
                           key={index}
-                          board={item}
+                          board={"item"}
                           width={windowSize.innerWidth > 1810 ? "320px" : "300px"}
                           height={windowSize.innerWidth > 1810 ? "330px" : "310px"}
                           imgHeight={"45%"}

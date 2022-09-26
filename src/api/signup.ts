@@ -1,4 +1,4 @@
-import { userName, id, email, emailCode, register } from "@src/Types/signup";
+import { userName, id, email, emailCode, register } from "Types/signup";
 import axios from "axios";
 import API from ".";
 

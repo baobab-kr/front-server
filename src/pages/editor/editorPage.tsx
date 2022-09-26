@@ -6,7 +6,7 @@ import * as E from "./editorStyle";
 import cancleImg from "./img/cancleBtn.png";
 import ReactTagInput from "@pathofdev/react-tag-input";
 
-import { ICreateBoard, IEditBoard } from "@src/Types/main";
+import { ICreateBoard, IEditBoard } from "Types/main";
 import { CreateBoard, EditBoard } from "../../api/board";
 import { useLocation, useNavigate } from "react-router-dom";
 

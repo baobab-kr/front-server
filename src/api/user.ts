@@ -1,5 +1,5 @@
 import API from ".";
-import { user } from "@src/Types/user";
+import { user } from "Types/user";
 
 export function getUserInfo(): Promise<user> {
   return new Promise<user>((resolve, reject) => {

@@ -1,5 +1,5 @@
 import API from ".";
-import { CreateComment, CreateReComment, DeleteComment, DeleteReComment, getComment, getReComment, IndexPage } from "@src/Types/indexPage";
+import { CreateComment, CreateReComment, DeleteComment, DeleteReComment, getComment, getReComment, IndexPage } from "Types/indexPage";
 
 export function getBoardDetail(_board_id: number): Promise<IndexPage> {
   return new Promise<IndexPage>((resolve, reject) => {

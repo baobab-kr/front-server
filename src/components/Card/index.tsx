@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Overlay, CardWrapper, CardImage, CardText, Date, Title, Content, Footer, User, TagWrapper, TagComponent, LikeComponent, DeleteButton } from "./style";
-import { Board, Tag, Like } from "@src/Types/main";
+import { Board, Tag, Like } from "Types/main";
 import { useNavigate, useLocation } from "react-router-dom";
 import { timeForToday } from "../../util/date";
 import { touchLikes, DeleteBoard } from "../../api/board";

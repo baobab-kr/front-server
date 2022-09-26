@@ -6,7 +6,7 @@ import { Content, CommentBox, Index, InputComment, Top, Navigate } from "./index
 import { useLocation, useNavigate } from "react-router-dom";
 import { createComment, createReComment, getBoardDetail, getComments, getReComments, patchDeleteComment, patchDeleteReComment } from "../../api/indexPage";
 import moment from "moment";
-import { user } from "@src/Types/user";
+import { user } from "Types/user";
 import { timeForToday } from "../../util/date";
 import DefaultAvator from "../../assets/defaultAvator.png";
 type tState = {
