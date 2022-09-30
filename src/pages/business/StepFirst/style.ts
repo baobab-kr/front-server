@@ -47,6 +47,11 @@ export const CustomButton = styled.button`
   padding: 0 32px;
   width: 240px;
   border-radius: 100px;
+
+  :hover {
+    background-color: #448fff;
+    color: white;
+  }
 `;
 
 export const InputAreaFooter = styled.div`

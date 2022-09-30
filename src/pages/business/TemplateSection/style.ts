@@ -22,10 +22,10 @@ export const SectionTitleArea = styled.div<Props>`
     background: #3d6aff;
     border-radius: 10px;
     content: "";
-    height: 69px;
+    height: 68px;
     left: 8px;
     position: absolute;
-    top: 10px;
+    top: 6px;
     width: 4px;
   }`
       : `  

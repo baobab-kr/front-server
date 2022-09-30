@@ -49,6 +49,8 @@ export default function BusinessPage(): JSX.Element {
   });
 
   const stepperController = (value: number) => {
+    window.scrollTo({ top: 0, behavior: "auto" });
+
     if (value < 0) {
       setStepper(Math.max(stepper - 1, 0));
     } else {
@@ -119,7 +121,7 @@ export default function BusinessPage(): JSX.Element {
                 )}
                 {stepper === 2 && (
                   <div className="step-3">
-                    <StepThird />
+                    <StepThird stepperController={stepperController} />
                   </div>
                 )}
               </div>

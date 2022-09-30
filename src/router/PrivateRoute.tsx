@@ -6,6 +6,7 @@ interface Props {
   component: React.ComponentType;
   path?: string;
   authentication: boolean; // true = 로그인이 되어야함, false = 모든 경우 가능
+  //TODO role으로 판별
 }
 
 export const PrivateRoute: React.FC<Props> = ({ component: RouteComponent, authentication, path }) => {
