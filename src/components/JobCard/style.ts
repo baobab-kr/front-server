@@ -18,6 +18,8 @@ export const CardImageArea = styled.div`
   width: 100%;
   z-index: 10;
 
+  cursor: pointer;
+
   @media screen and (max-width: 1810px) {
     height: 168px;
   }

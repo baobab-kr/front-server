@@ -6,6 +6,8 @@ import IndexPage from "./pages/index/indexPage";
 import EditorPage from "./pages/editor/editorPage";
 import MainPage from "./pages/main/MainPage";
 import JobsPage from "./pages/jobs/JobsPage";
+import ApplyJob from "pages/apply_job/ApplyJob";
+import JobDetail from "pages/jobs/job-detail/JobDetail";
 import BusinessPage from "./pages/business/BusinessPage";
 import PersonPage from "./pages/person/PersonPage";
 import Setting from "./pages/setting/Setting";
@@ -48,7 +50,9 @@ export default function App(): JSX.Element {
           <Route path="/setting" element={<Setting />} />
           <Route path="/editor" element={<PrivateRoute authentication={true} component={EditorPage} />} />
           <Route path="/jobs" element={<PrivateRoute authentication={false} component={JobsPage} />} />
+          <Route path="/jobs/:id" element={<PrivateRoute authentication={false} component={JobDetail} />} />
           <Route path="/business" element={<PrivateRoute authentication={false} component={BusinessPage} />} />
+          <Route path="/apply/:id" element={<PrivateRoute authentication={false} component={ApplyJob} />} />
         </Routes>
       </BrowserRouter>
     </StyleRoot>

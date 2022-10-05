@@ -2,9 +2,10 @@ import React from "react";
 import { CardWrapper, CardImageArea, CardImage, CardFooter, CardLogo, CardLogoImg, CardTitle, CardName, CardIntro, CardDetail } from "./style";
 import de from "../../baobab-data/develop1.jpg";
 import teslalogo from "../../baobab-data/tesla128.png";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
-  board: string;
+  board: number;
   width: string;
   height: string;
   imgHeight: string;
@@ -13,13 +14,18 @@ type Props = {
 };
 
 export default function JobCard({ board, width, height, isMyHome, deleteBoard, imgHeight }: Props): JSX.Element {
+  const navigate = useNavigate();
+
+  const routeDetailPage = () => {
+    navigate(`/jobs/${board}`);
+  };
   return (
     <CardWrapper>
       <div>
         <div className="card--heard">
           <div style={{ position: "relative" }}>
-            <CardImageArea>
-              <CardImage src={de} />
+            <CardImageArea onClick={routeDetailPage}>
+              <CardImage src={require(`../../jobimages/job${board % 9}.png`)} />
             </CardImageArea>
           </div>
         </div>

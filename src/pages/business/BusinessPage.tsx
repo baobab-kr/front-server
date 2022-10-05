@@ -76,7 +76,7 @@ export default function BusinessPage(): JSX.Element {
               <PreviewJobsWrap>
                 <PreviewJobsBanner>
                   <h5 style={{ marginBottom: "15px" }}>홈피드 배너 미리보기</h5>
-                  <JobCard board={"item"} width={"300px"} height={"310px"} imgHeight={"45%"} isMyHome={false} deleteBoard={() => {}} />
+                  <JobCard board={1} width={"300px"} height={"310px"} imgHeight={"45%"} isMyHome={false} deleteBoard={() => {}} />
                 </PreviewJobsBanner>
                 <PreviewJobsCard>
                   <h5 style={{ marginBottom: "15px" }}>채용 탭 카드 미리보기</h5>
@@ -87,7 +87,7 @@ export default function BusinessPage(): JSX.Element {
             <ColumnCenter>
               <div>
                 <ColumnTitleArea>
-                  <div>채용 광고 신청</div>
+                  <div>채용 신청</div>
                 </ColumnTitleArea>
                 <StepperArea>
                   <ProcessStepsWrapper>

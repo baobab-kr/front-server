@@ -97,7 +97,7 @@ export default function JobsPage(): JSX.Element {
                       return (
                         <JobCard
                           key={index}
-                          board={"item"}
+                          board={index}
                           width={windowSize.innerWidth > 1810 ? "320px" : "300px"}
                           height={windowSize.innerWidth > 1810 ? "330px" : "310px"}
                           imgHeight={"45%"}
