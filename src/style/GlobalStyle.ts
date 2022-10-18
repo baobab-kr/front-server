@@ -60,7 +60,17 @@ const GlobalStyle = createGlobalStyle`
     &:focus {
       outline: none;
     }
-  } 
+  }
+
+  input::-webkit-file-upload-button{
+    display:none
+  }
+  
+  input::-webkit-inner-spin-button {
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+  }
 
   button{
     cursor: pointer;

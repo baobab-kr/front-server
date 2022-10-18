@@ -63,7 +63,7 @@ export const HeadCategoryArea = styled.div`
 `;
 
 export const ItemTitleArea = styled.div`
-  color: #e4e5e7;
+  color: ${({ theme }) => theme.fontColor.color};
   font-size: 20px;
   font-weight: 700;
   height: 30px;

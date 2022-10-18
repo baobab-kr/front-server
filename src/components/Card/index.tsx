@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Overlay, CardWrapper, CardImage, CardText, Date, Title, Content, Footer, User, TagWrapper, TagComponent, LikeComponent, DeleteButton } from "./style";
-import { Board, Tag, Like } from "@src/Types/main";
+import { Board, Tag, Like } from "Types/main";
 import { useNavigate, useLocation } from "react-router-dom";
-import { timeForToday } from "../../util/date";
-import { touchLikes, DeleteBoard } from "../../api/board";
+import { timeForToday } from "util/date";
+import { touchLikes } from "api/board";
 
 import Avator from "../Avator/Avator";
 // import de from "../../baobab-data/develop1.jpg";
@@ -43,8 +43,6 @@ export default function Card({ board, width, height, isMyHome, deleteBoard, imgH
 
   useEffect(() => {
     likeIcon(board.likes_count, board.likes);
-
-    console.log(width);
   }, []);
 
   const liking = async () => {

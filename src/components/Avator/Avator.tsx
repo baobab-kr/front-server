@@ -1,5 +1,5 @@
 import React from "react";
-import DefaultAvator from "../../assets/defaultAvator.png";
+
 type Props = {
   userId: string;
   width: string;

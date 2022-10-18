@@ -1,7 +1,7 @@
 import { DefaultTheme } from "styled-components";
 
 const fontColor = {
-  color: "#999999",
+  color: "#000000",
   subColor: "#7F7F7F",
 };
 

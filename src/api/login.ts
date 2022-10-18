@@ -1,4 +1,4 @@
-import { login } from "@src/Types/login";
+import { login } from "Types/login";
 import axios from "axios";
 import API from ".";
 

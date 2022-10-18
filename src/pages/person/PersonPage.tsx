@@ -1,14 +1,13 @@
 import React, { Suspense, useEffect, useState } from "react";
 import { Wrapper, DivFlex, Properties, ThemeText, TagPlace, UserInfo, Content, Input, TagList, UserDiscrtprion } from "./style";
 import Card from "../../components/Card/index";
-import DefaultAvator from "../../assets/defaultAvator.png";
-import { Board, TagCount, Writer } from "../../Types/main";
-import { getPersonalBoard, getBoardPersonalTag, DeleteBoard, getBoardPersonalTagCount, getBoardPersonalWriter } from "../../api/board";
-import InfiniteScroll from "../../components/InfiniteScroll";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { Board, TagCount, Writer } from "Types/main";
+import { getPersonalBoard, getBoardPersonalTag, DeleteBoard, getBoardPersonalTagCount, getBoardPersonalWriter } from "api/board";
+import InfiniteScroll from "components/InfiniteScroll";
+import { useLocation } from "react-router-dom";
 import { PuffLoader } from "react-spinners";
-import { user } from "@src/Types/user";
-import Avator from "../../components/Avator/Avator";
+import { user } from "Types/user";
+import Avator from "components/Avator/Avator";
 
 type tState = {
   userId: number;
@@ -25,7 +24,6 @@ export default function PersonPage(): JSX.Element {
 
   const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
   const location = useLocation();
-  const [searchParams] = useSearchParams();
 
   const modeSelector = async (mode: string) => {
     setTagMode(mode);
@@ -93,7 +91,6 @@ export default function PersonPage(): JSX.Element {
   };
 
   const getTagCount = async () => {
-    // if (mainState) return;
     const userId = location.state as tState;
 
     await getBoardPersonalTagCount(userId.userId)
@@ -106,7 +103,6 @@ export default function PersonPage(): JSX.Element {
   };
 
   useEffect(() => {
-    console.log(searchParams.get("tag")); // ▶ URLSearchParams {}
     window.scrollTo({ top: 0 });
     getWriter();
     getTagCount();

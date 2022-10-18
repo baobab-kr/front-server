@@ -11,7 +11,7 @@ type props = {
 };
 
 export default function StyleRoot({ children }: props): JSX.Element {
-  const [darkMode, _] = useRecoilState<boolean>(Darkmode);
+  const [darkMode] = useRecoilState<boolean>(Darkmode);
   return (
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
       <GlobalStyle />

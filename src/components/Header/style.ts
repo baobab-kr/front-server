@@ -4,6 +4,10 @@ type tUserActionList = {
   scale: number;
 };
 
+type tCurrentTab = {
+  current: boolean;
+};
+
 export const HeaderContainer = styled.div`
   position: fixed;
   top: 0;
@@ -20,7 +24,7 @@ export const HeaderContainer = styled.div`
 
 export const Logo = styled.div`
   position: fixed;
-  left: 35px;
+  left: 20px;
   cursor: pointer;
 `;
 
@@ -107,5 +111,24 @@ export const UserActionListItem = styled.li`
 
   &:hover {
     background-color: #1d1d1d;
+  }
+`;
+
+export const TabArea = styled.div`
+  position: fixed;
+  left: 70px;
+
+  display: flex;
+  gap: 15px;
+`;
+
+export const Tabs = styled.p<tCurrentTab>`
+  color: ${({ theme, current }) => (current ? theme.fontColor.color : theme.fontColor.subColor)};
+  font-size: 0.825rem;
+
+  transition: 0.2s;
+  cursor: pointer;
+  &:hover {
+    color: ${({ theme }) => theme.fontColor.color};
   }
 `;

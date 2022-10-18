@@ -1,5 +1,4 @@
-import { userName, id, email, emailCode, register } from "@src/Types/signup";
-import axios from "axios";
+import { userName, id, email, emailCode, register } from "Types/signup";
 import API from ".";
 
 export function checkUsername(username_: string): Promise<userName> {

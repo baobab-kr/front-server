@@ -6,7 +6,7 @@ import * as E from "./editorStyle";
 import cancleImg from "./img/cancleBtn.png";
 import ReactTagInput from "@pathofdev/react-tag-input";
 
-import { ICreateBoard, IEditBoard } from "@src/Types/main";
+import { ICreateBoard, IEditBoard } from "Types/main";
 import { CreateBoard, EditBoard } from "../../api/board";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -17,7 +17,6 @@ import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight";
 
 import "tui-color-picker/dist/tui-color-picker.css";
 import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
-import Checkbox from "antd/lib/checkbox/Checkbox";
 import { Switch } from "antd";
 
 type props = {

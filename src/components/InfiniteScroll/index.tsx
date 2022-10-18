@@ -3,7 +3,7 @@ import { PuffLoader } from "react-spinners";
 import { useRecoilState } from "recoil";
 import Darkmode from "../../store/store.theme";
 
-import { Board } from "@src/Types/main";
+import { Board } from "Types/main";
 import { TopButton } from "./style";
 
 import { FiArrowUp } from "react-icons/fi";
@@ -16,7 +16,7 @@ type Props = {
 };
 export default function InfiniteScroll({ loadFnc, data, children, isLast }: Props): JSX.Element {
   const [isTopButton, setIsTopButton] = useState<boolean>(false);
-  const [darkMode, _] = useRecoilState<boolean>(Darkmode);
+  const [darkMode] = useRecoilState<boolean>(Darkmode);
 
   // ref
   const observerRef = useRef<IntersectionObserver>();
