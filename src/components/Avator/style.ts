@@ -12,3 +12,12 @@ export const Avatar = styled.div<tImgSize>`
   width: ${(props) => props.width};
   height: ${(props) => props.height};
 `;
+
+export const ImageAvator = styled.img`
+  image-rendering: -webkit-optimize-contrast;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  width: 78%;
+  height: 100%;
+  object-fit: cover;
+`;
