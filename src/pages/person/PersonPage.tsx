@@ -158,10 +158,17 @@ export default function PersonPage(): JSX.Element {
         </UserInfo>
         <Properties>
           <div>
-            <ThemeText style={{ width: "320px", gap: "5px", marginBottom: "8px" }} onClick={() => modeSelector("ALL")}>
-              태그 목록
-            </ThemeText>
-            <hr />
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <ThemeText style={{ width: "320px", gap: "5px", marginBottom: "8px" }} onClick={() => modeSelector("ALL")}>
+                태그 목록
+              </ThemeText>
+
+              <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
+                {/* <div>게시글2</div> */}
+                <Input alt="검색어" placeholder="검색어를 입력해주세요" />
+              </div>
+            </div>
+            <hr style={{ maxWidth: "350px" }} />
             <TagPlace>
               {tag.map((t: TagCount, index: number) => {
                 return (
@@ -171,10 +178,6 @@ export default function PersonPage(): JSX.Element {
                 );
               })}
             </TagPlace>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
-            {/* <div>게시글2</div> */}
-            <Input alt="검색어" placeholder="검색어를 입력해주세요" />
           </div>
         </Properties>
 
