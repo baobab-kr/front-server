@@ -1,4 +1,4 @@
-export interface IndexPage {
+export interface iIndexPage {
   borad_id: number;
   content: string;
   date: string;
@@ -6,6 +6,7 @@ export interface IndexPage {
   likes_count: number;
   title: string;
   tags: [];
+  writer: Writer;
 }
 export interface getComment {
   comments: string;
@@ -30,4 +31,12 @@ export interface CreateReComment {
   content: string;
   comment_id: number;
   recomment_status: number;
+}
+export interface Writer {
+  id: number;
+  userid: string;
+  username: string;
+  email: string;
+  role: number;
+  avatar_image: string | null;
 }

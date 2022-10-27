@@ -42,6 +42,10 @@ const GlobalStyle = createGlobalStyle`
 
   }
 
+  textarea{
+    font-family: 'twayair';
+  }
+
   /* input 기본 스타일 초기화 */
   input {
     -webkit-appearance: none;

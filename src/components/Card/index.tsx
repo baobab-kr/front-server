@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Overlay, CardWrapper, CardImage, CardText, Date, Title, Content, Footer, User, TagWrapper, TagComponent, LikeComponent, DeleteButton } from "./style";
+import { Overlay, CardWrapper, CardImage, CardText, Date, Title, Content, Footer, User, TagWrapper, LikeComponent, DeleteButton } from "./style";
 import { Board, Tag, Like } from "Types/main";
 import { useNavigate, useLocation } from "react-router-dom";
 import { timeForToday } from "util/date";
 import { touchLikes } from "api/board";
 
 import Avator from "../Avator/Avator";
+import TagComponent from "components/Tag/Tag";
 // import de from "../../baobab-data/develop1.jpg";
 
 type Props = {
@@ -82,7 +83,7 @@ export default function Card({ board, width, height, isMyHome, deleteBoard, imgH
       }}
     >
       {/* {board.thumbnail !== "" && <CardImage onClick={navigateIndex} src={board.thumbnail} alt="이미지"></CardImage>} */}
-      <CardImage imgHeight={imgHeight} src={require(`../../baobab-data/develop${board.id % 15}.jpg`)} alt="이미지"></CardImage>
+      <CardImage imgHeight={imgHeight} src={require(`../../baobab-data/image_${(board.id % 3) + 1}.png`)} alt="이미지"></CardImage>
 
       <CardText onClick={navigateIndex}>
         <Title>{board.title}</Title>
@@ -96,7 +97,7 @@ export default function Card({ board, width, height, isMyHome, deleteBoard, imgH
           <Overlay onClick={navigateIndex} />
           <TagWrapper>
             {board.tags.map((tag: Tag, index: number) => {
-              return <TagComponent key={index}># {tag.tag_name}</TagComponent>;
+              return <TagComponent key={index} tag_name={tag.tag_name} />;
             })}
           </TagWrapper>
         </>
