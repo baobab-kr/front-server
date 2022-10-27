@@ -26,10 +26,8 @@ export default function LoginForm({ open, setOpen }: tOpen): JSX.Element {
   };
 
   const handleSubmit = async () => {
-    console.log("asdasdasd");
     API.post("/users/login", { userid: id, password: password }, { withCredentials: true })
       .then((res) => {
-        console.log("login res => ", res);
         localStorage.setItem("atexpires", JSON.stringify(res.headers.atexpires));
         localStorage.setItem("rtexpires", JSON.stringify(res.headers.rtexpires));
         localStorage.setItem("user", JSON.stringify(res.data));
