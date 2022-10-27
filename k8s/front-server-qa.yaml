@@ -5,7 +5,7 @@ metadata:
   name: front-server
   namespace: qa
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: front-server
@@ -22,11 +22,11 @@ spec:
             - containerPort: 2999
           resources:
             requests:
-              cpu: 500m
-              memory: 2G
+              cpu: 200m
+              memory: 1.3G
             limits:
-              cpu: 500m
-              memory: 2G
+              cpu: 200m
+              memory: 1.3G
           env:
             - name: NODE_ENV
               valueFrom:
