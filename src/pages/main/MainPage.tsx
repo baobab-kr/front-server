@@ -55,8 +55,7 @@ export default function MainPage(): JSX.Element {
     await getMainBoard(page)
       .then((data) => {
         setPage(page + 1);
-        if (data.length - 1 === 2) data[2].thumbnail = "";
-        setBoard((curInfoArray) => [...curInfoArray, ...data]); // state에 추가
+        setBoard((curInfoArray) => [...data, ...curInfoArray].reverse()); // state에 추가
       })
       .catch((err) => {
         setMainState(true);
@@ -139,9 +138,9 @@ export default function MainPage(): JSX.Element {
                             <p style={{ fontSize: "12px" }}>경력 (3년이상), 대졸이상</p>
                           </div>
                         </JobCard> */}
-                        <MainJobCard />
-                        <MainJobCard />
-                        <MainJobCard />
+                        <MainJobCard logo="tesla" title="Tesla" wlrrms="[Tesla] Field Service Engineer" 경력="경력 (3년이상), 대졸이상" />
+                        <MainJobCard logo="naver" title="Naver" wlrrms="[NAVER] 프론트엔드 개발자" 경력="경력 신입" />
+                        <MainJobCard logo="meta" title="Facebook" wlrrms="[Facebook] 백엔드 개발자" 경력="경력 (3년이상), 대졸이상" />
                       </JobList>
                     </div>
                   </JobArea>

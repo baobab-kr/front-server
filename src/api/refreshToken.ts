@@ -12,7 +12,7 @@ const refresh = async (config: AxiosRequestConfig): Promise<AxiosRequestConfig> 
   const date = new Date(utcNow + koreaTimeDiff + koreaTimeDiff); // utc로 변환된 값을 한국 시간으로 변환시키기 위해 9시간(밀리세컨드)를 더함
 
   // 토큰이 만료되었고, refreshToken 이 저장되어 있을 때
-  if (expireAt !== "" && Number(JSON.parse(expireAt) - Number(date)) < 60000) {
+  if (expireAt !== "" && Number(JSON.parse(expireAt) - Number(date)) < 0) {
     // 토큰 갱신 서버통신
     await axios
       .get(`${process.env.REACT_APP_API_ROOT}users/refresh`, { withCredentials: true })

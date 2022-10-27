@@ -1,8 +1,8 @@
 import API from ".";
-import { CreateComment, CreateReComment, DeleteComment, DeleteReComment, getComment, getReComment, IndexPage } from "Types/indexPage";
+import { CreateComment, CreateReComment, DeleteComment, DeleteReComment, getComment, getReComment, iIndexPage } from "Types/indexPage";
 
-export function getBoardDetail(_board_id: number): Promise<IndexPage> {
-  return new Promise<IndexPage>((resolve, reject) => {
+export function getBoardDetail(_board_id: number): Promise<iIndexPage> {
+  return new Promise<iIndexPage>((resolve, reject) => {
     API.post("/board/BoardView", { board_id: _board_id })
       .then((res) => {
         resolve(res.data);

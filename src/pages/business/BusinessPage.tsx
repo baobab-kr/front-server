@@ -80,7 +80,7 @@ export default function BusinessPage(): JSX.Element {
                 </PreviewJobsBanner>
                 <PreviewJobsCard>
                   <h5 style={{ marginBottom: "15px" }}>채용 탭 카드 미리보기</h5>
-                  <MainJobCard />
+                  <MainJobCard logo="" title="" wlrrms="" 경력="" />
                 </PreviewJobsCard>
               </PreviewJobsWrap>
             </ColumnLeft>

@@ -1,17 +1,31 @@
 import React from "react";
 import { MainJobCardWrapper } from "./style";
-import { SiTesla } from "react-icons/si";
+import { SiTesla, SiNaver, SiFacebook } from "react-icons/si";
 
-export default function MainJobCard(): JSX.Element {
+type tProps = {
+  title: string;
+  경력: string;
+  wlrrms: string;
+  logo: string;
+};
+export default function MainJobCard({ title, 경력, wlrrms, logo }: tProps): JSX.Element {
+  const logoOrder = () => {
+    switch (logo) {
+      case "tesla":
+        return <SiTesla size={45} />;
+      case "naver":
+        return <SiNaver size={45} />;
+      case "meta":
+        return <SiFacebook size={45} />;
+    }
+  };
   return (
     <MainJobCardWrapper>
-      <div style={{ width: "70px", display: "flex", justifyContent: "center" }}>
-        <SiTesla size={45} />
-      </div>
+      <div style={{ width: "70px", display: "flex", justifyContent: "center" }}>{logoOrder()}</div>
       <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-        <p>[Tesla] Front-end Engineer</p>
-        <p style={{ fontSize: "12px" }}>Tesla</p>
-        <p style={{ fontSize: "12px" }}>신입, 대졸이상</p>
+        <p>{wlrrms}</p>
+        <p style={{ fontSize: "12px" }}>{title}</p>
+        <p style={{ fontSize: "12px" }}>{경력}</p>
       </div>
     </MainJobCardWrapper>
   );
