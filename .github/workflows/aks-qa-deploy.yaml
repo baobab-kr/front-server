@@ -8,7 +8,6 @@ env:
   IMAGE_NAME: front-server-qa
   IMAGE_TAG: ${{ github.sha }}
   NAMESPACE: qa
-  DOMAIN: https://qa.baobab.blog
 
 jobs:
   build:
