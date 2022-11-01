@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import { users_register } from "../../../api/signup";
-
+import { JOB_GROUP, USER_TYPE_SELECT } from "constants/index";
 import { SignupOverlay, SignupContainer, TitleArea, Button, ButtonArea, SiginupArea, SignupWrapper } from "./style";
 import Swal from "sweetalert2";
 
@@ -29,6 +29,8 @@ export default function SignupForm({ open, setOpen }: tOpen): JSX.Element {
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [emailCode, setEmailCode] = useState<string>("");
+  const [userType, setUserType] = useState<number>(USER_TYPE_SELECT[0].value);
+  const [job, setJob] = useState<string>(JOB_GROUP[0].value);
   const [confirm, setConfirm] = useState<tConfirm>({
     name: false,
     id: false,
@@ -93,7 +95,7 @@ export default function SignupForm({ open, setOpen }: tOpen): JSX.Element {
           />
         );
       case 1:
-        return <SignupStepperSecond />;
+        return <SignupStepperSecond userType={userType} setUserType={setUserType} job={job} setJob={setJob} />;
       case 2:
         return <SignupStepperThird name={name} email={email} setEmail={setEmail} emailCode={emailCode} setEmailCode={setEmailCode} />;
       default:
@@ -136,7 +138,8 @@ export default function SignupForm({ open, setOpen }: tOpen): JSX.Element {
       return;
     }
 
-    users_register(id, email, name, password, emailCode)
+    const techStack = JOB_GROUP.find((q) => q.value === job);
+    users_register(id, email, name, password, emailCode, userType, techStack!.label)
       .then(() => {
         Swal.fire("회원가입 되었습니다.");
         closeOverlay();

@@ -68,7 +68,7 @@ export default function SignupStepperFirst(props: tStepperFirst): JSX.Element {
       props.setConfirm((c) => {
         return { ...c, password: false };
       });
-      setPasswordErr({ error: true, text: "영문 대 소문자, 숫자, 특수문자(!, @, $, %, *, &)를 사용하세요." });
+      setPasswordErr({ error: true, text: "암호는 대문자, 소문자, 숫자, 특수문자를 조합할 수 있습니다. 특수문자는 !, @, $, %, *, &만 사용할 수 있습니다." });
     } else {
       props.setConfirm((c) => {
         return { ...c, password: true };

@@ -115,13 +115,13 @@ export const JOB_GROUP = [
 ];
 
 export const USER_TYPE = Object.freeze({
-  DEVELOPER: "Developer",
-  HEADHUNTER: "headhunter",
+  DEVELOPER: 0,
+  HEADHUNTER: 1,
 });
 
 export const USER_TYPE_SELECT = [
-  { value: "Developer", label: "개발자" },
-  { value: "headhunter", label: "헤드헌터" },
+  { value: 0, label: "개발자" },
+  { value: 1, label: "헤드헌터" },
 ];
 
 export const TITLE_TAB = Object.freeze({

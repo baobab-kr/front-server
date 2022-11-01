@@ -144,12 +144,12 @@ export default function PersonPage(): JSX.Element {
                 <DivFlex direction="row" style={{ gap: "15px", flexBasis: "50%" }}>
                   <DivFlex direction="column" style={{ gap: "15px", flexBasis: "50%" }}>
                     <div style={{ color: "#999999" }}>Expertise</div>
-                    <ThemeText>{writer?.description ?? ""}</ThemeText>
+                    <ThemeText>{writer?.techStack ?? ""}</ThemeText>
                   </DivFlex>
 
                   <DivFlex direction="column" style={{ gap: "15px", flexBasis: "50%" }}>
                     <div style={{ color: "#999999" }}>Social Media</div>
-                    <ThemeText>{writer?.description ?? ""}</ThemeText>
+                    <ThemeText>{writer?.socialUrl ?? ""}</ThemeText>
                   </DivFlex>
                 </DivFlex>
               </DivFlex>
@@ -157,7 +157,7 @@ export default function PersonPage(): JSX.Element {
           </div>
         </UserInfo>
         <Properties>
-          <div>
+          <div style={{ width: "100%" }}>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <ThemeText style={{ width: "320px", gap: "5px", marginBottom: "8px" }} onClick={() => modeSelector("ALL")}>
                 태그 목록

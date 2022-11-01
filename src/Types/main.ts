@@ -32,6 +32,8 @@ export interface Writer {
   role: string;
   description: string;
   avatar_image: string;
+  techStack: string;
+  socialUrl: string;
 }
 
 export interface TagCount {

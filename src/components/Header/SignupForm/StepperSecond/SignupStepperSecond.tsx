@@ -1,21 +1,24 @@
-import React, { useState } from "react";
-import { JOB_GROUP, USER_TYPE, USER_TYPE_SELECT } from "../../../../constants/index";
-
+import React, { Dispatch, SetStateAction } from "react";
 import Select from "react-select";
+import { JOB_GROUP, USER_TYPE, USER_TYPE_SELECT } from "constants/index";
 
 import { StepperSecond } from "./style";
 
-type tProps = { value: string; label: string };
+type tProps = { value: string | number; label: string };
 const formatOptionLabel = ({ value, label }: tProps) => (
   <div style={{ display: "flex", color: "black" }}>
     <div>{label}</div>
   </div>
 );
 
-export default function SignupStepperSecond(): JSX.Element {
-  const [userType, setUserType] = useState<string>(USER_TYPE_SELECT[0].value);
-  const [job, setJob] = useState<string>(JOB_GROUP[0].value);
+type tStepperSecond = {
+  userType: number;
+  setUserType: Dispatch<SetStateAction<number>>;
+  job: string;
+  setJob: Dispatch<SetStateAction<string>>;
+};
 
+export default function SignupStepperSecond({ userType, setUserType, job, setJob }: tStepperSecond): JSX.Element {
   const jobHandler = (props: any) => {
     setJob(props.value);
   };
