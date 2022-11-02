@@ -24,7 +24,6 @@ export default function IndexPage(): JSX.Element {
 
   useEffect(() => {
     const apiGet = async () => {
-      console.log(board_id);
       await getBoardDetail(parseInt(board_id))
         .then((res) => {
           setDetail(res);
@@ -42,10 +41,6 @@ export default function IndexPage(): JSX.Element {
     };
     apiGet();
   }, []);
-
-  useEffect(() => {
-    console.log("asd=>>", detail);
-  }, [detail]);
 
   return (
     <>
@@ -113,7 +108,7 @@ export default function IndexPage(): JSX.Element {
                 }}
               />
               <div>9999</div>
-              <Comment status={commentStatus} setStatus={setCommentStatus} boardID={detail?.borad_id} />
+              <Comment status={commentStatus} setStatus={setCommentStatus} boardID={Number(board_id)} />
             </S.FooterCommentArea>
           </S.ContentArea>
         </S.CenterPosition>

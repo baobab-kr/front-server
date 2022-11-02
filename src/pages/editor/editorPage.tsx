@@ -1,23 +1,24 @@
 import React, { useState, useEffect } from "react";
-import "@toast-ui/editor/dist/toastui-editor.css"; // Editor's Style
-import "@toast-ui/editor/dist/theme/toastui-editor-dark.css";
+
 import { Editor } from "@toast-ui/react-editor";
 import * as E from "./editorStyle";
-import cancleImg from "./img/cancleBtn.png";
 import ReactTagInput from "@pathofdev/react-tag-input";
 
 import { ICreateBoard, IEditBoard } from "Types/main";
-import { CreateBoard, EditBoard } from "../../api/board";
+import { CreateBoard, EditBoard } from "api/board";
 import { useLocation, useNavigate } from "react-router-dom";
 
+import ThumbnailImg from "assets/ThumbnailImg.png";
+
+// Toast Editor
 import "prismjs/themes/prism.css";
 import "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css";
 import Prism from "prismjs";
 import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight";
-
 import "tui-color-picker/dist/tui-color-picker.css";
 import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
-import { Switch } from "antd";
+import "@toast-ui/editor/dist/toastui-editor.css"; // Editor's Style
+import "@toast-ui/editor/dist/theme/toastui-editor-dark.css";
 
 type props = {
   onClose: React.Dispatch<React.SetStateAction<boolean>>;
@@ -26,11 +27,22 @@ type props = {
   boardId: string;
 };
 function Popup({ onClose, data, setData, boardId }: props) {
-  const [toggle, setToggle] = useState(false);
-  const clickedToggle = () => {
-    setToggle((prev) => !prev);
-  };
+  const [isPublic, setIsPublic] = useState<boolean>(true);
+  const [description, setDescription] = useState<string>("");
+  const [fileImage, setFileImage] = useState<string>("");
+  const [fileList, setFileList] = useState<FileList>();
+
   const navigate = useNavigate();
+
+  const imageSelectHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const fileLists = e.target.files;
+    if (fileLists !== null) {
+      // setFileImage(fileImage);
+      setFileImage(URL.createObjectURL(fileLists[0]));
+      setFileList(fileLists);
+      console.log("asd", fileList);
+    }
+  };
 
   const saveFileImage = (e: any) => {
     setData({ ...data, thumbnail: e.target.files[0] });
@@ -47,16 +59,26 @@ function Popup({ onClose, data, setData, boardId }: props) {
   const onClick = () => {
     onClose(false);
   };
+
   const onSaveClick = () => {
-    if (toggle) {
+    if (isPublic) {
       onSave();
     } else {
       onOnlyMe();
     }
   };
   const onSave = () => {
-    setData({ ...data, board_status: 0 });
-    CreateBoard(data)
+    const formData: any = new FormData();
+    formData.append("title", data.title);
+    formData.append("description", description);
+    formData.append("content", data.content);
+    formData.append("board_status", isPublic ? 0 : 1);
+    if (fileList) formData.append("thumbnail", fileList![0]);
+    for (let i = 0; i < data.tag_name.length; i++) {
+      formData.append("tag_name", data.tag_name[i]);
+    }
+
+    CreateBoard(formData)
       .then((res) => {
         console.log("Board 생성 성공", res);
 
@@ -96,47 +118,45 @@ function Popup({ onClose, data, setData, boardId }: props) {
     <>
       <E.popup>
         <E.popupInner>
-          <E.postImage>
-            <div className="title imageTitle">포스트 미리보기</div>
+          <E.Position>
             <div>
-              {data.thumbnail ? (
-                <img className="image" alt="sample" src={data.thumbnail} />
-              ) : (
-                <div className="defaultImageBg">
-                  <div className="defaultImage">포스트 이미지</div>
-                </div>
-              )}
-              <div>
-                <input className="imgUpload" name="imgUpload" type="file" accept="image/*" onChange={saveFileImage} />
-
-                <button className="imgDeleteBtn" onClick={() => deleteFileImage()}>
-                  삭제
-                </button>
-              </div>
+              <E.PopupTitle>포스트 썸네일</E.PopupTitle>
+              <input type="file" id="imgUpload" style={{ display: "none" }} onChange={imageSelectHandler}></input>
+              <label htmlFor="imgUpload">
+                <E.ThumbnailArea>
+                  <img src={fileImage === "" ? ThumbnailImg : fileImage} alt="이미지 등록하기" />
+                </E.ThumbnailArea>
+              </label>
             </div>
-          </E.postImage>
-
-          <E.description>
-            <div className="title descriptionTitle">설명</div>
-            <textarea className="descriptionInput" value={data.description} onChange={descriptionHandle} />
-          </E.description>
-
-          <img className="cancleBtn" onClick={onClick} src={cancleImg} alt="cancle" />
-
-          {boardId === "" ? (
-            <E.btnBox>
-              <Switch checkedChildren="공개" unCheckedChildren="비공개" defaultChecked onChange={clickedToggle} />
-              <button className="saveBtn" onClick={onSaveClick}>
-                저장
-              </button>
-            </E.btnBox>
-          ) : (
-            <E.btnBox>
-              <button className="saveBtn" onClick={() => onEdit(editdata)}>
-                수정
-              </button>
-            </E.btnBox>
-          )}
+            <E.PopupBtnArea>
+              <E.PopuoButton active={isPublic} onClick={() => setIsPublic(true)}>
+                전체 공개
+              </E.PopuoButton>
+              <E.PopuoButton active={!isPublic} onClick={() => setIsPublic(false)}>
+                나만 보기
+              </E.PopuoButton>
+            </E.PopupBtnArea>
+          </E.Position>
+          <E.Position>
+            <div>
+              <E.PopupTitle>포스트 설명</E.PopupTitle>
+              <E.Textarea placeholder="설명을 입력하세요!" maxLength={4000} value={description} onChange={(e) => setDescription(e.target.value)}></E.Textarea>
+            </div>
+            <E.PopupBtnArea>
+              <E.PopuoButton active={false} onClick={onClick}>
+                취소
+              </E.PopuoButton>
+              {boardId === "" ? (
+                <E.PopuoButton active={true} onClick={onSave}>
+                  저장
+                </E.PopuoButton>
+              ) : (
+                <E.PopuoButton active={true} onClick={onSave}>
+                  수정
+                </E.PopuoButton>
+              )}
+            </E.PopupBtnArea>
+          </E.Position>
         </E.popupInner>
       </E.popup>
     </>

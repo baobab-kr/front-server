@@ -119,3 +119,22 @@ export function getBoardPersonalWriter(user_id: number): Promise<Writer> {
       });
   });
 }
+
+export function getBoardThumbnail(name: string): Promise<any> {
+  return new Promise<any>((resolve, reject) => {
+    API.post(
+      "/board/getThumpnail",
+      { filename: name },
+      {
+        responseType: "arraybuffer",
+      },
+    )
+      .then((res) => {
+        console.log("array", res.data);
+        resolve({ data: res.data, type: res.headers["content-type"] });
+      })
+      .catch((err) => {
+        reject(err.response);
+      });
+  });
+}

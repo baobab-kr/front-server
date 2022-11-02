@@ -3,7 +3,7 @@ import { Overlay, CardWrapper, CardImage, CardText, Date, Title, Content, Footer
 import { Board, Tag, Like } from "Types/main";
 import { useNavigate, useLocation } from "react-router-dom";
 import { timeForToday } from "util/date";
-import { touchLikes } from "api/board";
+import { getBoardThumbnail, touchLikes } from "api/board";
 
 import Avator from "../Avator/Avator";
 import TagComponent from "components/Tag/Tag";
@@ -32,6 +32,7 @@ export default function Card({ board, width, height, isMyHome, deleteBoard, imgH
   const state: tState = { state: { userId: board.writer!.id } };
   const [likeState, setLikeState] = useState<string>("");
   const [isListHover, setIsListHover] = useState<boolean>(false);
+  const [imgSrc, setImgSrc] = useState<string>("");
 
   const navigateIndex = () => {
     navigate(`/@${board.writer!.username}/${board.id}`, state);
@@ -44,7 +45,13 @@ export default function Card({ board, width, height, isMyHome, deleteBoard, imgH
 
   useEffect(() => {
     likeIcon(board.likes_count, board.likes);
+
+    getThumbnail(board.thumbnail);
   }, []);
+
+  useEffect(() => {
+    console.log("asdasd =>", imgSrc);
+  }, [imgSrc]);
 
   const liking = async () => {
     await touchLikes(board.id)
@@ -68,6 +75,20 @@ export default function Card({ board, width, height, isMyHome, deleteBoard, imgH
     else if (count > 100) setLikeState(`🌴 ${count}`);
     else return setLikeState(`🍃 ${count}`);
   };
+
+  const getThumbnail = async (name: string) => {
+    if (board.thumbnail === "") return;
+
+    await getBoardThumbnail(name).then((data) => {
+      console.log("data=>", data);
+      const blob = new Blob([data.data], { type: data.type });
+      console.log("blob", blob);
+      const url = URL.createObjectURL(blob);
+      console.log("url", url);
+
+      setImgSrc(url);
+    });
+  };
   //
 
   return (
@@ -83,7 +104,7 @@ export default function Card({ board, width, height, isMyHome, deleteBoard, imgH
       }}
     >
       {/* {board.thumbnail !== "" && <CardImage onClick={navigateIndex} src={board.thumbnail} alt="이미지"></CardImage>} */}
-      <CardImage imgHeight={imgHeight} src={require(`../../baobab-data/image_${(board.id % 3) + 1}.png`)} alt="이미지"></CardImage>
+      {board.thumbnail !== "" && <CardImage imgHeight={imgHeight} src={imgSrc} alt="이미지"></CardImage>}
 
       <CardText onClick={navigateIndex}>
         <Title>{board.title}</Title>

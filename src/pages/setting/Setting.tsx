@@ -17,7 +17,6 @@ export default function Setting(): JSX.Element {
     const formData: any = new FormData();
     formData.append("profile", fileList![0]);
     formData.append("userid", `"${userInfo?.userid}"`);
-    console.log("profile", formData.get("profile"));
     API({
       method: "post",
       url: "/users/upload-profile",

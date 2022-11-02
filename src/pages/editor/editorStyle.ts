@@ -3,189 +3,95 @@ import styled from "styled-components";
 const popup = styled.div`
   position: absolute;
   top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: ${({ theme }) => theme.backgroundColor.bg};
+  opacity: 1;
   z-index: 990;
 `;
 
 const popupInner = styled.div`
   position: absolute;
-  top: 17%;
-  left: 20%;
-  width: 60%;
-  height: 70%;
-  background-color: ${({ theme }) => theme.backgroundColor.bg};
-  opacity: 1;
+  width: 45%;
+  height: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 
-  .title {
-    font-size: 20px;
-    font-weight: 700;
-    margin-bottom: 10px;
-  }
-  .cancleBtn {
-    position: absolute;
-    top: 35px;
-    right: 2%;
-    width: 50px;
-    height: 50px;
-  }
+  display: flex;
+  justify-content: space-between;
 `;
 
-const postImage = styled.div`
-  position: absolute;
-  left: 10vw;
-  top: 20%;
-  width: 285px;
-  .image {
-    width: 285px;
-    height: 285px;
-  }
-  .defaultImageBg {
-    position: relative;
-    width: 100%;
-    height: 285px;
-    margin-bottom: 5px;
-    background: ${({ theme }) => theme.backgroundColor.subColor};
-    color: #fff;
-    .defaultImage {
-      position: absolute;
-      width: 100%;
-      top: 50%;
-
-      text-align: center;
-    }
-  }
-  .imgDeleteBtn {
-    width: 32px;
-    height: 23px;
-    background: rgb(255, 255, 255);
-    color: #000;
-  }
+const PopupTitle = styled.div`
+  font-size: 18px;
+  margin-bottom: 20px;
 `;
 
-const description = styled.div`
-  position: absolute;
-  left: 55%;
-  top: 20%;
-  width: 285px;
-  .descriptionInput {
-    padding: 15px;
-    width: 100%;
-    height: 300px;
-    resize: none;
-    background: ${({ theme }) => theme.backgroundColor.subColor};
-    color: #fff;
-    &:focus {
-      outline: none;
-    }
-  }
+const PopupBtnArea = styled.div`
+  display: flex;
+  justify-content: space-between;
+
+  width: 100%;
 `;
-const btnBox = styled.div`
-  top: 74%;
-  position: absolute;
-  left: 55%;
-  width: 285px;
-  .onlyMeBtn {
-    position: absolute;
-    left: 0px;
-    width: 70px;
-    height: 40px;
-    background: rgb(100, 100, 100);
-    color: #fff;
-  }
-  .saveBtn {
-    position: absolute;
-    right: 0px;
-    width: 70px;
-    height: 40px;
-    background: rgb(100, 100, 100);
-    color: #fff;
-  }
-  .ant-switch {
-    margin: 0;
-    padding: 0;
-    color: #1d1d1d;
-    font-size: 14px;
-    padding-right: 10px;
-    text-align: right;
-    font-variant: tabular-nums;
-    line-height: 1.5715;
-    list-style: none;
-    font-feature-settings: "tnum";
-    position: absolute;
-    display: inline-block;
-    box-sizing: border-box;
-    min-width: 100px;
-    height: 40px;
-    line-height: 22px;
-    vertical-align: middle;
-    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)), linear-gradient(to right, #fff, #fff);
-    border: 0;
-    border-radius: 100px;
-    cursor: pointer;
-    transition: all 0.2s;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
-  .ant-switch-handle {
-    position: absolute;
-    top: 2px;
-    left: 4px;
-    width: 35px;
-    height: 35px;
-    transition: all 0.2s ease-in-out;
-    ::before {
-      position: absolute;
-      inset: 0;
-      background-color: #252525;
-      border-radius: 20px;
-      box-shadow: 0 2px 4px #00230b33;
-      transition: all 0.2s ease-in-out;
-      content: "";
-    }
-  }
-  .ant-switch-checked {
-    margin: 0;
-    padding: 0;
-    color: #1d1d1d;
-    font-size: 14px;
-    font-variant: tabular-nums;
-    line-height: 1.5715;
-    list-style: none;
-    padding-left: 10px;
-    text-align: left;
-    font-feature-settings: "tnum";
-    position: absolute;
-    display: inline-block;
-    box-sizing: border-box;
-    min-width: 100px;
-    height: 40px;
-    line-height: 22px;
-    vertical-align: middle;
-    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)), linear-gradient(to right, #fff, #fff);
-    border: 0;
-    border-radius: 100px;
-    cursor: pointer;
-    transition: all 0.2s;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    .ant-switch-handle {
-      left: calc(100% - 40px);
-      :before {
-        position: absolute;
-        inset: 0;
-        background-color: #252525;
-        border-radius: 20px;
-        box-shadow: 0 2px 4px #00230b33;
-        transition: all 0.2s ease-in-out;
-        content: "";
-      }
-    }
+
+type tProps = {
+  active: boolean;
+};
+
+const PopuoButton = styled.div<tProps>`
+  background-color: ${({ theme, active }) => (active ? theme.backgroundColor.subColor : "transparent")};
+  color: ${(props) => (props.active ? "#96F2D7" : "#FFFFFF")};
+  padding: 10px 20px;
+  cursor: pointer;
+
+  transition: 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
+`;
+
+const ThumbnailArea = styled.div`
+  display: flex;
+  justify-content: center;
+
+  width: 100%;
+  height: 250px;
+
+  border-radius: 8px;
+
+  padding: 15%;
+  background-color: ${({ theme }) => theme.backgroundColor.subColor};
+
+  margin: 0px auto;
+`;
+
+const Position = styled.div`
+  height: 100%;
+  width: 40%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
+const Textarea = styled.textarea`
+  background-color: ${({ theme }) => theme.backgroundColor.subColor};
+
+  resize: none;
+  min-height: 100px;
+  border-radius: 5px;
+  border: none;
+  width: 100%;
+  height: 250px;
+  padding: 10px;
+  line-height: 1.125rem;
+  overflow-y: hidden;
+  font-size: 16px;
+
+  color: white;
+
+  letter-spacing: 1px;
+
+  :focus {
+    outline: none;
   }
 `;
 
@@ -201,10 +107,13 @@ const TitleWrpper = styled.div`
 const titleInput = styled.input`
   border: none;
   height: 40px;
-  font-size: 35px;
+  width: 50%;
+  font-size: 25px;
   margin-bottom: 20px;
   background: ${({ theme }) => theme.backgroundColor.subColor};
   color: ${({ theme }) => theme.fontColor.color};
+  padding-left: 15px;
+
   &:focus {
     outline: none;
   }
@@ -217,4 +126,4 @@ const saveBtn = styled.button`
   border-radius: 3px;
 `;
 
-export { popup, popupInner, postImage, description, btnBox, TitleWrpper, titleInput, saveBtn };
+export { popup, popupInner, Position, ThumbnailArea, Textarea, PopupTitle, PopuoButton, PopupBtnArea, TitleWrpper, titleInput, saveBtn };
