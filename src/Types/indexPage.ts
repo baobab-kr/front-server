@@ -40,3 +40,10 @@ export interface Writer {
   role: number;
   avatar_image: string | null;
 }
+
+export interface iComment {
+  id: number;
+  content: string;
+  date: string;
+  writer: Writer;
+}

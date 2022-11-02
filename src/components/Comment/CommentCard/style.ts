@@ -88,3 +88,14 @@ export const TextActionArea = styled.div`
     padding: 6px 12px 6px;
   }
 `;
+
+export const LoadMoreBtn = styled.div`
+  width: 100%;
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+  margin-top: 15px;
+
+  cursor: pointer;
+`;

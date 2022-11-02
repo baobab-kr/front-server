@@ -101,4 +101,15 @@ const TextActionArea = styled.div`
   }
 `;
 
-export { CommentWrapper, HeaderArea, Header, UserArea, CommentArea, UserContainer, UserInfo, Textarea, TextActionArea };
+const LoadMoreBtn = styled.div`
+  width: 100%;
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+  margin-top: 15px;
+
+  cursor: pointer;
+`;
+
+export { CommentWrapper, HeaderArea, Header, UserArea, CommentArea, UserContainer, UserInfo, Textarea, TextActionArea, LoadMoreBtn };

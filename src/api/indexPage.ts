@@ -1,5 +1,5 @@
 import API from ".";
-import { CreateComment, CreateReComment, DeleteComment, DeleteReComment, getComment, getReComment, iIndexPage } from "Types/indexPage";
+import { CreateComment, CreateReComment, DeleteComment, DeleteReComment, getComment, getReComment, iComment, iIndexPage } from "Types/indexPage";
 
 export function getBoardDetail(_board_id: number): Promise<iIndexPage> {
   return new Promise<iIndexPage>((resolve, reject) => {
@@ -12,9 +12,9 @@ export function getBoardDetail(_board_id: number): Promise<iIndexPage> {
       });
   });
 }
-export function getComments(_board_id: number): Promise<getComment> {
-  return new Promise<getComment>((resolve, reject) => {
-    API.post("/board/Comment", { board_id: _board_id })
+export function getComments(_board_id: number, _page: number): Promise<iComment[]> {
+  return new Promise<iComment[]>((resolve, reject) => {
+    API.post("/board/Comment", { board_id: _board_id, page: _page })
       .then((res) => {
         resolve(res.data);
       })
@@ -23,9 +23,9 @@ export function getComments(_board_id: number): Promise<getComment> {
       });
   });
 }
-export function getReComments(_commemt_id: number): Promise<getReComment> {
-  return new Promise<getReComment>((resolve, reject) => {
-    API.post("/board/ReComment", { comment_id: _commemt_id })
+export function getReComments(_commemt_id: number, _page: number): Promise<iComment[]> {
+  return new Promise<iComment[]>((resolve, reject) => {
+    API.post("/board/ReComment", { comment_id: _commemt_id, page: _page })
       .then((res) => {
         resolve(res.data);
       })

@@ -1,12 +1,28 @@
-import React, { useState, useEffect, useRef } from "react";
-import { CardWrapper, Card, UserContainer, UserInfo, Comment, CommentFooter, ShowReply, ReplyArea, Textarea, TextActionArea } from "./style";
+import React, { useState, useEffect, useRef, Dispatch, SetStateAction } from "react";
 import { BsFillChatFill } from "react-icons/bs";
 import Avator from "components/Avator/Avator";
 import ReCommentCard from "components/Comment/CommentCard/ReCommentCard";
+import { iComment } from "Types/indexPage";
+import { user } from "Types/user";
+import { createReComment, getReComments, patchDeleteComment } from "api/indexPage";
+import { CardWrapper, Card, UserContainer, UserInfo, Comment, CommentFooter, ShowReply, ReplyArea, Textarea, TextActionArea, LoadMoreBtn } from "./style";
+import { timeForToday } from "util/date";
 
-export default function CommentCard(): JSX.Element {
+type tProps = {
+  data: iComment;
+  comments: iComment[];
+  setComments: Dispatch<SetStateAction<iComment[]>>;
+};
+export default function CommentCard({ data, comments, setComments }: tProps): JSX.Element {
+  const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
+
   const [replyStatus, setReplyStatus] = useState<boolean>(false);
   const [createReply, setCreateReply] = useState<boolean>(false);
+  const [reComments, setReComments] = useState<iComment[]>([]);
+  const [reComment, setReComment] = useState<string>("");
+
+  const [page, setPage] = useState<number>(0);
+
   const textArea = useRef<HTMLTextAreaElement>(null);
   const resize = () => {
     if (textArea.current) {
@@ -14,21 +30,71 @@ export default function CommentCard(): JSX.Element {
       textArea.current.style.height = 12 + textArea.current.scrollHeight + "px";
     }
   };
+
+  const replyStatusHandler = (condition: boolean) => {
+    setReplyStatus(condition);
+    if (!condition) {
+      setPage(0);
+    }
+  };
+
+  const deleteComment = async () => {
+    await patchDeleteComment(data.id).then(() => {
+      setComments(comments.filter((q) => q.id !== data.id));
+    });
+  };
+
+  useEffect(() => {
+    getReCommentsFnc();
+  }, [page]);
+
+  const getReCommentsFnc = async () => {
+    await getReComments(data.id, page)
+      .then((res: iComment[]) => {
+        console.log("getComments", res);
+        const ids = reComments.map((q) => q.id);
+        const result = res.filter((q) => !ids.includes(q.id));
+        setReComments([...reComments, ...result]);
+      })
+      .catch((err) => {
+        console.log("getcommetn err => ", err);
+      });
+  };
+
+  const onRespond = async () => {
+    await createReComment(reComment, data.id).then(async () => {
+      setReComment("");
+      await getReCommentsFnc();
+      setCreateReply(false);
+    });
+  };
+
+  const loadMore = () => {
+    setPage(page + 1);
+  };
+
   return (
     <CardWrapper>
       <Card>
-        <UserContainer>
-          <UserInfo>
-            <Avator height="2em" width="2rem" userId={"1"} />
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <div>tugwon</div>
-              <div>35분전</div>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <UserContainer>
+            <UserInfo>
+              <Avator height="2em" width="2rem" userId={"1"} />
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <div>{data.writer.username}</div>
+                <div style={{ color: "rgba(255, 7, 110, 1)", fontSize: "12px", marginTop: "5px" }}>{timeForToday(data.date)}</div>
+              </div>
+            </UserInfo>
+          </UserContainer>
+          {userInfo?.id === data.writer.id && (
+            <div style={{ cursor: "pointer" }} onClick={deleteComment}>
+              삭제
             </div>
-          </UserInfo>
-        </UserContainer>
-        <Comment>댓글입니다. 댓글입니다.</Comment>
+          )}
+        </div>
+        <Comment>{data.content}</Comment>
         <CommentFooter>
-          <ShowReply style={{ cursor: "pointer" }} onClick={() => setReplyStatus(!replyStatus)}>
+          <ShowReply style={{ cursor: "pointer" }} onClick={() => replyStatusHandler(!replyStatus)}>
             <BsFillChatFill />
             {!replyStatus && <div>Show Reply</div>}
             {replyStatus && <div>Hide Reply</div>}
@@ -40,15 +106,34 @@ export default function CommentCard(): JSX.Element {
         {createReply && (
           <>
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <Textarea ref={textArea} placeholder="댓글을 입력하세요!" onKeyDown={resize} onKeyUp={resize} maxLength={4000}></Textarea>
+              <Textarea
+                ref={textArea}
+                placeholder="댓글을 입력하세요!"
+                value={reComment}
+                onChange={(e) => setReComment(e.target.value)}
+                onKeyDown={resize}
+                onKeyUp={resize}
+                maxLength={4000}
+              ></Textarea>
               <TextActionArea>
                 <div>Cancel</div>
-                <div className="respond">Respond</div>
+                <div className="respond" onClick={onRespond}>
+                  Respond
+                </div>
               </TextActionArea>
             </div>
           </>
         )}
-        <ReplyArea>{replyStatus && <ReCommentCard />}</ReplyArea>
+        <ReplyArea>
+          {replyStatus && (
+            <>
+              {reComments.map((data, index) => {
+                return <ReCommentCard data={data} reComments={reComments} setReComments={setReComments} key={index} />;
+              })}
+              <LoadMoreBtn onClick={loadMore}>더보기</LoadMoreBtn>
+            </>
+          )}
+        </ReplyArea>
       </Card>
     </CardWrapper>
   );
