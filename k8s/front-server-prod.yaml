@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: front-server
+  namespace: prod
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: front-server
+  template:
+    metadata:
+      labels:
+        app: front-server
+    spec:
+      containers:
+        - name: front-server
+          image: ghcr.io/baobab-kr/front-server/front-server-prod:v0.1.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 2999
+          resources:
+            requests:
+              cpu: 200m
+              memory: 1.3G
+            limits:
+              cpu: 200m
+              memory: 1.3G
+          env:
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: baobab-prod-cm
+                  key: node_env
+            - name: REACT_APP_API_ROOT
+              valueFrom:
+                configMapKeyRef:
+                  name: baobab-prod-cm
+                  key: react_app_api_root
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: baobab-prod-cm
+                  key: front_server_port
+            - name: GENERATE_SOURCEMAP
+              valueFrom:
+                configMapKeyRef:
+                  name: baobab-prod-cm
+                  key: generate_sourcemap
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: front-server
+  namespace: prod
+spec:
+  type: ClusterIP
+  ports:
+    - port: 2999
+  selector:
+    app: front-server
