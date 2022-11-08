@@ -1,0 +1,41 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: front-server
+  namespace: test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: front-server
+  template:
+    metadata:
+      labels:
+        app: front-server
+    spec:
+      containers:
+        - name: front-server
+          image: front-server-test:v0.0.1
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 2999
+          resources:
+            requests:
+              cpu: 500m
+              memory: 2G
+            limits:
+              cpu: 500m
+              memory: 2G
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: front-server
+  namespace: test
+spec:
+  type: ClusterIP
+  ports:
+    - port: 2999
+  selector:
+    app: front-server
