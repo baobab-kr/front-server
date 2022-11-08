@@ -57,6 +57,10 @@ export default function Header(): JSX.Element {
     };
   }, []);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, [location.pathname]);
+
   const navagateHome = () => {
     navigate("/");
   };
@@ -103,7 +107,6 @@ export default function Header(): JSX.Element {
   };
 
   useEffect(() => {
-    console.log(location.pathname);
     if (location.pathname === "/") {
       setTab(TITLE_TAB.MAIN);
     } else if (location.pathname === "/jobs") {

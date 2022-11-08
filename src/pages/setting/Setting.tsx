@@ -1,18 +1,50 @@
-import React, { useState } from "react";
-import { UserInfo, ImageButton, EditButton } from "./style";
+import React, { useState, useEffect } from "react";
+import UnderLine from "components/UnderLine/UnderLine";
+import Select from "react-select";
+import { JOB_GROUP, USER_TYPE, USER_TYPE_SELECT } from "constants/index";
 import { user } from "Types/user";
-import styled from "styled-components";
 import API from "api";
+import { FiEdit3 } from "react-icons/fi";
 import Avator from "components/Avator/Avator";
 
+import * as S from "./style";
+import { ModifySocialUrl, ModifyTechStack, ModifyDescription, getUserInfo } from "api/user";
+
+type tProps = { value: string | number; label: string };
+const formatOptionLabel = ({ value, label }: tProps) => (
+  <div style={{ display: "flex", color: "black" }}>
+    <div>{label}</div>
+  </div>
+);
 export default function Setting(): JSX.Element {
   const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
+
+  const [job, setJob] = useState<{ value: string; label: string }>(JOB_GROUP[0]);
   const [fileImage, setFileImage] = useState<string>("");
   const [fileList, setFileList] = useState<FileList>();
+  const [description, setDescription] = useState<string>("");
+  const [url, setUrl] = useState<string>("");
+  const jobHandler = (props: any) => {
+    setJob(props);
+  };
 
-  const saveInfo = async (e: any) => {
+  useEffect(() => {
+    setUrl(userInfo?.socialUrl || "");
+    setDescription(userInfo?.description || "");
+    const techStack = JOB_GROUP.find((q) => q.label === userInfo?.techStack);
+    setJob(techStack || JOB_GROUP[0]);
+  }, []);
+
+  const imageSelectHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const fileLists = e.target.files;
+    if (fileLists !== null) {
+      setFileImage(URL.createObjectURL(fileLists[0]));
+      setFileList(fileLists);
+    }
+  };
+
+  const saveProfile = async (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
-    console.log(`"${userInfo?.userid}"`, fileList);
     if (!fileList) return;
     const formData: any = new FormData();
     formData.append("profile", fileList![0]);
@@ -24,8 +56,6 @@ export default function Setting(): JSX.Element {
       headers: { "Content-Type": "multipart/form-data" },
     })
       .then(function (response) {
-        console.log(response);
-        window.location.reload();
         setFileImage("");
       })
       .catch(function (response) {
@@ -33,70 +63,89 @@ export default function Setting(): JSX.Element {
       });
   };
 
-  const imageSelectHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const fileLists = e.target.files;
-    if (fileLists !== null) {
-      // setFileImage(fileImage);
-      setFileImage(URL.createObjectURL(fileLists[0]));
-      setFileList(fileLists);
-      console.log("asd", fileList);
-    }
+  const saveTechStack = async () => {
+    await ModifyTechStack(userInfo!.userid, job.label);
+  };
+  const saveSocialUrl = async () => {
+    await ModifySocialUrl(userInfo!.userid, url);
+  };
+  const saveDescription = async () => {
+    await ModifyDescription(userInfo!.userid, description);
   };
 
-  // if (userInfo === null) return <Navigate to="/" replace />;
-  // else
-  return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-      <div style={{ width: "1324px" }}>
-        <UserInfo>
-          <div>
-            {fileImage !== "" && (
-              <div style={{ maxWidth: "150px", maxHeight: "150px", width: "150px", height: "150px", borderRadius: "3%", overflow: "hidden" }}>
-                <img src={fileImage} style={{ width: "100%", height: "100%", objectFit: "cover" }} alt="avator"></img>
-              </div>
-            )}
-            {fileImage === "" && <Avator userId={`${userInfo?.userid}`} width={"150px"} height={"150px"} />}
-            <AppStyle>
-              <ImageButton bgColor="red">이미지 제거</ImageButton>
-              <label htmlFor="ex_file">
-                <ImageButton bgColor="#2f2f2f">이미지 업로드</ImageButton>
-              </label>
-              <input type="file" id="ex_file" accept="image/jpg, image/png, image/jpeg" onChange={imageSelectHandler} />
-            </AppStyle>
-          </div>
-          <div style={{ display: "flex", gap: "10px", flexDirection: "column" }}>
-            <div style={{ color: "black" }}></div>
-            <hr />
-            <div style={{ marginTop: "10px" }}></div>
-            <EditButton onClick={saveInfo}>수정</EditButton>
-          </div>
-        </UserInfo>
-      </div>
-    </div>
-  );
-  // );
-}
+  const saveController = async (e: React.MouseEvent<HTMLDivElement>) => {
+    await saveSocialUrl();
+    await saveTechStack();
+    await saveDescription();
+    await saveProfile(e);
 
-const AppStyle = styled.div`
-  margin: 0 8px 0 8px;
-  img {
-    max-width: 325px;
-  }
-  /* label {
-    display: inline-block;
-    font-size: inherit;
-    line-height: normal;
-    vertical-align: middle;
-    cursor: pointer;
-  } */
-  input[type="file"] {
-    position: absolute;
-    width: 0;
-    height: 0;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    border: 0;
-  }
-`;
+    await getUserInfo()
+      .then((data) => {
+        localStorage.setItem("user", JSON.stringify(data));
+      })
+      .catch((err) => {
+        localStorage.removeItem("atexpires");
+        localStorage.removeItem("rtexpires");
+        localStorage.removeItem("user");
+      });
+
+    window.location.reload();
+  };
+
+  return (
+    <S.ContentWrapper>
+      <S.SettingArea>
+        <S.Header>
+          <h1 style={{ fontSize: "45px" }}>설정</h1>
+          <h5>계정 관리와 상세 설정을 할 수 있어요.</h5>
+        </S.Header>
+        <S.SettingGroupArea>
+          <S.SettingContainer>
+            <S.GroupTitle>
+              <div style={{ padding: "32px 0", fontSize: "25px" }}>계정 설정</div>
+              <UnderLine color="white" margin="none" />
+            </S.GroupTitle>
+            <S.GroupItem>
+              <div style={{ alignSelf: "start", marginTop: "20px" }}>프로필 사진</div>
+              <S.ProfileArea htmlFor="ex_file">
+                {fileImage !== "" && (
+                  <div style={{ maxWidth: "150px", maxHeight: "150px", width: "150px", height: "150px", borderRadius: "3%", overflow: "hidden" }}>
+                    <img src={fileImage} style={{ width: "100%", height: "100%", objectFit: "cover" }} alt="avator"></img>
+                  </div>
+                )}
+                {fileImage === "" && <Avator userId="tester" height="150px" width="150px" />}
+                <div className="profile-overlay"></div>
+                <div className="profile-btn">
+                  <FiEdit3 size={35} />
+                </div>
+                <input type="file" id="ex_file" accept="image/jpg, image/png, image/jpeg" onChange={imageSelectHandler} />
+              </S.ProfileArea>
+            </S.GroupItem>
+            <UnderLine color="white" margin="10px 0px 30px" />
+            <S.GroupItem>
+              <div style={{ alignSelf: "start", marginTop: "5px" }}>한 줄 소개</div>
+              <div style={{ width: "300px", height: "150px" }}>
+                <S.CustomTextarea placeholder="소개글을 작성해보세요!" value={description} onChange={(e) => setDescription(e.target.value)} />
+              </div>
+            </S.GroupItem>
+            <UnderLine color="white" margin="20px 0px 0px" />
+            <S.GroupItem>
+              <div>테크 스택</div>
+              <div style={{ width: "300px" }}>
+                <Select defaultValue={job} options={JOB_GROUP} formatOptionLabel={formatOptionLabel} onChange={jobHandler} value={job} />
+              </div>
+            </S.GroupItem>
+            <UnderLine color="white" margin="none" />
+            <S.GroupItem>
+              <div>소셜 미디어</div>
+              <S.CustomInput placeholder="www." value={url} onChange={(e) => setUrl(e.target.value)} />
+            </S.GroupItem>
+          </S.SettingContainer>
+        </S.SettingGroupArea>
+        <S.ActionArea>
+          <S.SaveBtn onClick={saveController}>파일저장</S.SaveBtn>
+        </S.ActionArea>
+      </S.SettingArea>
+    </S.ContentWrapper>
+  );
+}
