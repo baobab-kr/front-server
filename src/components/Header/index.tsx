@@ -89,6 +89,10 @@ export default function Header(): JSX.Element {
     navigate("/jobs");
   };
 
+  const navagateJobManagement = () => {
+    navigate("/job-management");
+  };
+
   const logout = async () => {
     await userLogout()
       .then((res) => {
@@ -111,6 +115,8 @@ export default function Header(): JSX.Element {
       setTab(TITLE_TAB.MAIN);
     } else if (location.pathname === "/jobs") {
       setTab(TITLE_TAB.JOB);
+    } else if (location.pathname === "/job-management") {
+      setTab(TITLE_TAB.JOB_MANAGEMENT);
     } else {
       setTab(TITLE_TAB.NOT);
     }
@@ -127,6 +133,10 @@ export default function Header(): JSX.Element {
         </Tabs>
         <Tabs onClick={navagateJob} current={tab === TITLE_TAB.JOB}>
           채용
+        </Tabs>
+        <div style={{ width: "2px", backgroundColor: "gray" }} />
+        <Tabs onClick={navagateJobManagement} current={tab === TITLE_TAB.JOB_MANAGEMENT}>
+          채용 관리
         </Tabs>
       </TabArea>
       <ItemWrapper>
@@ -148,8 +158,9 @@ export default function Header(): JSX.Element {
               <UserContainer>
                 <Avator userId={userInfo.userid} height={"40px"} width={"40px"} />
                 <UserActionList scale={toggleUser}>
-                  <div style={{ margin: "10px" }}>
+                  <div style={{ margin: "10px", display: "flex", gap: "15px", alignItems: "center" }}>
                     <Avator userId={userInfo.userid} height={"40px"} width={"40px"} />
+                    <p>{userInfo.username}</p>
                   </div>
                   <hr color="#999999" />
                   <UserActionListItem onClick={navagateMy}>My Home</UserActionListItem>
