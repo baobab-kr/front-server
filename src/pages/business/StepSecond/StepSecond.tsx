@@ -10,6 +10,7 @@ import TemplateSection from "../TemplateSection/TemplateSection";
 import { TemplateSectionFooter, InputWrap, LabelArea, CustomButton, InputAreaFooter, BackButton } from "./style";
 import { tStepSecond } from "Types/Business";
 import { AiFillLeftCircle } from "react-icons/ai";
+import LocationSelector from "components/LocationSelector/LocationSelector";
 type tProps = {
   value: tStepSecond;
   setValue: Dispatch<SetStateAction<tStepSecond>>;
@@ -31,6 +32,12 @@ export default function StepSecond({ value, setValue, stepperController }: tProp
 
   const backController = () => {
     stepperController(-1);
+  };
+
+  const locationHandler = (locaton: string) => {
+    setValue((v) => {
+      return { ...v, Location: locaton };
+    });
   };
 
   return (
@@ -91,7 +98,7 @@ export default function StepSecond({ value, setValue, stepperController }: tProp
 
         <InputContainer title="근무 지역" description="">
           <div className="input">
-            <InputText
+            {/* <InputText
               maxLength={60}
               placeholder="예) 경기도 시흥시"
               value={value.Location}
@@ -100,7 +107,8 @@ export default function StepSecond({ value, setValue, stepperController }: tProp
                   return { ...v, Location: e.target.value };
                 })
               }
-            />
+            /> */}
+            <LocationSelector setValue={locationHandler} />
           </div>
         </InputContainer>
 
