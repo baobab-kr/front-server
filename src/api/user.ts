@@ -27,3 +27,39 @@ export function userLogout(): Promise<string> {
       });
   });
 }
+
+export function ModifySocialUrl(userid: string, url: string): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
+    API.post("/users/create-socialUrl", { userid: userid, socialUrl: url })
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        reject(err.response);
+      });
+  });
+}
+
+export function ModifyTechStack(userid: string, techStack: string): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
+    API.post("/users/update-techStack", { userid: userid, techStack: techStack })
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        reject(err.response);
+      });
+  });
+}
+
+export function ModifyDescription(userid: string, description: string): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
+    API.post("/users/create-description", { userid: userid, description: description })
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        reject(err.response);
+      });
+  });
+}
