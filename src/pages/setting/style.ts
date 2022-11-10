@@ -1,18 +1,54 @@
 import styled from "styled-components";
 
+const Wrapper = styled.div`
+  display: grid;
+  grid-template-columns: 300px auto;
+  padding: 0 40px;
+`;
+
 const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-  justify-content: center;
   padding: 0 40px;
   width: 100%;
 `;
 
+const RouterArea = styled.div`
+  width: 230px;
+  height: 100vh;
+  position: sticky;
+  left: 100px;
+  top: 0;
+  padding-top: 72px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .select {
+    background-color: ${({ theme }) => theme.backgroundColor.subColor};
+  }
+`;
+
+const Routers = styled.div`
+  padding: 15px;
+  border-radius: 10px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.backgroundColor.subColor};
+  }
+`;
+
 const SettingArea = styled.div`
   position: relative;
-  padding-bottom: 118px;
+  padding-bottom: 50px;
   width: 1050px;
+  /* width: 900px; */
   padding-top: 72px;
   margin: 0px auto;
 `;
@@ -148,6 +184,7 @@ const SaveBtn = styled.div`
 `;
 
 export {
+  Wrapper,
   ActionArea,
   SaveBtn,
   ContentWrapper,
@@ -160,4 +197,6 @@ export {
   ProfileArea,
   CustomInput,
   CustomTextarea,
+  RouterArea,
+  Routers,
 };

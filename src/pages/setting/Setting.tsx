@@ -4,7 +4,8 @@ import Select from "react-select";
 import { JOB_GROUP, USER_TYPE, USER_TYPE_SELECT } from "constants/index";
 import { user } from "Types/user";
 import API from "api";
-import { FiEdit3 } from "react-icons/fi";
+import { FiEdit3, FiSettings } from "react-icons/fi";
+import { MdBusinessCenter } from "react-icons/md";
 import Avator from "components/Avator/Avator";
 
 import * as S from "./style";
@@ -93,59 +94,71 @@ export default function Setting(): JSX.Element {
   };
 
   return (
-    <S.ContentWrapper>
-      <S.SettingArea>
-        <S.Header>
-          <h1 style={{ fontSize: "45px" }}>설정</h1>
-          <h5>계정 관리와 상세 설정을 할 수 있어요.</h5>
-        </S.Header>
-        <S.SettingGroupArea>
-          <S.SettingContainer>
-            <S.GroupTitle>
-              <div style={{ padding: "32px 0", fontSize: "25px" }}>계정 설정</div>
-              <UnderLine color="white" margin="none" />
-            </S.GroupTitle>
-            <S.GroupItem>
-              <div style={{ alignSelf: "start", marginTop: "20px" }}>프로필 사진</div>
-              <S.ProfileArea htmlFor="ex_file">
-                {fileImage !== "" && (
-                  <div style={{ maxWidth: "150px", maxHeight: "150px", width: "150px", height: "150px", borderRadius: "3%", overflow: "hidden" }}>
-                    <img src={fileImage} style={{ width: "100%", height: "100%", objectFit: "cover" }} alt="avator"></img>
+    <S.Wrapper>
+      <S.RouterArea>
+        <S.Routers>
+          <MdBusinessCenter size={20} />
+          채용 관리
+        </S.Routers>
+        <S.Routers className="select">
+          <FiSettings />
+          설정
+        </S.Routers>
+      </S.RouterArea>
+      <S.ContentWrapper>
+        <S.SettingArea>
+          <S.Header>
+            <h1 style={{ fontSize: "45px" }}>설정</h1>
+            <h5>계정 관리와 상세 설정을 할 수 있어요.</h5>
+          </S.Header>
+          <S.SettingGroupArea>
+            <S.SettingContainer>
+              <S.GroupTitle>
+                <div style={{ padding: "32px 0", fontSize: "25px" }}>계정 설정</div>
+                <UnderLine color="white" margin="none" />
+              </S.GroupTitle>
+              <S.GroupItem>
+                <div style={{ alignSelf: "start", marginTop: "20px" }}>프로필 사진</div>
+                <S.ProfileArea htmlFor="ex_file">
+                  {fileImage !== "" && (
+                    <div style={{ maxWidth: "150px", maxHeight: "150px", width: "150px", height: "150px", borderRadius: "3%", overflow: "hidden" }}>
+                      <img src={fileImage} style={{ width: "100%", height: "100%", objectFit: "cover" }} alt="avator"></img>
+                    </div>
+                  )}
+                  {fileImage === "" && <Avator userId="tester" height="150px" width="150px" />}
+                  <div className="profile-overlay"></div>
+                  <div className="profile-btn">
+                    <FiEdit3 size={35} />
                   </div>
-                )}
-                {fileImage === "" && <Avator userId="tester" height="150px" width="150px" />}
-                <div className="profile-overlay"></div>
-                <div className="profile-btn">
-                  <FiEdit3 size={35} />
+                  <input type="file" id="ex_file" accept="image/jpg, image/png, image/jpeg" onChange={imageSelectHandler} />
+                </S.ProfileArea>
+              </S.GroupItem>
+              <UnderLine color="white" margin="10px 0px 30px" />
+              <S.GroupItem>
+                <div style={{ alignSelf: "start", marginTop: "5px" }}>한 줄 소개</div>
+                <div style={{ width: "300px", height: "150px" }}>
+                  <S.CustomTextarea placeholder="소개글을 작성해보세요!" value={description} onChange={(e) => setDescription(e.target.value)} />
                 </div>
-                <input type="file" id="ex_file" accept="image/jpg, image/png, image/jpeg" onChange={imageSelectHandler} />
-              </S.ProfileArea>
-            </S.GroupItem>
-            <UnderLine color="white" margin="10px 0px 30px" />
-            <S.GroupItem>
-              <div style={{ alignSelf: "start", marginTop: "5px" }}>한 줄 소개</div>
-              <div style={{ width: "300px", height: "150px" }}>
-                <S.CustomTextarea placeholder="소개글을 작성해보세요!" value={description} onChange={(e) => setDescription(e.target.value)} />
-              </div>
-            </S.GroupItem>
-            <UnderLine color="white" margin="20px 0px 0px" />
-            <S.GroupItem>
-              <div>테크 스택</div>
-              <div style={{ width: "300px" }}>
-                <Select defaultValue={job} options={JOB_GROUP} formatOptionLabel={formatOptionLabel} onChange={jobHandler} value={job} />
-              </div>
-            </S.GroupItem>
-            <UnderLine color="white" margin="none" />
-            <S.GroupItem>
-              <div>소셜 미디어</div>
-              <S.CustomInput placeholder="www." value={url} onChange={(e) => setUrl(e.target.value)} />
-            </S.GroupItem>
-          </S.SettingContainer>
-        </S.SettingGroupArea>
-        <S.ActionArea>
-          <S.SaveBtn onClick={saveController}>파일저장</S.SaveBtn>
-        </S.ActionArea>
-      </S.SettingArea>
-    </S.ContentWrapper>
+              </S.GroupItem>
+              <UnderLine color="white" margin="20px 0px 0px" />
+              <S.GroupItem>
+                <div>테크 스택</div>
+                <div style={{ width: "300px" }}>
+                  <Select defaultValue={job} options={JOB_GROUP} formatOptionLabel={formatOptionLabel} onChange={jobHandler} value={job} />
+                </div>
+              </S.GroupItem>
+              <UnderLine color="white" margin="none" />
+              <S.GroupItem>
+                <div>소셜 미디어</div>
+                <S.CustomInput placeholder="www." value={url} onChange={(e) => setUrl(e.target.value)} />
+              </S.GroupItem>
+            </S.SettingContainer>
+          </S.SettingGroupArea>
+          <S.ActionArea>
+            <S.SaveBtn onClick={saveController}>파일저장</S.SaveBtn>
+          </S.ActionArea>
+        </S.SettingArea>
+      </S.ContentWrapper>
+    </S.Wrapper>
   );
 }

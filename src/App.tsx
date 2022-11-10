@@ -12,6 +12,7 @@ import BusinessPage from "./pages/business/BusinessPage";
 import PersonPage from "./pages/person/PersonPage";
 import Setting from "./pages/setting/Setting";
 import StyleRoot from "./style/StyleRoot";
+import JobMenagement from "pages/jobs/JobManagement/JobMenagement";
 import { getUserInfo } from "./api/user";
 import ThemeSwitch from "./components/ThemeSwitch/ThemeSwitch";
 import { useRecoilState } from "recoil";
@@ -53,6 +54,7 @@ export default function App(): JSX.Element {
           <Route path="/jobs/:id" element={<PrivateRoute authentication={false} component={JobDetail} />} />
           <Route path="/business" element={<PrivateRoute authentication={false} component={BusinessPage} />} />
           <Route path="/apply/:id" element={<PrivateRoute authentication={false} component={ApplyJob} />} />
+          <Route path="/job-management" element={<PrivateRoute authentication={true} component={JobMenagement} />} />
         </Routes>
       </BrowserRouter>
     </StyleRoot>
