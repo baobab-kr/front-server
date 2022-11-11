@@ -170,13 +170,14 @@ export default function PersonPage(): JSX.Element {
             </div>
             <hr style={{ maxWidth: "350px" }} />
             <TagPlace>
-              {tag.map((t: TagCount, index: number) => {
-                return (
-                  <TagList key={index} onClick={() => modeSelector(t.tag_name)}>
-                    {t.tag_name} {`(${t.tag_count})`}
-                  </TagList>
-                );
-              })}
+              {tag.length >= 1 &&
+                tag.map((t: TagCount, index: number) => {
+                  return (
+                    <TagList key={index} onClick={() => modeSelector(t.tag_name)}>
+                      {t.tag_name} {`(${t.tag_count})`}
+                    </TagList>
+                  );
+                })}
             </TagPlace>
           </div>
         </Properties>
