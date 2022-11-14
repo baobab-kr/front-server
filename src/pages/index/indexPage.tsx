@@ -29,7 +29,6 @@ export default function IndexPage(): JSX.Element {
           setDetail(res);
           document.querySelector(".toastui-editor-contents")!.innerHTML = res.content;
           document.querySelectorAll<HTMLElement>(".toastui-editor-contents h1")!.forEach((data) => {
-            console.log(data);
             setTitleList((q) => {
               return [...q, data];
             });
@@ -85,7 +84,7 @@ export default function IndexPage(): JSX.Element {
             )}
             <S.MainContentArea>
               <div className={localStorage.getItem("Theme") === "dark" ? "toastui-editor-dark" : "toastui-editor"}>
-                <div className="toastui-editor-contents"></div>
+                <div className="toastui-editor-contents draggable"></div>
               </div>
             </S.MainContentArea>
             {detail?.tags !== undefined && detail!.tags.length > 0 && (
@@ -101,7 +100,7 @@ export default function IndexPage(): JSX.Element {
             )}
             <S.FooterCommentArea>
               <BsFillChatFill
-                style={{ margin: "-30px 1rem", cursor: "pointer" }}
+                style={{ margin: "-30px 1rem -30px 0px", cursor: "pointer" }}
                 size={20}
                 onClick={() => {
                   setCommentStatus(!commentStatus);

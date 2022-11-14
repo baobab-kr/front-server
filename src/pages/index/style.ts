@@ -71,6 +71,8 @@ const ContentListArea = styled.div`
   transition: transform 250ms ease, box-shadow 250ms ease, color 250ms ease;
   box-shadow: 1px 1px 5px 0 rgb(1 1 1 / 5%);
   padding: 2rem;
+
+  margin-top: -30px;
 `;
 
 type tCountProps = {
@@ -109,15 +111,15 @@ const ContentListItem = styled.div`
 `;
 
 const MainContentArea = styled.div`
-  background-color: #222222;
+  /* background-color: #222222; */
   border-radius: 0.5rem;
   transition: transform 250ms ease, box-shadow 250ms ease, color 250ms ease;
   box-shadow: 1px 1px 5px 0 rgb(1 1 1 / 5%);
-  padding: 2rem;
+  /* padding: 2rem; */
 `;
 
 const FooterTagArea = styled.div`
-  background-color: #222222;
+  /* background-color: #222222; */
   border-radius: 0.5rem;
   transition: transform 250ms ease, box-shadow 250ms ease, color 250ms ease;
   box-shadow: 1px 1px 5px 0 rgb(1 1 1 / 5%);
@@ -133,7 +135,7 @@ const TagContainer = styled.div`
   bottom: 15%;
 
   gap: 10px;
-  padding: 15px;
+  /* padding: 15px; */
 
   max-height: 85%;
   overflow-y: hidden;
@@ -145,10 +147,7 @@ const FooterCommentArea = styled.div`
 
   align-items: center;
 
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+  margin-bottom: 50px;
 `;
 
 type tOpacityProps = {

@@ -11,7 +11,7 @@ export const Wrapper = styled.div`
 export const WrapperInner = styled.div`
   position: relative;
   display: grid;
-  grid-template-columns: 340px auto;
+  grid-template-columns: auto;
   text-align: left;
 `;
 
@@ -69,10 +69,6 @@ export const ItemTitleArea = styled.div`
   height: 30px;
   margin-bottom: 16px;
   position: relative;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
 `;
 
 export const ItemArea = styled.div`
@@ -81,19 +77,19 @@ export const ItemArea = styled.div`
   grid-template-columns: repeat(6, 330px);
 
   @media screen and (max-width: 2170px) {
-    grid-template-columns: repeat(4, 330px);
+    grid-template-columns: repeat(5, 330px);
   }
   @media screen and (max-width: 1810px) {
     grid-gap: 25px;
-    grid-template-columns: repeat(4, 300px);
+    grid-template-columns: repeat(5, 300px);
   }
   @media screen and (max-width: 1600px) {
     grid-gap: 25px;
-    grid-template-columns: repeat(3, 300px);
+    grid-template-columns: repeat(4, 300px);
   }
   @media screen and (max-width: 1260px) {
     grid-gap: 25px;
-    grid-template-columns: repeat(2, 300px);
+    grid-template-columns: repeat(3, 300px);
   }
 `;
 
@@ -103,13 +99,15 @@ export const JobArea = styled.div`
   height: 330px;
   position: relative;
   width: 330px;
-
+  @media screen and (max-width: 2170px) {
+    grid-column: 5;
+  }
   @media screen and (max-width: 1810px) {
     height: 310px;
     width: 300px;
   }
   @media screen and (max-width: 1600px) {
-    grid-column: 3;
+    grid-column: 4;
   }
   @media screen and (max-width: 1260px) {
     grid-column: 2;

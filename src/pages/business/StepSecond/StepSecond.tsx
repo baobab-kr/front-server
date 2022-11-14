@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { useState, Dispatch, SetStateAction } from "react";
 import Swal from "sweetalert2";
 
 import InputText from "../Custominput/InputText";
@@ -7,10 +7,17 @@ import CustomTextarea from "../Custominput/CustomTextarea";
 import InputContainer from "../Custominput/InputContainer";
 import TemplateSection from "../TemplateSection/TemplateSection";
 
-import { TemplateSectionFooter, InputWrap, LabelArea, CustomButton, InputAreaFooter, BackButton } from "./style";
+import { TemplateSectionFooter, InputWrap, LabelArea, CustomButton, InputAreaFooter, BackButton, CheckBoxBtn } from "./style";
 import { tStepSecond } from "Types/Business";
 import { AiFillLeftCircle } from "react-icons/ai";
 import LocationSelector from "components/LocationSelector/LocationSelector";
+
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { ko } from "date-fns/esm/locale";
+
+import checkImg from "../../../assets/selected.png";
+
 type tProps = {
   value: tStepSecond;
   setValue: Dispatch<SetStateAction<tStepSecond>>;
@@ -18,6 +25,10 @@ type tProps = {
 };
 
 export default function StepSecond({ value, setValue, stepperController }: tProps): JSX.Element {
+  const [startDate, setStartDate] = useState<Date>(new Date());
+  const [endDate, setEndDate] = useState<Date>(new Date());
+  const [isDate, setIsDate] = useState<boolean>(true);
+
   const logoFileController = (e: React.ChangeEvent<HTMLInputElement>) => {};
   const imageFileController = (e: React.ChangeEvent<HTMLInputElement>) => {};
 
@@ -39,6 +50,12 @@ export default function StepSecond({ value, setValue, stepperController }: tProp
       return { ...v, Location: locaton };
     });
   };
+
+  const ExampleCustomInput = React.forwardRef(({ value, onClick }: any, ref: any) => (
+    <button style={{ color: "white" }} onClick={onClick} ref={ref}>
+      {value}
+    </button>
+  ));
 
   return (
     <>
@@ -160,18 +177,59 @@ export default function StepSecond({ value, setValue, stepperController }: tProp
           </div>
         </InputContainer>
 
-        <InputContainer title="채용 마감일" description="">
+        <InputContainer title="채용 기간" description="">
           <div className="input">
-            <InputText
-              maxLength={60}
-              placeholder="예) 신입"
-              value={value.EndDate}
-              setValue={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setValue((v) => {
-                  return { ...v, EndDate: e.target.value };
-                })
-              }
-            />
+            <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
+                <CheckBoxBtn onClick={() => setIsDate(true)}>{isDate && <img src={checkImg} alt="aa" style={{ width: "100%" }} />}</CheckBoxBtn>
+                <p>상시 채용</p>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
+                <CheckBoxBtn onClick={() => setIsDate(false)}>{!isDate && <img src={checkImg} alt="aa" style={{ width: "100%" }} />}</CheckBoxBtn>
+                <p>채용 기간 설정</p>
+              </div>
+            </div>
+
+            {!isDate && (
+              <div
+                style={{
+                  marginTop: "15px",
+                  display: "flex",
+                  padding: "15px",
+                  border: "1px solid #35363b",
+                  borderRadius: "9px",
+                  justifyContent: "space-around",
+                  alignItems: "center",
+                }}
+              >
+                <div>
+                  <DatePicker
+                    selected={startDate}
+                    onChange={(date) => setStartDate(date!)}
+                    selectsStart
+                    startDate={startDate}
+                    endDate={endDate}
+                    dateFormat="yyyy년 MM월 dd일"
+                    locale={ko}
+                    customInput={<ExampleCustomInput />}
+                  />
+                </div>
+                <div style={{ width: "10px", height: "2px", background: "#35363b" }}></div>
+                <div>
+                  <DatePicker
+                    selected={endDate}
+                    onChange={(date) => setEndDate(date!)}
+                    selectsEnd
+                    startDate={startDate}
+                    endDate={endDate}
+                    minDate={startDate}
+                    dateFormat="yyyy년 MM월 dd일"
+                    locale={ko}
+                    customInput={<ExampleCustomInput />}
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </InputContainer>
 
@@ -213,10 +271,10 @@ export default function StepSecond({ value, setValue, stepperController }: tProp
       <div style={{ marginTop: "30px", marginBottom: "30px" }}>
         <TemplateSection title="추가 정보" open={false}>
           <InputContainer title="연봉 테이블" description="">
-            <div className="input">
+            <div className="input" style={{ display: "flex", alignItems: "center", gap: "15px" }}>
               <InputText
                 maxLength={60}
-                placeholder="예) 2500만원 ~ 29000만원"
+                placeholder="예) 3800"
                 value={value.Salary}
                 setValue={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setValue((v) => {
@@ -224,6 +282,7 @@ export default function StepSecond({ value, setValue, stepperController }: tProp
                   })
                 }
               />
+              <p>만원</p>
             </div>
           </InputContainer>
 

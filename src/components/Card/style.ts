@@ -80,10 +80,11 @@ export const Title = styled.p`
   font-size: 25px;
   font-weight: bold;
 
-  top: 45%;
+  top: 35%;
   padding-right: 20px;
 
   text-shadow: 1px 1px 1px gray;
+  line-height: 2rem;
 `;
 
 export const Content = styled.p`

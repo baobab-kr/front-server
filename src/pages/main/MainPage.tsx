@@ -88,16 +88,16 @@ export default function MainPage(): JSX.Element {
               <p style={{ marginTop: "20px" }}>이제 바오밥에서 커리어를 쌓아보세요.</p>
             </BannerTitle>
             <BannerDesc>
-              <h1>Spotify - Moved by Music</h1>
+              {/* <h1>Spotify - Moved by Music</h1> */}
               <p>by BAOBAB</p>
             </BannerDesc>
           </div>
         </MainBanner>
         <Wrapper>
           <WrapperInner>
-            <NavArea>
+            {/* <NavArea>
               <Category />
-            </NavArea>
+            </NavArea> */}
             <ContentArea>
               <div>
                 <ItemTitleArea>
