@@ -74,3 +74,11 @@ export const BackButton = styled.button`
   justify-content: center;
   align-items: center;
 `;
+
+export const CheckBoxBtn = styled.div`
+  width: 25px;
+  height: 25px;
+  border: 1px solid #35363b;
+  border-radius: 3px;
+  padding: 0px;
+`;

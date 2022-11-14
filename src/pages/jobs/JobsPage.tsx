@@ -9,6 +9,7 @@ import InfiniteScroll from "../../components/InfiniteScroll";
 import Category from "./Category/Category";
 import { getMainBoard } from "../../api/board";
 import JobCard from "../../components/JobCard/JobCard";
+import { user } from "Types/user";
 
 function getWindowSize() {
   const { innerWidth, innerHeight } = window;
@@ -16,6 +17,8 @@ function getWindowSize() {
 }
 
 export default function JobsPage(): JSX.Element {
+  const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
+
   const navigate = useNavigate();
   const [windowSize, setWindowSize] = useState(getWindowSize());
   const [board, setBoard] = useState<Board[]>([]);
@@ -71,10 +74,12 @@ export default function JobsPage(): JSX.Element {
                 alt="banner"
               />
             </BannerImageArea>
-            <BannerTitle>
-              <h1 style={{ fontSize: "30px" }}>새로운 인재를 찾고 있나요?</h1>
-              <LinkBtn onClick={navagateBusiness}>채용 광고 신청하러 가기</LinkBtn>
-            </BannerTitle>
+            {userInfo?.role === 1 && (
+              <BannerTitle>
+                <h1 style={{ fontSize: "30px" }}>새로운 인재를 찾고 있나요?</h1>
+                <LinkBtn onClick={navagateBusiness}>채용 광고 신청하러 가기</LinkBtn>
+              </BannerTitle>
+            )}
             <BannerDesc>
               {/* <h1>Spotify - Moved by Music</h1> */}
               <p>by BAOBAB</p>

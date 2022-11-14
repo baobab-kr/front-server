@@ -138,7 +138,7 @@ export default function PersonPage(): JSX.Element {
             <UserDiscrtprion>
               <DivFlex direction="row" style={{ marginTop: "20px", gap: "15px" }}>
                 <DivFlex direction="column" style={{ gap: "15px", flexBasis: "50%" }}>
-                  <div style={{ color: "#999999" }}>DATA Analtst</div>
+                  <div style={{ color: "#999999" }}>Description</div>
                   <ThemeText>{writer?.description ?? "데이터 분석을 통한 프로덕트 성장에 관심있습니다."}</ThemeText>
                 </DivFlex>
                 <DivFlex direction="row" style={{ gap: "15px", flexBasis: "50%" }}>

@@ -4,12 +4,33 @@ import reset from "styled-reset";
 const GlobalStyle = createGlobalStyle`
   ${reset}
   
-@font-face {
-    font-family: 'twayair';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_tway@1.0/twayair.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
+  @font-face {
+      font-family: 'twayair';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_tway@1.0/twayair.woff') format('woff');
+      font-weight: normal;
+      font-style: normal;
+  }
+
+  @font-face {
+      font-family: 'SpoqaHanSansNeo-Regular';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SpoqaHanSansNeo-Regular.woff') format('woff');
+      font-weight: normal;
+      font-style: normal;
+  }
+
+  @font-face {
+      font-family: 'NanumSquareNeo-Variable';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2') format('woff2');
+      font-weight: normal;
+      font-style: normal;
+  }
+
+  @font-face {
+      font-family: 'LINESeedKR-Bd';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/LINESeedKR-Bd.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+  }
 
   *, *::before, *::after {
     box-sizing: border-box;
@@ -30,7 +51,10 @@ const GlobalStyle = createGlobalStyle`
     color: white;
     background-attachment: fixed;
     /* font-family: LL Circular,Apple SD Gothic Neo,sans-serif; */
-    font-family: 'twayair';
+    /* font-family: 'twayair'; */
+    /* font-family: 'SpoqaHanSansNeo-Regular'; */
+    /* font-family: 'NanumSquareNeo-Variable'; */
+    font-family: 'LINESeedKR-Bd';
 
     background-color:${({ theme }) => theme.backgroundColor.bg};
     margin: 0;
@@ -40,6 +64,10 @@ const GlobalStyle = createGlobalStyle`
 
     transition:0.3s;
 
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none
   }
 
   textarea{
@@ -95,6 +123,13 @@ const GlobalStyle = createGlobalStyle`
 
   body::-webkit-scrollbar-track {
       background: #000000;  /*스크롤바 뒷 배경 색상*/
+  }
+
+  .draggable {
+    -webkit-user-select:text;
+    -moz-user-select:text;
+    -ms-user-select:text;
+    user-select:text
   }
 
 `;

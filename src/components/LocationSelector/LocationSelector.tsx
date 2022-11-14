@@ -45,13 +45,13 @@ export default function LocationSelector({ setValue }: tValue): JSX.Element {
   }, [gu]);
 
   return (
-    <div style={{ display: "flex", gap: "15px", alignItems: "center" }}>
-      <div style={{ minWidth: "70px" }}>광역시/도:</div>
-      <div style={{ minWidth: "160px" }}>
+    <div style={{ display: "flex", gap: "15px", alignItems: "center", fontSize: "14px" }}>
+      <div style={{ minWidth: "60px" }}>광역시/도:</div>
+      <div style={{ minWidth: "150px" }}>
         <Select defaultValue={si} options={siGroup} formatOptionLabel={formatOptionLabel} onChange={siHandler} value={si} />
       </div>
-      <div style={{ minWidth: "70px" }}>시/군/구:</div>
-      <div style={{ minWidth: "160px" }}>
+      <div style={{ minWidth: "60px" }}>시/군/구:</div>
+      <div style={{ minWidth: "150px" }}>
         <Select defaultValue={gu} options={guGroup} formatOptionLabel={formatOptionLabel} onChange={guHandler} value={gu} />
       </div>
     </div>
