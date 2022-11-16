@@ -130,7 +130,6 @@ export function getBoardThumbnail(name: string): Promise<any> {
       },
     )
       .then((res) => {
-        console.log("array", res.data);
         resolve({ data: res.data, type: res.headers["content-type"] });
       })
       .catch((err) => {

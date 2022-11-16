@@ -18,6 +18,16 @@ export const Overlay = styled.span`
   height: 85%;
 `;
 
+export const HoverArea = styled.div<cardInit>`
+  &:hover {
+    .card {
+      transform: translateY(-8px);
+      transition: 0.2s;
+      box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.9);
+    }
+  }
+`;
+
 export const CardWrapper = styled.div<cardInit>`
   position: relative;
   width: ${(props) => props.width};
@@ -38,14 +48,14 @@ export const CardWrapper = styled.div<cardInit>`
   cursor: pointer;
   transition: 0.2s;
 
-  ${(props) =>
+  /* ${(props) =>
     props.isHover
       ? ` &:hover {
-            transform: translate(0px, -10px);
+            transform: translateY(-8px); 
             transition: 0.2s;
             box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.9);
           }`
-      : ""};
+      : ""}; */
 
   @media screen and (max-width: 1339px) {
     /* 타블렛 가로 */
@@ -77,8 +87,9 @@ export const CardText = styled.div`
 
 export const Title = styled.p`
   position: absolute;
-  font-size: 25px;
+  font-size: 24px;
   font-weight: bold;
+  word-break: break-all;
 
   top: 35%;
   padding-right: 20px;

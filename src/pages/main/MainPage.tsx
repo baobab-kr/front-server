@@ -55,7 +55,7 @@ export default function MainPage(): JSX.Element {
     await getMainBoard(page)
       .then((data) => {
         setPage(page + 1);
-        setBoard((curInfoArray) => [...data, ...curInfoArray].reverse()); // state에 추가
+        setBoard((curInfoArray) => [...curInfoArray, ...data]); // state에 추가
       })
       .catch((err) => {
         setMainState(true);

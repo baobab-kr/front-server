@@ -7,11 +7,12 @@ import { Board } from "Types/main";
 import { TopButton } from "./style";
 
 import { FiArrowUp } from "react-icons/fi";
+import { iComment } from "Types/indexPage";
 
 type Props = {
   children: ReactNode;
   loadFnc: () => void;
-  data: Board[];
+  data: Board[] | iComment[];
   isLast: boolean;
 };
 export default function InfiniteScroll({ loadFnc, data, children, isLast }: Props): JSX.Element {

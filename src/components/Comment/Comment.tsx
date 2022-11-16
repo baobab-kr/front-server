@@ -6,6 +6,7 @@ import Avator from "components/Avator/Avator";
 import CommentCard from "components/Comment/CommentCard/CommentCard";
 import { iComment } from "Types/indexPage";
 import { createComment, getComments } from "api/indexPage";
+import InfiniteScroll from "components/InfiniteScroll";
 
 type tProps = {
   status: boolean;
@@ -17,6 +18,7 @@ export default function Comment({ status, setStatus, boardID }: tProps): JSX.Ele
   const [comments, setComments] = useState<iComment[]>([]);
   const [page, setPage] = useState<number>(0);
   const [comment, setComment] = useState<string>("");
+  const [isLastPage, setIsLastPage] = useState<boolean>(false);
   const textArea = useRef<HTMLTextAreaElement>(null);
   const resize = () => {
     if (textArea.current) {
@@ -33,19 +35,23 @@ export default function Comment({ status, setStatus, boardID }: tProps): JSX.Ele
   };
 
   useEffect(() => {
+    if (isLastPage) return;
     getCommentsFnc();
   }, [page]);
 
   const getCommentsFnc = async () => {
     await getComments(boardID!, page)
       .then((res: iComment[]) => {
-        console.log("getComments", res);
         const ids = comments.map((q) => q.id);
         const result = res.filter((q) => !ids.includes(q.id));
+        if (result.length === 0) {
+          throw new Error("is Last Page");
+        }
         setComments([...comments, ...result]);
       })
       .catch((err) => {
         console.log("getcommetn err => ", err);
+        setIsLastPage(true);
       });
   };
 
@@ -86,10 +92,11 @@ export default function Comment({ status, setStatus, boardID }: tProps): JSX.Ele
       </S.UserArea>
 
       <S.CommentArea>
-        {comments.map((data) => {
-          return <CommentCard data={data} comments={comments} setComments={setComments} key={data.id} />;
-        })}
-        <S.LoadMoreBtn onClick={loadMore}>더보기</S.LoadMoreBtn>
+        <InfiniteScroll loadFnc={loadMore} data={comments} isLast={isLastPage}>
+          {comments.map((data) => {
+            return <CommentCard data={data} comments={comments} setComments={setComments} key={data.id} />;
+          })}
+        </InfiniteScroll>
       </S.CommentArea>
     </S.CommentWrapper>
   );

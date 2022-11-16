@@ -7,7 +7,7 @@ type tSelected = {
 export const SwitchContainer = styled.div`
   position: fixed;
   top: 50%;
-  right: 25px;
+  left: 25px;
   height: 130px;
   width: 40px;
   transform: translate(0%, -50%);
