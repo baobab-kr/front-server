@@ -6,7 +6,7 @@ import { useLocation } from "react-router-dom";
 import Avator from "components/Avator/Avator";
 
 import * as S from "./style";
-import { getBoardDetail } from "api/indexPage";
+import { getBoardDetail, getCommentCount } from "api/indexPage";
 import { iIndexPage } from "Types/indexPage";
 import moment from "moment";
 import { Tag } from "Types/main";
@@ -19,6 +19,7 @@ export default function IndexPage(): JSX.Element {
   const [detail, setDetail] = useState<iIndexPage>();
   const [titleList, setTitleList] = useState<HTMLElement[]>([]);
   const [commentStatus, setCommentStatus] = useState<boolean>(false);
+  const [commentCnt, setCommentCnt] = useState<number>(0);
   const location = useLocation();
   const board_id = location.pathname.split("/")[2];
 
@@ -37,6 +38,10 @@ export default function IndexPage(): JSX.Element {
         .catch((err) => {
           console.log(err);
         });
+
+      await getCommentCount(parseInt(board_id)).then((res) => {
+        setCommentCnt(res);
+      });
     };
     apiGet();
   }, []);
@@ -106,8 +111,8 @@ export default function IndexPage(): JSX.Element {
                   setCommentStatus(!commentStatus);
                 }}
               />
-              <div>9999</div>
-              <Comment status={commentStatus} setStatus={setCommentStatus} boardID={Number(board_id)} />
+              <div>{commentCnt}</div>
+              <Comment status={commentStatus} setStatus={setCommentStatus} boardID={Number(board_id)} commentCnt={commentCnt} setCommentCnt={setCommentCnt} />
             </S.FooterCommentArea>
           </S.ContentArea>
         </S.CenterPosition>

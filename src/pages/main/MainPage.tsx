@@ -104,7 +104,7 @@ export default function MainPage(): JSX.Element {
                   <span>최신 아티클</span>
                 </ItemTitleArea>
                 <ItemArea>
-                  <InfiniteScroll loadFnc={getInfo} data={board} isLast={mainState}>
+                  <InfiniteScroll loadFnc={getInfo} data={board} isLast={mainState} isOnTop={true}>
                     {board?.map((item: Board, index: number) => {
                       return (
                         <Card

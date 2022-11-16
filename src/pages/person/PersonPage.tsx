@@ -183,7 +183,7 @@ export default function PersonPage(): JSX.Element {
         </Properties>
 
         <Content>
-          <InfiniteScroll loadFnc={getBoardInfo} data={board} isLast={mainState}>
+          <InfiniteScroll loadFnc={getBoardInfo} data={board} isLast={mainState} isOnTop={true}>
             {board.map((blogInfo: Board, index: number) => {
               return (
                 <Card

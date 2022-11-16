@@ -4,7 +4,7 @@ import Avator from "components/Avator/Avator";
 import ReCommentCard from "components/Comment/CommentCard/ReCommentCard";
 import { iComment } from "Types/indexPage";
 import { user } from "Types/user";
-import { createReComment, getReComments, patchDeleteComment } from "api/indexPage";
+import { createReComment, getReCommentCount, getReComments, patchDeleteComment } from "api/indexPage";
 import { CardWrapper, Card, UserContainer, UserInfo, Comment, CommentFooter, ShowReply, ReplyArea, Textarea, TextActionArea, LoadMoreBtn } from "./style";
 import { timeForToday } from "util/date";
 
@@ -20,6 +20,7 @@ export default function CommentCard({ data, comments, setComments }: tProps): JS
   const [createReply, setCreateReply] = useState<boolean>(false);
   const [reComments, setReComments] = useState<iComment[]>([]);
   const [reComment, setReComment] = useState<string>("");
+  const [reCommentCnt, setReCommentCnt] = useState<number>(0);
 
   const [page, setPage] = useState<number>(0);
 
@@ -48,6 +49,15 @@ export default function CommentCard({ data, comments, setComments }: tProps): JS
     getReCommentsFnc();
   }, [page]);
 
+  useEffect(() => {
+    const apiGet = async () => {
+      await getReCommentCount(data.id).then((res) => {
+        setReCommentCnt(res);
+      });
+    };
+    apiGet();
+  }, []);
+
   const getReCommentsFnc = async () => {
     await getReComments(data.id, page)
       .then((res: iComment[]) => {
@@ -66,6 +76,7 @@ export default function CommentCard({ data, comments, setComments }: tProps): JS
       setReComment("");
       await getReCommentsFnc();
       setCreateReply(false);
+      setReCommentCnt(reCommentCnt + 1);
     });
   };
 
@@ -96,7 +107,7 @@ export default function CommentCard({ data, comments, setComments }: tProps): JS
         <CommentFooter>
           <ShowReply style={{ cursor: "pointer" }} onClick={() => replyStatusHandler(!replyStatus)}>
             <BsFillChatFill />
-            {!replyStatus && <div>Show Reply</div>}
+            {!replyStatus && <div>{reCommentCnt} replies</div>}
             {replyStatus && <div>Hide Reply</div>}
           </ShowReply>
           <div style={{ cursor: "pointer" }} onClick={() => setCreateReply(!createReply)}>
