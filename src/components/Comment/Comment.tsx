@@ -12,9 +12,11 @@ type tProps = {
   status: boolean;
   setStatus: Dispatch<SetStateAction<boolean>>;
   boardID: number | undefined;
+  commentCnt: number;
+  setCommentCnt: Dispatch<SetStateAction<number>>;
 };
 
-export default function Comment({ status, setStatus, boardID }: tProps): JSX.Element {
+export default function Comment({ status, setStatus, boardID, commentCnt, setCommentCnt }: tProps): JSX.Element {
   const [comments, setComments] = useState<iComment[]>([]);
   const [page, setPage] = useState<number>(0);
   const [comment, setComment] = useState<string>("");
@@ -30,6 +32,7 @@ export default function Comment({ status, setStatus, boardID }: tProps): JSX.Ele
   const onRespond = async () => {
     await createComment(comment, boardID!).then(async () => {
       setComment("");
+      setCommentCnt(commentCnt + 1);
       await getCommentsFnc();
     });
   };
@@ -62,7 +65,7 @@ export default function Comment({ status, setStatus, boardID }: tProps): JSX.Ele
   return (
     <S.CommentWrapper status={status}>
       <S.HeaderArea>
-        <S.Header>Responese ({30})</S.Header>
+        <S.Header>Responese ({commentCnt})</S.Header>
         <AiOutlineClose onClick={() => setStatus(false)} />
       </S.HeaderArea>
       <S.UserArea>
@@ -92,7 +95,7 @@ export default function Comment({ status, setStatus, boardID }: tProps): JSX.Ele
       </S.UserArea>
 
       <S.CommentArea>
-        <InfiniteScroll loadFnc={loadMore} data={comments} isLast={isLastPage}>
+        <InfiniteScroll loadFnc={loadMore} data={comments} isLast={isLastPage} isOnTop={false}>
           {comments.map((data) => {
             return <CommentCard data={data} comments={comments} setComments={setComments} key={data.id} />;
           })}

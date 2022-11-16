@@ -72,7 +72,7 @@ export default function HeadHunterMgmt(): JSX.Element {
                   <span>나의 채용 공고 리스트</span>
                 </ItemTitleArea>
                 <ItemArea>
-                  <InfiniteScroll loadFnc={getInfo} data={board} isLast={mainState}>
+                  <InfiniteScroll loadFnc={getInfo} data={board} isLast={mainState} isOnTop={true}>
                     {board?.map((item: Board, index: number) => {
                       return (
                         <JobCard

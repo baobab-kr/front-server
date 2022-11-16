@@ -97,7 +97,7 @@ export default function JobsPage(): JSX.Element {
                   <span>전체 채용</span>
                 </ItemTitleArea>
                 <ItemArea>
-                  <InfiniteScroll loadFnc={getInfo} data={board} isLast={mainState}>
+                  <InfiniteScroll loadFnc={getInfo} data={board} isLast={mainState} isOnTop={true}>
                     {board?.map((item: Board, index: number) => {
                       return (
                         <JobCard
