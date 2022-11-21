@@ -19,6 +19,7 @@ import "tui-color-picker/dist/tui-color-picker.css";
 import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
 import "@toast-ui/editor/dist/toastui-editor.css"; // Editor's Style
 import "@toast-ui/editor/dist/theme/toastui-editor-dark.css";
+import API from "api";
 
 type props = {
   onClose: React.Dispatch<React.SetStateAction<boolean>>;
@@ -113,7 +114,7 @@ function Popup({ onClose, data, setData, boardId }: props) {
         console.log("Board 생성 실패", err);
       });
   };
-  const editdata = { title: data.title, content: data.content, description: data.description, tag_name: data.tag_name, board_id: parseInt(boardId) };
+
   return (
     <>
       <E.popup>
@@ -212,6 +213,26 @@ export default function EditorPage() {
     };
   }, []);
 
+  // const hooksController = (blob: Blob | File, callback: HookCallback) => {
+  //   const formData = new FormData();
+  //   formData.append("ToastImage", blob);
+
+  //   console.log("add", blob);
+
+  //   // API({
+  //   //   method: "post",
+  //   //   url: "/jobs/UploadToastUiImage",
+  //   //   data: formData,
+  //   //   headers: { "Content-Type": "multipart/form-data" },
+  //   // })
+  //   //   .then(function (response) {
+  //   //     console.log(response);
+  //   //   })
+  //   //   .catch(function (response) {
+  //   //     alert(response);
+  //   //   });
+  // };
+
   return (
     <>
       <E.TitleWrpper>
@@ -247,6 +268,28 @@ export default function EditorPage() {
         ref={editorRef}
         placeholder="당신의 바오밥 나무에 가지를 추가해보세요..."
         plugins={[[codeSyntaxHighlight, { highlighter: Prism }], colorSyntax]}
+        hooks={{
+          addImageBlobHook: (blob, callback) => {
+            const formData = new FormData();
+            formData.append("ToastImage", blob);
+
+            console.log("add", blob);
+
+            API({
+              method: "post",
+              url: "/jobs/UploadToastUiImage",
+              data: formData,
+              headers: { "Content-Type": "multipart/form-data" },
+            })
+              .then(async function (response) {
+                callback(`${process.env.REACT_APP_API_ROOT}/jobs/getToastImage?file_name=${response.data}`, "image");
+              })
+              .catch(function (response) {
+                console.log("err", response);
+                callback("image_load_fail", "image");
+              });
+          },
+        }}
       />
       {showPopup ? <Popup onClose={setShowPopup} data={editor} setData={setEditor} boardId={location.state !== null ? location.state.id : ""} /> : null}
     </>
