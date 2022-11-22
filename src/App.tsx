@@ -17,6 +17,9 @@ import { getUserInfo } from "./api/user";
 import ThemeSwitch from "./components/ThemeSwitch/ThemeSwitch";
 import { useRecoilState } from "recoil";
 import Darkmode from "./store/store.theme";
+import MyApplyJobs from "pages/apply_job/my-apply-jobs/MyApplyJobs";
+import NotFound from "pages/NotFound/NotFound";
+import { USER_TYPE } from "constants/index";
 
 export default function App(): JSX.Element {
   const [, setDarkMode] = useRecoilState<boolean>(Darkmode);
@@ -48,13 +51,15 @@ export default function App(): JSX.Element {
           <Route path="/" element={<MainPage />} />
           <Route path="/@:id" element={<PrivateRoute authentication={true} component={PersonPage} />} />
           <Route path="/@:id/:boardid" element={<PrivateRoute authentication={false} component={IndexPage} />} />
+          <Route path="/@:id/my-apply-jobs" element={<PrivateRoute authentication={true} component={MyApplyJobs} role={USER_TYPE.DEVELOPER} />} />
+          <Route path="/@:id/job-management" element={<PrivateRoute authentication={true} component={JobMenagement} />} />
           <Route path="/setting" element={<Setting />} />
           <Route path="/editor" element={<PrivateRoute authentication={true} component={EditorPage} />} />
           <Route path="/jobs" element={<PrivateRoute authentication={false} component={JobsPage} />} />
           <Route path="/jobs/:id" element={<PrivateRoute authentication={false} component={JobDetail} />} />
           <Route path="/business" element={<PrivateRoute authentication={false} component={BusinessPage} />} />
           <Route path="/apply/:id" element={<PrivateRoute authentication={false} component={ApplyJob} />} />
-          <Route path="/job-management" element={<PrivateRoute authentication={true} component={JobMenagement} />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </StyleRoot>
