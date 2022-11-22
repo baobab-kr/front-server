@@ -72,7 +72,7 @@ export default function MainPage(): JSX.Element {
 
   return (
     <Suspense fallback={() => fallback()}>
-      <div style={{ zIndex: "1", height: "100%" }}>
+      <div style={{ zIndex: "1", height: "100%", width: "100%" }}>
         <MainBanner>
           <div>
             <BannerImageArea>
@@ -89,7 +89,7 @@ export default function MainPage(): JSX.Element {
             </BannerTitle>
             <BannerDesc>
               {/* <h1>Spotify - Moved by Music</h1> */}
-              <p>by BAOBAB</p>
+              {/* <p>by BAOBAB</p> */}
             </BannerDesc>
           </div>
         </MainBanner>
@@ -100,10 +100,10 @@ export default function MainPage(): JSX.Element {
             </NavArea> */}
             <ContentArea>
               <div>
-                <ItemTitleArea>
-                  <span>최신 아티클</span>
-                </ItemTitleArea>
                 <ItemArea>
+                  <ItemTitleArea>
+                    <span>최신 아티클</span>
+                  </ItemTitleArea>
                   <InfiniteScroll loadFnc={getInfo} data={board} isLast={mainState} isOnTop={true}>
                     {board?.map((item: Board, index: number) => {
                       return (
@@ -121,23 +121,11 @@ export default function MainPage(): JSX.Element {
                   </InfiniteScroll>
                   <JobArea>
                     <div style={{ height: "100%" }}>
-                      {windowSize.innerWidth > 1260 && (
-                        <JobHeader>
-                          <IoBusinessSharp />
-                          새로운 채용 공고
-                        </JobHeader>
-                      )}
+                      <JobHeader style={{ color: "black" }}>
+                        <IoBusinessSharp />
+                        새로운 채용 공고
+                      </JobHeader>
                       <JobList>
-                        {/* <JobCard>
-                          <div style={{ width: "70px", display: "flex", justifyContent: "center" }}>
-                            <SiTesla size={45} />
-                          </div>
-                          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                            <p>[Tesla] Field Service Engineer</p>
-                            <p style={{ fontSize: "12px" }}>Tesla</p>
-                            <p style={{ fontSize: "12px" }}>경력 (3년이상), 대졸이상</p>
-                          </div>
-                        </JobCard> */}
                         <MainJobCard logo="tesla" title="Tesla" wlrrms="[Tesla] Field Service Engineer" 경력="경력 (3년이상), 대졸이상" />
                         <MainJobCard logo="naver" title="Naver" wlrrms="[NAVER] 프론트엔드 개발자" 경력="경력 신입" />
                         <MainJobCard logo="meta" title="Facebook" wlrrms="[Facebook] 백엔드 개발자" 경력="경력 (3년이상), 대졸이상" />
