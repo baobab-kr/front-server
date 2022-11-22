@@ -5,8 +5,9 @@ import { AiOutlineClose } from "react-icons/ai";
 import Avator from "components/Avator/Avator";
 import CommentCard from "components/Comment/CommentCard/CommentCard";
 import { iComment } from "Types/indexPage";
-import { createComment, getComments } from "api/indexPage";
+import { createComment, getCommentCount, getComments } from "api/indexPage";
 import InfiniteScroll from "components/InfiniteScroll";
+import { user } from "Types/user";
 
 type tProps = {
   status: boolean;
@@ -17,6 +18,8 @@ type tProps = {
 };
 
 export default function Comment({ status, setStatus, boardID, commentCnt, setCommentCnt }: tProps): JSX.Element {
+  const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
+
   const [comments, setComments] = useState<iComment[]>([]);
   const [page, setPage] = useState<number>(0);
   const [comment, setComment] = useState<string>("");
@@ -40,6 +43,7 @@ export default function Comment({ status, setStatus, boardID, commentCnt, setCom
   useEffect(() => {
     if (isLastPage) return;
     getCommentsFnc();
+    getCommentCountFnc();
   }, [page]);
 
   const getCommentsFnc = async () => {
@@ -58,6 +62,12 @@ export default function Comment({ status, setStatus, boardID, commentCnt, setCom
       });
   };
 
+  const getCommentCountFnc = async () => {
+    await getCommentCount(boardID!).then((res) => {
+      console.log(res);
+    });
+  };
+
   const loadMore = () => {
     setPage(page + 1);
   };
@@ -69,35 +79,40 @@ export default function Comment({ status, setStatus, boardID, commentCnt, setCom
         <AiOutlineClose onClick={() => setStatus(false)} />
       </S.HeaderArea>
       <S.UserArea>
-        <S.UserContainer>
-          <S.UserInfo>
-            <Avator height="2em" width="2rem" userId={"1"} />
-            <div>tugwon</div>
-          </S.UserInfo>
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <S.Textarea
-              ref={textArea}
-              placeholder="댓글을 입력하세요!"
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              onKeyDown={resize}
-              onKeyUp={resize}
-              maxLength={4000}
-            ></S.Textarea>
-            <S.TextActionArea>
-              <div>Cancel</div>
-              <div className="respond" onClick={onRespond}>
-                Respond
-              </div>
-            </S.TextActionArea>
-          </div>
-        </S.UserContainer>
+        {userInfo !== null && (
+          <S.UserContainer>
+            <S.UserInfo>
+              <Avator height="2em" width="2rem" userId={"1"} />
+              <div>tugwon</div>
+            </S.UserInfo>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <S.Textarea
+                ref={textArea}
+                placeholder="댓글을 입력하세요!"
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                onKeyDown={resize}
+                onKeyUp={resize}
+                maxLength={4000}
+              ></S.Textarea>
+              <S.TextActionArea>
+                <div>Cancel</div>
+                <div className="respond" onClick={onRespond}>
+                  Respond
+                </div>
+              </S.TextActionArea>
+            </div>
+          </S.UserContainer>
+        )}
+        {userInfo === null && <div style={{ width: "100%", textAlign: "center" }}>댓글 작성을 하려면 로그인이 필요합니다.</div>}
       </S.UserArea>
 
       <S.CommentArea>
         <InfiniteScroll loadFnc={loadMore} data={comments} isLast={isLastPage} isOnTop={false}>
           {comments.map((data) => {
-            return <CommentCard data={data} comments={comments} setComments={setComments} key={data.id} />;
+            return (
+              <CommentCard data={data} comments={comments} setComments={setComments} commentCnt={commentCnt} setCommentCnt={setCommentCnt} key={data.id} />
+            );
           })}
         </InfiniteScroll>
       </S.CommentArea>
