@@ -96,3 +96,11 @@ export const VisibilityBtnArea = styled.div`
 
   cursor: pointer;
 `;
+
+export const GitHubLogin = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+`;

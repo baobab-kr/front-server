@@ -20,6 +20,7 @@ import Darkmode from "./store/store.theme";
 import MyApplyJobs from "pages/apply_job/my-apply-jobs/MyApplyJobs";
 import NotFound from "pages/NotFound/NotFound";
 import { USER_TYPE } from "constants/index";
+import GithubLogin from "pages/github-login/GithubLogin";
 
 export default function App(): JSX.Element {
   const [, setDarkMode] = useRecoilState<boolean>(Darkmode);
@@ -27,7 +28,7 @@ export default function App(): JSX.Element {
   useEffect(() => {
     getUserInfoFnc();
     const theme = localStorage.getItem("Theme");
-    setDarkMode(theme ? (theme === "dark" ? true : false) : false);
+    setDarkMode(theme ? (theme === "dark" ? true : false) : true);
   }, []);
 
   const getUserInfoFnc = async () => {
@@ -59,6 +60,7 @@ export default function App(): JSX.Element {
           <Route path="/jobs/:id" element={<PrivateRoute authentication={false} component={JobDetail} />} />
           <Route path="/business" element={<PrivateRoute authentication={false} component={BusinessPage} />} />
           <Route path="/apply/:id" element={<PrivateRoute authentication={false} component={ApplyJob} />} />
+          <Route path="/github-login" element={<GithubLogin />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

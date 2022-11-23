@@ -1,10 +1,12 @@
 import React, { Dispatch, SetStateAction, useState, KeyboardEvent, useEffect } from "react";
 import API from "../../../api";
 
-import { LoginOverlay, LoginContainer, LoginWrapper, CustomInput, VisibilityBtnArea, LoginArea, TitleArea, LoginBtn } from "./style";
+import { GitHubLogin, LoginOverlay, LoginContainer, LoginWrapper, CustomInput, VisibilityBtnArea, LoginArea, TitleArea, LoginBtn } from "./style";
 import { MdVisibilityOff, MdVisibility } from "react-icons/md";
 import Wave from "./Wave/Wave";
 import Swal from "sweetalert2";
+import { AiFillGithub } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
 
 type tOpen = {
   open: boolean;
@@ -12,6 +14,7 @@ type tOpen = {
 };
 
 export default function LoginForm({ open, setOpen }: tOpen): JSX.Element {
+  const navigate = useNavigate();
   const [id, setID] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [visibility, setVisibility] = useState<boolean>(false);
@@ -28,6 +31,7 @@ export default function LoginForm({ open, setOpen }: tOpen): JSX.Element {
   const handleSubmit = async () => {
     API.post("/users/login", { userid: id, password: password }, { withCredentials: true })
       .then((res) => {
+        console.log("/users/login => ", res);
         localStorage.setItem("atexpires", JSON.stringify(res.headers.atexpires));
         localStorage.setItem("rtexpires", JSON.stringify(res.headers.rtexpires));
         localStorage.setItem("user", JSON.stringify(res.data));
@@ -42,6 +46,12 @@ export default function LoginForm({ open, setOpen }: tOpen): JSX.Element {
     if (e.key === "Enter") {
       handleSubmit();
     }
+  };
+
+  const githubLogin = () => {
+    const url: string = `https://github.com/login/oauth/authorize?client_id=${process.env.REACT_APP_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_GITHUB_CALLBACK_URL}`;
+
+    document.location.href = url;
   };
 
   useEffect(() => {
@@ -86,6 +96,12 @@ export default function LoginForm({ open, setOpen }: tOpen): JSX.Element {
             </VisibilityBtnArea>
 
             <LoginBtn onClick={handleSubmit}>로그인</LoginBtn>
+            <LoginBtn style={{ marginTop: "-25px" }} onClick={githubLogin}>
+              <GitHubLogin>
+                <AiFillGithub size={20} />
+                <p>GitHub로 로그인 하기</p>
+              </GitHubLogin>
+            </LoginBtn>
           </LoginArea>
         </LoginWrapper>
       </LoginContainer>
