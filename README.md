@@ -45,9 +45,12 @@
 
 ## Environment Table
 
-| Variable           | dev | qa/prod |        Example         | Explanation                                    |
-| ------------------ | :-: | :-----: | :--------------------: | ---------------------------------------------- |
-| NODE_ENV           | ✅  |   ✅    |      development       | Nodejs의 실행 환경을 지정합니다.               |
-| REACT_APP_API_ROOT | ✅  |   ✅    | http://localhost:3000/ | Backend API의 도메인과 포트 번호를 지정합니다. |
-| PORT               | ✅  |   ✅    |          2999          | Frontend의 포트 번호를 지정합니다.             |
-| GENERATE_SOURCEMAP | ✅  |   ✅    |         false          | 디버깅을 위한 파일의 생성 여부를 지정합니다.   |
+| Variable                      | dev | qa/prod |              Example               | Explanation                                           |
+| ----------------------------- | :-: | :-----: | :--------------------------------: | ----------------------------------------------------- |
+| NODE_ENV                      | ✅  |   ✅    |            development             | Nodejs의 실행 환경을 지정합니다.                      |
+| REACT_APP_API_ROOT            | ✅  |   ✅    |       http://localhost:3000        | Backend API의 도메인과 포트 번호를 지정합니다.        |
+| REACT_APP_CLIENT_ID           | ✅  |   ✅    |              PRIVATE               | Github OAuth에 사용 할 Client ID를 지정합니다.        |
+| REACT_APP_CLIENT_SECRET       | ✅  |   ✅    |              PRIVATE               | Github OAuth에 사용 할 Client Secret ID를 지정합니다. |
+| REACT_APP_GITHUB_CALLBACK_URL | ✅  |   ✅    | http://localhost:2999/github-login | Backend API의 도메인과 포트 번호를 지정합니다.        |
+| PORT                          | ✅  |   ✅    |                2999                | Frontend의 포트 번호를 지정합니다.                    |
+| GENERATE_SOURCEMAP            | ✅  |   ✅    |               false                | 디버깅을 위한 파일의 생성 여부를 지정합니다.          |
