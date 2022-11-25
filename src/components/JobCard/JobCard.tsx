@@ -1,64 +1,74 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { CardWrapper, CardImageArea, CardImage, CardFooter, CardLogo, CardLogoImg, CardTitle, CardName, CardIntro, CardDetail } from "./style";
 import de from "../../baobab-data/develop1.jpg";
 import teslalogo from "../../baobab-data/tesla128.png";
 import { useNavigate } from "react-router-dom";
+import { tJob } from "Types/Jobs";
 
 type Props = {
+  jobItem: tJob;
   board: number;
   width: string;
   height: string;
   imgHeight: string;
   isMyHome: boolean;
+  previewLogo: string;
   deleteBoard: (id: number) => void;
 };
 
-export default function JobCard({ board, width, height, isMyHome, deleteBoard, imgHeight }: Props): JSX.Element {
+export default function JobCard({ jobItem, board, width, height, isMyHome, deleteBoard, previewLogo, imgHeight }: Props): JSX.Element {
   const navigate = useNavigate();
-
-  const location = ["서울시 강남구", "경기도 성남시", "서울시 송파구", "서울시 송파구"];
-  const jobs = ["프론트엔드 개발자", "서비스 기획자(PM/PO)", "UI/UX 디자이너", "디자인 팀 리더"];
-  const CardIntros = [
-    "AR/VR Development UNREAL Engine Front-end Development",
-    "국내 1등 관리형 에듀테크 스타트업 IHFB에서 '교육 격차'라는 버그를 잡을 멋진 동료를 찾습니다 ",
-    "우리 모두에게 필요한 커리어 플랫폼을 함께 만들어 가실 새로운 팀원을 기다립니다. 관심 있으신 분이라면 누구든지 환영해요. 😊",
-    "프로덕트 기획과 브랜드 경험, 고객 중심 디자인 등 디자인 영역 전반에 걸쳐 역량을 갖춘 디자인 팀 리더 분이 꼭 필요한 시점이 왔습니다.",
-  ];
-  const 경력s = ["경력 1년 이상", "경력 5 - 8년", "신입", "경력 5 - 8년"];
-  const periods = ["채용시까지", "마감 11월 21일", "상시채용", "마감 11월 26일"];
-  const 회사명s = ["BLOCERY", "cheery", "HYENKWANG", "JBROHOLDINGS"];
+  const [logo, setLogo] = useState<string>("");
 
   const routeDetailPage = () => {
+    if (board === -1) return;
     navigate(`/jobs/${board}`);
   };
+  const orderType = (type: number) => {
+    switch (type) {
+      case 0:
+        return "경력무관";
+      case 1:
+        return "인턴";
+      case 2:
+        return "신입";
+      case 3:
+        return "경력";
+      default:
+        return "경력무관";
+    }
+  };
+
   return (
     <CardWrapper>
       <div>
         <div className="card--heard">
           <div style={{ position: "relative" }}>
             <CardImageArea onClick={routeDetailPage}>
-              <CardImage src={require(`../../jobimages/job${board % 9}.png`)} />
+              {jobItem.logo !== "" && <CardImage src={`${process.env.REACT_APP_API_ROOT}/jobs/getToastImage?file_name=${jobItem.logo}`} alt="logo" />}
+              {previewLogo !== "" && <CardImage src={previewLogo} alt="logo" />}
             </CardImageArea>
           </div>
         </div>
         <CardFooter>
           <div>
             <CardLogo>
-              <CardLogoImg src={require(`../../jobimages/job${board % 9}.png`)} />
+              {jobItem.logo !== "" && <CardLogoImg src={`${process.env.REACT_APP_API_ROOT}/jobs/getToastImage?file_name=${jobItem.logo}`} alt="logo" />}
+              {previewLogo !== "" && <CardImage src={previewLogo} alt="logo" />}
             </CardLogo>
             <CardTitle>
-              <div className="jobLink">{jobs[board % 4]}</div>
+              <div className="jobLink">[{jobItem.field}]</div>
               <div style={{ padding: "6px 0 8px" }}>
-                <CardName>{회사명s[board % 4]}</CardName>
-                <div className="location">{location[board % 4]}</div>
+                <CardName>{jobItem.companyName}</CardName>
+                <div className="location">{jobItem.location}</div>
               </div>
             </CardTitle>
           </div>
-          <CardIntro>{CardIntros[board % 4]}</CardIntro>
+          <CardIntro>{jobItem.message}</CardIntro>
           <CardDetail>
-            <div className="experience">{경력s[board % 4]}</div>
-            <div className="period">{periods[board % 4]}</div>
-            <div className="field">{jobs[board % 4]}</div>
+            <div className="experience">{orderType(jobItem.careerType)}</div>
+            <div className="period">{jobItem.salary}만원</div>
+            <div className="field">{jobItem.field}</div>
           </CardDetail>
         </CardFooter>
       </div>

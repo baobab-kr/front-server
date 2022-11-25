@@ -11,7 +11,7 @@ export const Wrapper = styled.div`
 export const WrapperInner = styled.div`
   position: relative;
   display: grid;
-  grid-template-columns: 340px auto;
+  grid-template-columns: auto;
   text-align: left;
 `;
 

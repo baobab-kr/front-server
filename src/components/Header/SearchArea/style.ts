@@ -22,6 +22,11 @@ export const SearchContainer = styled.div`
   height: 260px;
   background: ${({ theme }) => theme.backgroundColor.subColor};
   padding: 0px 250px;
+
+  @media screen and (max-width: 495px) {
+    height: 150px;
+    padding: 0px 150px;
+  }
 `;
 
 export const SearchWrapper = styled.div`
@@ -47,4 +52,14 @@ export const CustomInput = styled.input`
   font-weight: 500;
   padding: 0px 50px 34px 20px;
   width: 100%;
+
+  @media screen and (max-width: 495px) {
+    width: 80%;
+    padding: 0px 0px 15px 0px;
+    font-size: 20px;
+  }
+`;
+
+export const XBtn = styled.div`
+  margin: 8px;
 `;

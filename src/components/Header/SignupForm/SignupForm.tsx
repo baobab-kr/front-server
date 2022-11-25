@@ -139,6 +139,7 @@ export default function SignupForm({ open, setOpen }: tOpen): JSX.Element {
     }
 
     const techStack = JOB_GROUP.find((q) => q.value === job);
+    console.log(techStack);
     users_register(id, email, name, password, emailCode, userType, techStack!.label)
       .then(() => {
         Swal.fire("회원가입 되었습니다.");

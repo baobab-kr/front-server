@@ -1,7 +1,7 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
-import { SearchOverlay, SearchContainer, SearchWrapper, CustomInput } from "./style";
+import React, { Dispatch, SetStateAction, useState, KeyboardEvent } from "react";
+import { SearchOverlay, SearchContainer, SearchWrapper, CustomInput, XBtn } from "./style";
 import { BsSearch, BsXSquareFill } from "react-icons/bs";
-
+import { useNavigate } from "react-router-dom";
 type tOpen = {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
@@ -9,7 +9,7 @@ type tOpen = {
 
 export default function SearchArea({ open, setOpen }: tOpen): JSX.Element {
   const [searchWord, setSearchWord] = useState<string>("");
-
+  const navigate = useNavigate();
   const closeOverlay = () => {
     setOpen(false);
   };
@@ -21,6 +21,13 @@ export default function SearchArea({ open, setOpen }: tOpen): JSX.Element {
 
   const cancle = () => {
     setSearchWord("");
+  };
+
+  const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      navigate(`/search?title=${searchWord}`);
+      setOpen(false);
+    }
   };
 
   return (
@@ -35,8 +42,11 @@ export default function SearchArea({ open, setOpen }: tOpen): JSX.Element {
             onChange={(e) => {
               setSearchWord(e.target.value);
             }}
+            onKeyPress={handleKeyPress}
           />
-          <BsXSquareFill color="#99999" size={30} onClick={cancle} style={{ margin: "8px" }} />
+          <XBtn>
+            <BsXSquareFill color="#99999" size={30} onClick={cancle} />
+          </XBtn>
         </SearchWrapper>
       </SearchContainer>
     </SearchOverlay>

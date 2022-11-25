@@ -3,7 +3,7 @@ import InfiniteScroll from "../../components/InfiniteScroll";
 import { Board } from "Types/main";
 import Card from "../../components/Card";
 import MainJobCard from "../../components/JobCard/MainJobCard";
-import { getMainBoard } from "../../api/board";
+import { getBoardSearchOfTitle, getMainBoard } from "../../api/board";
 import BannerImage from "../../assets/banner2.jpg";
 import {
   Wrapper,
@@ -20,7 +20,7 @@ import {
   JobHeader,
   JobList,
 } from "./style";
-
+import { useLocation } from "react-router-dom";
 import { IoBusinessSharp } from "react-icons/io5";
 import "../../style/tagInputStyle.css";
 import { PuffLoader } from "react-spinners";
@@ -33,7 +33,8 @@ function getWindowSize() {
   return { innerWidth, innerHeight };
 }
 
-export default function MainPage(): JSX.Element {
+export default function MainSearchPage(): JSX.Element {
+  const location = useLocation();
   const [windowSize, setWindowSize] = useState(getWindowSize());
   const [board, setBoard] = useState<Board[]>([]);
   // const [tags, setTags] = useState<string[]>([]);
@@ -60,9 +61,10 @@ export default function MainPage(): JSX.Element {
 
   const getInfo = async () => {
     if (mainState) return;
-    console.log(page);
+    const query = queryParse(location.search);
+    console.log(query);
 
-    await getMainBoard(page)
+    await getBoardSearchOfTitle(page, query["title"])
       .then((data) => {
         setPage(page + 1);
         setBoard((curInfoArray) => [...curInfoArray, ...data]); // state에 추가
@@ -71,6 +73,18 @@ export default function MainPage(): JSX.Element {
         console.log(err);
         setMainState(true);
       });
+  };
+
+  const queryParse = (str: string): any => {
+    const temp: string[] = str.split("?");
+    const buff: any = {};
+    temp.forEach((q) => {
+      if (q !== "") {
+        const t = q.split("=");
+        buff[t[0]] = t[1];
+      }
+    });
+    return buff;
   };
 
   const fallback = () => {
@@ -113,7 +127,7 @@ export default function MainPage(): JSX.Element {
               <div>
                 <ItemArea>
                   <ItemTitleArea>
-                    <span>최신 아티클</span>
+                    <span>검색</span>
                   </ItemTitleArea>
                   <InfiniteScroll loadFnc={getInfo} data={board} isLast={mainState} isOnTop={true}>
                     {board?.map((item: Board, index: number) => {
@@ -130,61 +144,6 @@ export default function MainPage(): JSX.Element {
                       );
                     })}
                   </InfiniteScroll>
-                  <JobArea>
-                    <div style={{ height: "100%" }}>
-                      <JobHeader>
-                        <IoBusinessSharp />
-                        새로운 채용 공고
-                      </JobHeader>
-                      <JobList>
-                        {jobs.length > 0 && (
-                          <MainJobCard
-                            logo={
-                              <img
-                                src={`${process.env.REACT_APP_API_ROOT}/jobs/getToastImage?file_name=${jobs[0].logo}`}
-                                alt="logo"
-                                width={55}
-                                height={55}
-                              ></img>
-                            }
-                            title={jobs[0].title}
-                            wlrrms={`[${jobs[0].companyName}] ${jobs[0].field}`}
-                            경력={jobs[0].message}
-                          />
-                        )}
-                        {jobs.length > 1 && (
-                          <MainJobCard
-                            logo={
-                              <img
-                                src={`${process.env.REACT_APP_API_ROOT}/jobs/getToastImage?file_name=${jobs[1].logo}`}
-                                alt="logo"
-                                width={55}
-                                height={55}
-                              ></img>
-                            }
-                            title={jobs[1].title}
-                            wlrrms={`[${jobs[1].companyName}] ${jobs[1].field}`}
-                            경력={jobs[1].message}
-                          />
-                        )}
-                        {jobs.length > 2 && (
-                          <MainJobCard
-                            logo={
-                              <img
-                                src={`${process.env.REACT_APP_API_ROOT}/jobs/getToastImage?file_name=${jobs[2].logo}`}
-                                alt="logo"
-                                width={55}
-                                height={55}
-                              ></img>
-                            }
-                            title={jobs[2].title}
-                            wlrrms={`[${jobs[2].companyName}] ${jobs[2].field}`}
-                            경력={jobs[2].message}
-                          />
-                        )}
-                      </JobList>
-                    </div>
-                  </JobArea>
                 </ItemArea>
               </div>
             </ContentArea>

@@ -20,16 +20,16 @@ export function loginAPI(id_: string, password_: string): Promise<login> {
   });
 }
 
-export function githubLoginAPI(code: string): Promise<login> {
+export function githubLoginAPI(code: string): Promise<any> {
   const login = { code: code };
   console.log(login);
-  return new Promise<login>((resolve, reject) => {
+  return new Promise<any>((resolve, reject) => {
     API.post("/users/github-login", login)
       .then((res) => {
         if (res.data.message) {
           reject(res.data.message);
         }
-        resolve(res.data);
+        resolve(res);
       })
       .catch((err) => {
         console.log("err", err);

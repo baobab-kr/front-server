@@ -21,6 +21,7 @@ import MyApplyJobs from "pages/apply_job/my-apply-jobs/MyApplyJobs";
 import NotFound from "pages/NotFound/NotFound";
 import { USER_TYPE } from "constants/index";
 import GithubLogin from "pages/github-login/GithubLogin";
+import MainSearchPage from "pages/main/MainSearchPage";
 
 export default function App(): JSX.Element {
   const [, setDarkMode] = useRecoilState<boolean>(Darkmode);
@@ -50,6 +51,7 @@ export default function App(): JSX.Element {
         <ThemeSwitch />
         <Routes>
           <Route path="/" element={<MainPage />} />
+          <Route path="/search" element={<MainSearchPage />} />
           <Route path="/@:id" element={<PrivateRoute authentication={true} component={PersonPage} />} />
           <Route path="/@:id/:boardid" element={<PrivateRoute authentication={false} component={IndexPage} />} />
           <Route path="/@:id/my-apply-jobs" element={<PrivateRoute authentication={true} component={MyApplyJobs} role={USER_TYPE.DEVELOPER} />} />

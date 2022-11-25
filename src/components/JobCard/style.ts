@@ -3,9 +3,13 @@ import styled from "styled-components";
 export const CardWrapper = styled.div`
   position: relative;
   width: 330px;
+  height: 380px;
 
   @media screen and (max-width: 1810px) {
     width: 300px;
+  }
+  @media screen and (max-width: 480px) {
+    width: 100%;
   }
 `;
 
@@ -78,6 +82,7 @@ export const CardTitle = styled.div`
     padding-right: 40px;
     position: relative;
     transition: all 0.15s;
+    width: 100%;
   }
   div {
     color: #e4e5e7;
@@ -142,7 +147,7 @@ export const CardDetail = styled.div`
 export const MainJobCardWrapper = styled.div`
   width: 100%;
   height: 100px;
-  background-color: #1d1d1d;
+  background-color: ${({ theme }) => theme.backgroundColor.bg};
   box-shadow: 2px 2px 8px rgb(0 0 0 / 90%);
   border-radius: 5px;
 
@@ -150,7 +155,14 @@ export const MainJobCardWrapper = styled.div`
 
   padding: 10px 0px;
 
+  color: ${({ theme }) => theme.fontColor.color};
+
   @media screen and (max-width: 1810px) {
     height: 90px;
   }
+`;
+
+export const MainCardColor = styled.p`
+  color: ${({ theme }) => theme.fontColor.color};
+  font-size: 12px;
 `;

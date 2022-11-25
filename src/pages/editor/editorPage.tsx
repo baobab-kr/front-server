@@ -76,8 +76,12 @@ function Popup({ onClose, data, setData, boardId }: props) {
     formData.append("board_status", isPublic ? 0 : 1);
     if (fileList) formData.append("thumbnail", fileList![0]);
     console.log("data", data.tag_name);
-    for (let i = 0; i < data.tag_name.length; i++) {
-      formData.append("tag_name", data.tag_name[i]);
+    if (data.tag_name.length === 1) {
+      formData.append("tag_name[0]", data.tag_name[0]);
+    } else {
+      for (let i = 0; i < data.tag_name.length; i++) {
+        formData.append("tag_name", data.tag_name[i]);
+      }
     }
     console.log("_createBoard", formData.get("tag_name"));
 

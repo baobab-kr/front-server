@@ -8,6 +8,8 @@ import InfiniteScroll from "components/InfiniteScroll";
 import Category from "../../Category/Category";
 import { getMainBoard } from "api/board";
 import JobCard from "components/JobCard/JobCard";
+import { tJob } from "Types/Jobs";
+import { getJobsBoardAll } from "api/jobs";
 
 function getWindowSize() {
   const { innerWidth, innerHeight } = window;
@@ -17,7 +19,7 @@ function getWindowSize() {
 export default function HeadHunterMgmt(): JSX.Element {
   const navigate = useNavigate();
   const [windowSize, setWindowSize] = useState(getWindowSize());
-  const [board, setBoard] = useState<Board[]>([]);
+  const [board, setBoard] = useState<tJob[]>([]);
   const [mainState, setMainState] = useState<boolean>(false);
   const [page, setPage] = useState<number>(0);
 
@@ -36,10 +38,9 @@ export default function HeadHunterMgmt(): JSX.Element {
   const getInfo = async () => {
     if (mainState) return;
 
-    await getMainBoard(page)
+    await getJobsBoardAll(page)
       .then((data) => {
         setPage(page + 1);
-        if (data.length - 1 === 2) data[2].thumbnail = "";
         setBoard((curInfoArray) => [...curInfoArray, ...data]); // state에 추가
       })
       .catch((err) => {
@@ -63,9 +64,9 @@ export default function HeadHunterMgmt(): JSX.Element {
       <div style={{ zIndex: "1", height: "100%" }}>
         <Wrapper>
           <WrapperInner>
-            <NavArea>
+            {/* <NavArea>
               <Category />
-            </NavArea>
+            </NavArea> */}
             <ContentArea>
               <div>
                 <ItemTitleArea>
@@ -73,15 +74,17 @@ export default function HeadHunterMgmt(): JSX.Element {
                 </ItemTitleArea>
                 <ItemArea>
                   <InfiniteScroll loadFnc={getInfo} data={board} isLast={mainState} isOnTop={true}>
-                    {board?.map((item: Board, index: number) => {
+                    {board?.map((item: tJob, index: number) => {
                       return (
                         <JobCard
                           key={index}
-                          board={index}
+                          jobItem={item}
+                          board={item.id}
                           width={windowSize.innerWidth > 1810 ? "320px" : "300px"}
                           height={windowSize.innerWidth > 1810 ? "330px" : "310px"}
                           imgHeight={"45%"}
                           isMyHome={false}
+                          previewLogo={""}
                           deleteBoard={() => {}}
                         />
                       );

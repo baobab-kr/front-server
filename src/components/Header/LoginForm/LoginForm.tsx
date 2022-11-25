@@ -51,6 +51,8 @@ export default function LoginForm({ open, setOpen }: tOpen): JSX.Element {
   const githubLogin = () => {
     const url: string = `https://github.com/login/oauth/authorize?client_id=${process.env.REACT_APP_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_GITHUB_CALLBACK_URL}`;
 
+    // window.open(url);
+
     document.location.href = url;
   };
 

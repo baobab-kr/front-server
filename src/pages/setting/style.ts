@@ -171,6 +171,7 @@ const ActionArea = styled.div`
   width: 100%;
   display: flex;
   justify-content: flex-end;
+  gap: 15px;
 `;
 
 const SaveBtn = styled.div`

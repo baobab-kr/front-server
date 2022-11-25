@@ -84,7 +84,7 @@ export default function Card({ board, width, height, isMyHome, deleteBoard, imgH
   //
 
   return (
-    <HoverArea isHover={location.pathname === "/"} height="" width="">
+    <HoverArea isHover={location.pathname === "/"} height={height} width={width}>
       <CardWrapper
         className="card"
         width={width}

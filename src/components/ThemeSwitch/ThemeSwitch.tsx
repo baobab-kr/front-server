@@ -1,25 +1,34 @@
 import React from "react";
 import { SwitchContainer, Mode, Divider } from "./style";
 import { useRecoilState } from "recoil";
+import { useLocation } from "react-router-dom";
+
 import Darkmode from "../../store/store.theme";
 
 export default function ThemeSwitch(): JSX.Element {
+  const disalbeLocation = ["/editor"];
+  const location = useLocation();
+
   const [darkMode, setDarkMode] = useRecoilState<boolean>(Darkmode);
 
   const modeHandler = (state: boolean) => {
     localStorage.setItem("Theme", state ? "dark" : "light");
     setDarkMode(state);
   };
-
+  console.log(location.pathname);
   return (
-    <SwitchContainer>
-      <Mode isSelected={!darkMode} onClick={() => modeHandler(false)}>
-        LIGHT
-      </Mode>
-      <Divider />
-      <Mode isSelected={darkMode} onClick={() => modeHandler(true)}>
-        DARK
-      </Mode>
-    </SwitchContainer>
+    <>
+      {!disalbeLocation.includes(location.pathname) && (
+        <SwitchContainer>
+          <Mode isSelected={!darkMode} onClick={() => modeHandler(false)}>
+            LIGHT
+          </Mode>
+          <Divider />
+          <Mode isSelected={darkMode} onClick={() => modeHandler(true)}>
+            DARK
+          </Mode>
+        </SwitchContainer>
+      )}
+    </>
   );
 }

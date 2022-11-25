@@ -16,7 +16,7 @@ type tProps = {
 
 export default function StepFirst({ value, setValue, stepperController }: tProps): JSX.Element {
   const setpController = () => {
-    if (value.BusinessLicense !== null && value.ManagerEMail !== "" && value.ManagerName !== "" && value.ManagerPhone !== "" && value.URL !== "") {
+    if (value.BusinessLicense !== null && value.ManagerEMail !== "" && value.ManagerName !== "" && value.ManagerPhone !== "") {
       stepperController(1);
     } else {
       Swal.fire("정보를 다시 확인해주세요.");
@@ -34,10 +34,6 @@ export default function StepFirst({ value, setValue, stepperController }: tProps
       });
     }
   };
-
-  useEffect(() => {
-    console.log(value.ManagerName);
-  }, [value.ManagerName]);
 
   return (
     <>
@@ -84,21 +80,6 @@ export default function StepFirst({ value, setValue, stepperController }: tProps
               setValue={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setValue((v) => {
                   return { ...v, ManagerPhone: e.target.value };
-                })
-              }
-            />
-          </div>
-        </InputContainer>
-
-        <InputContainer title="채용을 지원할 수 있는 URL" description="채용 정보 확인와 지원이 가능한 URL을 입력해주세요.">
-          <div className="input">
-            <InputText
-              maxLength={50}
-              placeholder="URL을 입력해주세요"
-              value={value.URL}
-              setValue={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setValue((v) => {
-                  return { ...v, URL: e.target.value };
                 })
               }
             />

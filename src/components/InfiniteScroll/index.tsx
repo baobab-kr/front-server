@@ -8,11 +8,12 @@ import { TopButton } from "./style";
 
 import { FiArrowUp } from "react-icons/fi";
 import { iComment } from "Types/indexPage";
+import { tApplyJob, tJob } from "Types/Jobs";
 
 type Props = {
   children: ReactNode;
   loadFnc: () => void;
-  data: Board[] | iComment[];
+  data: Board[] | iComment[] | tJob[] | tApplyJob[];
   isLast: boolean;
   isOnTop: boolean;
 };

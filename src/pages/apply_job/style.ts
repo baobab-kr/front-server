@@ -6,6 +6,7 @@ export const Wrapper = styled.div`
   width: 100%;
 
   max-width: 1370px;
+  color: ${({ theme }) => theme.fontColor.color};
 `;
 
 export const Template = styled.div`
@@ -58,7 +59,7 @@ export const CustomEditinput = styled.input`
   background: none;
   color: #e4e5e7;
 
-  width: 60%;
+  width: 80%;
   height: 35px;
   padding-left: 15px;
   font-size: 1rem;
@@ -92,7 +93,37 @@ export const CareerButton = styled.div`
   background-color: white;
   border: 2px solid black;
 
+  .isSelected {
+    background-color: #448fff;
+  }
+  p {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+`;
+
+export const CheckBoxBtn = styled.div`
+  width: 25px;
+  height: 25px;
+  border: 1px solid #35363b;
+  border-radius: 3px;
+  padding: 0px;
+`;
+
+export const ThumbnailArea = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
+  width: 100%;
+  height: 200px;
+  max-width: 130px;
+  border-radius: 8px;
+  padding: 15%;
+  background-color: ${({ theme }) => theme.backgroundColor.subColor};
+  margin: 0px auto;
+  object-fit: contain;
+  overflow: hidden;
 `;
