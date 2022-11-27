@@ -110,16 +110,6 @@ export default function Setting(): JSX.Element {
 
   return (
     <S.Wrapper>
-      <S.RouterArea>
-        {/* <S.Routers>
-          <MdBusinessCenter size={20} />
-          채용 관리
-        </S.Routers> */}
-        <S.Routers className="select">
-          <FiSettings />
-          설정
-        </S.Routers>
-      </S.RouterArea>
       <S.ContentWrapper>
         <S.SettingArea>
           <S.Header>

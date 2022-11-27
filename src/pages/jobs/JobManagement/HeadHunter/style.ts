@@ -53,18 +53,38 @@ export const ItemArea = styled.div`
   grid-template-columns: repeat(6, 330px);
 
   @media screen and (max-width: 2170px) {
-    grid-template-columns: repeat(4, 330px);
+    grid-template-columns: repeat(5, 330px);
   }
   @media screen and (max-width: 1810px) {
     grid-gap: 25px;
-    grid-template-columns: repeat(4, 300px);
+    grid-template-columns: repeat(5, 300px);
   }
   @media screen and (max-width: 1600px) {
     grid-gap: 25px;
+    grid-template-columns: repeat(4, 300px);
+  }
+  @media screen and (max-width: 1278px) {
+    grid-gap: 25px;
     grid-template-columns: repeat(3, 300px);
   }
-  @media screen and (max-width: 1260px) {
+
+  @media screen and (max-width: 1080px) {
     grid-gap: 25px;
     grid-template-columns: repeat(2, 300px);
+  }
+
+  @media screen and (max-width: 754px) {
+    grid-row-gap: 25px;
+    grid-template-columns: repeat(2, 300px);
+  }
+
+  @media screen and (max-width: 665px) {
+    grid-row-gap: 25px;
+    grid-template-columns: repeat(1, 400px);
+  }
+
+  @media screen and (max-width: 480px) {
+    grid-row-gap: 25px;
+    grid-template-columns: repeat(1, 100%);
   }
 `;

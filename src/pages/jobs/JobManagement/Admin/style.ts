@@ -63,9 +63,29 @@ export const ItemArea = styled.div`
     grid-gap: 25px;
     grid-template-columns: repeat(4, 300px);
   }
-  @media screen and (max-width: 1260px) {
+  @media screen and (max-width: 1278px) {
+    grid-gap: 25px;
+    grid-template-columns: repeat(3, 300px);
+  }
+
+  @media screen and (max-width: 1080px) {
     grid-gap: 25px;
     grid-template-columns: repeat(2, 300px);
+  }
+
+  @media screen and (max-width: 754px) {
+    grid-row-gap: 25px;
+    grid-template-columns: repeat(2, 300px);
+  }
+
+  @media screen and (max-width: 665px) {
+    grid-row-gap: 25px;
+    grid-template-columns: repeat(1, 400px);
+  }
+
+  @media screen and (max-width: 480px) {
+    grid-row-gap: 25px;
+    grid-template-columns: repeat(1, 100%);
   }
 `;
 

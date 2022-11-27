@@ -2,13 +2,14 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import { users_register } from "../../../api/signup";
 import { JOB_GROUP, USER_TYPE_SELECT } from "constants/index";
-import { SignupOverlay, SignupContainer, TitleArea, Button, ButtonArea, SiginupArea, SignupWrapper } from "./style";
+import { SignupOverlay, SignupContainer, TitleArea, Button, ButtonArea, SiginupArea, SignupWrapper, CloseBtnArea } from "./style";
 import Swal from "sweetalert2";
 
 import SignupStepperFirst from "./StepperFirst/SignupStepperFirst";
 import SignupStepperSecond from "./StepperSecond/SignupStepperSecond";
 import SignupStepperThird from "./StepperThird/SignupStepperThird";
 import Stepper from "./Stepper/Stepper";
+import { AiOutlineClose } from "react-icons/ai";
 
 type tConfirm = {
   name: boolean;
@@ -154,8 +155,11 @@ export default function SignupForm({ open, setOpen }: tOpen): JSX.Element {
   return (
     <SignupOverlay open={open} onClick={closeOverlay}>
       <SignupContainer onClick={prevet}>
+        <CloseBtnArea>
+          <AiOutlineClose onClick={closeOverlay} />
+        </CloseBtnArea>
         <TitleArea>
-          <p style={{ fontSize: "45px" }}>회원가입</p>
+          <p>회원가입</p>
         </TitleArea>
         <SiginupArea>
           <Stepper step={stepper} />

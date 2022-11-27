@@ -18,6 +18,7 @@ import {
   CustomInput,
   Title,
   SearchAccordion,
+  DateButton,
 } from "./style";
 import BannerImage from "../../assets/JobBanner.jpg";
 
@@ -140,9 +141,9 @@ export default function JobsPage(): JSX.Element {
   };
 
   const ExampleCustomInput = React.forwardRef(({ value, onClick }: any, ref: any) => (
-    <button style={{ color: "white", minWidth: "120px", minHeight: "15px" }} onClick={onClick} ref={ref}>
+    <DateButton onClick={onClick} ref={ref}>
       {value}
-    </button>
+    </DateButton>
   ));
 
   const submit = async () => {
@@ -248,6 +249,7 @@ export default function JobsPage(): JSX.Element {
                       <Title>기간</Title>
                       <div
                         style={{
+                          color: "red",
                           display: "flex",
                           padding: "13px",
                           border: "1px solid #35363b",

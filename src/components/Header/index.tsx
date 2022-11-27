@@ -13,6 +13,8 @@ import {
   Arrow,
   UserActionList,
   UserActionListItem,
+  SearchBtn,
+  UserActionSearch,
 } from "./style";
 import LogoImg2 from "../../assets/Logo2.png";
 import { userLogout } from "../../api/user";
@@ -149,7 +151,9 @@ export default function Header(): JSX.Element {
       </TabArea>
       <ItemWrapper>
         <SearchContainer>
-          <BsSearch onClick={seachClick} />
+          <SearchBtn>
+            <BsSearch onClick={seachClick} />
+          </SearchBtn>
           <SearchArea open={open} setOpen={setOpen} />
         </SearchContainer>
         <LoginForm open={loginModal} setOpen={setLoginModal} />
@@ -171,6 +175,9 @@ export default function Header(): JSX.Element {
                     <p>{userInfo.username}</p>
                   </div>
                   <hr color="#999999" />
+                  <UserActionSearch>
+                    <UserActionListItem onClick={seachClick}>검색</UserActionListItem>
+                  </UserActionSearch>
                   {userInfo?.role === USER_TYPE.DEVELOPER && <UserActionListItem onClick={navagateMy}>My Home</UserActionListItem>}
                   {userInfo?.role === USER_TYPE.HEADHUNTER && <UserActionListItem onClick={navagateJobMagt}>채용 관리</UserActionListItem>}
                   {userInfo?.role === USER_TYPE.ADMIN && <UserActionListItem onClick={navagateJobMagt}>채용 관리</UserActionListItem>}

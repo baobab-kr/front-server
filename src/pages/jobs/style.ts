@@ -75,6 +75,8 @@ export const Wrapper = styled.div`
   justify-content: center;
   padding: 0 20px;
   width: 100%;
+
+  color: ${({ theme }) => theme.fontColor.color};
 `;
 
 export const WrapperInner = styled.div`
@@ -264,4 +266,10 @@ export const CustomInput = styled.input`
 export const Title = styled.div`
   color: ${({ theme }) => theme.fontColor.color};
   min-width: 30px;
+`;
+
+export const DateButton = styled.button`
+  color: ${({ theme }) => theme.fontColor.color};
+  min-width: 120px;
+  min-height: 15px;
 `;

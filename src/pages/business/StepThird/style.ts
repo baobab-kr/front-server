@@ -5,6 +5,8 @@ export const Template = styled.div`
   border-radius: 10px;
   box-shadow: 10px 20px 20px 0 rgb(11 12 14 / 8%);
   margin-top: 30px;
+
+  color: ${({ theme }) => theme.fontColor.color};
 `;
 
 export const TemplateArea = styled.div`
@@ -12,7 +14,7 @@ export const TemplateArea = styled.div`
   position: relative;
 `;
 
-export const CompanyName = styled.h3`
+export const CompanyName = styled.div`
   font-size: 20px;
   margin-bottom: 10px;
 `;
@@ -50,12 +52,10 @@ export const ImageArea = styled.div`
 
   margin-top: 30px;
 `;
-
 export const TemplateSectionFooter = styled.div`
   margin-top: 30px;
   margin-bottom: 30px;
 `;
-
 export const InputWrap = styled.div`
   align-items: center;
   border-bottom: 1px solid #35363b;
@@ -124,6 +124,15 @@ export const BackButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+export const JobsDescriptionArea = styled.div`
+  display: flex;
+  gap: 40px;
+
+  @media screen and (max-width: 1000px) {
+    flex-direction: column;
+  }
 `;
 
 // export const Test = styled.div`

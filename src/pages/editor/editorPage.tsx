@@ -219,32 +219,12 @@ export default function EditorPage() {
     };
   }, []);
 
-  // const hooksController = (blob: Blob | File, callback: HookCallback) => {
-  //   const formData = new FormData();
-  //   formData.append("ToastImage", blob);
-
-  //   console.log("add", blob);
-
-  //   // API({
-  //   //   method: "post",
-  //   //   url: "/jobs/UploadToastUiImage",
-  //   //   data: formData,
-  //   //   headers: { "Content-Type": "multipart/form-data" },
-  //   // })
-  //   //   .then(function (response) {
-  //   //     console.log(response);
-  //   //   })
-  //   //   .catch(function (response) {
-  //   //     alert(response);
-  //   //   });
-  // };
-
   return (
     <>
       <E.TitleWrpper>
         <E.titleInput placeholder="제목을 입력하세요." onChange={titleHandler} value={editor.title}></E.titleInput>
         <div style={{ display: "flex", gap: "10px", width: "100%", justifyContent: "space-between" }}>
-          <div style={{ width: "50%" }}>
+          <E.TagSelectorArea>
             <ReactTagInput
               tags={editor.tag_name}
               placeholder="태그를 입력하세요"
@@ -254,7 +234,7 @@ export default function EditorPage() {
               maxTags={14}
               onChange={(newTags) => tagHandler(newTags)}
             />
-          </div>
+          </E.TagSelectorArea>
           {location.state !== null ? (
             <E.saveBtn className="btn_edit" onClick={onClickEvent}>
               Edit

@@ -9,7 +9,7 @@ import {
   CompanyName,
   JobOptionArea,
   TalentArea,
-  ImageArea,
+  JobsDescriptionArea,
   TemplateSectionFooter,
   InputWrap,
   LabelArea,
@@ -107,25 +107,6 @@ export default function StepThird({ stepFirst, stepSecond, stepperController }: 
     });
   }
 
-  // const saveImage = async () => {
-  //   const formData: any = new FormData();
-  //   formData.append("profile", stepSecond.Image![0]);
-  //   API({
-  //     method: "post",
-  //     url: "/jobs/UploadOfCompanyImage",
-  //     data: formData,
-  //     headers: { "Content-Type": "multipart/form-data" },
-  //   })
-  //     .then(function (response) {
-  //       image = response.data;
-  //       console.log("saveLicense", image);
-
-  //     })
-  //     .catch(function (response) {
-  //       alert(response);
-  //     });
-  // };
-
   const saveLicense = async () => {
     const formData: any = new FormData();
     formData.append("profile", stepSecond.Image![0]);
@@ -208,40 +189,39 @@ export default function StepThird({ stepFirst, stepSecond, stepperController }: 
     <>
       <Template>
         <TemplateArea>
-          <CompanyName>TESLA</CompanyName>
-          <Title>TESLA 엔지니어 모집</Title>
+          <div>
+            <CompanyName>{stepSecond.CompanyName}</CompanyName>
+          </div>
+          <Title>{stepSecond.Title}</Title>
           <div style={{ display: "flex", padding: "6px 0px 6px 0px", color: "rgba(255, 7, 110, 1)" }}>
             <div>마감일 : &nbsp;</div>
             <div>{dateOrder()}</div>
           </div>
 
-          <div style={{ display: "flex", gap: "40px" }}>
+          <JobsDescriptionArea>
             <JobOptionArea>
-              <JobOption title="채용 분야" data={stepSecond.Field} />
-              <JobOption title="근무 지역" data={stepSecond.Location} />
+              <JobOption title="채용 분야" data={stepSecond.Field || ""} />
+              <JobOption title="근무 지역" data={stepSecond.Location || ""} />
             </JobOptionArea>
 
             <JobOptionArea>
-              <JobOption title="경력" data={orderType(stepSecond.Type)} />
+              <JobOption title="경력" data={orderType(stepSecond.Type || 0)} />
               <JobOption title="급여" data={`${stepSecond.Salary} 만원`} />
             </JobOptionArea>
-          </div>
-
-          {/* <ImageArea>
-            <img src={tossimage} alt="채용 이미지" style={{ width: "100%" }} />
-          </ImageArea> */}
+          </JobsDescriptionArea>
 
           <TalentArea>
             <h1 style={{ fontSize: "18px", marginBottom: "10px" }}>인재상</h1>
             <ul style={{ marginLeft: "15px" }}>
-              {stepSecond.talent.split(",").map((q: string, index) => {
-                if (q === "") return <div key={index}></div>;
-                return (
-                  <li style={{ listStyleType: "disc" }} key={index}>
-                    {q}
-                  </li>
-                );
-              })}
+              {stepSecond.talent &&
+                stepSecond.talent.split(",").map((q: string, index: number) => {
+                  if (q === "") return <div key={index}></div>;
+                  return (
+                    <li style={{ listStyleType: "disc" }} key={index}>
+                      {q}
+                    </li>
+                  );
+                })}
             </ul>
           </TalentArea>
           <TalentArea>

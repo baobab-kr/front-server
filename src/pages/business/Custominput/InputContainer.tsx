@@ -14,10 +14,7 @@ export default function InputContainer({ title, description, children }: tProps)
         <span className="info">{description}</span>
       </LabelArea>
       <InputArea>
-        <div className="input">
-          {/* <InputFile fileController={fileController} /> */}
-          {children}
-        </div>
+        <div className="input">{children}</div>
       </InputArea>
     </InputWrap>
   );

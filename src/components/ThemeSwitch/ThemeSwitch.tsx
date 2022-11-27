@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { SwitchContainer, Mode, Divider } from "./style";
 import { useRecoilState } from "recoil";
 import { useLocation } from "react-router-dom";
@@ -15,6 +15,14 @@ export default function ThemeSwitch(): JSX.Element {
     localStorage.setItem("Theme", state ? "dark" : "light");
     setDarkMode(state);
   };
+
+  useEffect(() => {
+    const theme: string | null = localStorage.getItem("Theme");
+    if (theme === null) {
+      localStorage.setItem("Theme", darkMode ? "dark" : "light");
+    }
+  }, []);
+
   console.log(location.pathname);
   return (
     <>

@@ -19,7 +19,9 @@ export const LoginOverlay = styled.div<tOpen>`
 export const LoginContainer = styled.div`
   position: relative;
   width: 800px;
-  height: 600px;
+  height: 80%;
+  min-height: 500px;
+  max-height: 600px;
   border-radius: 16px;
   background: ${({ theme }) => theme.backgroundColor.subColor};
 
@@ -27,6 +29,18 @@ export const LoginContainer = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   overflow: hidden;
+
+  @media screen and (max-width: 820px) {
+    width: 600px;
+  }
+
+  @media screen and (max-width: 620px) {
+    width: 100%;
+    height: 100%;
+
+    min-height: none;
+    max-height: none;
+  }
 `;
 
 export const LoginWrapper = styled.div`
@@ -42,6 +56,8 @@ export const CustomInput = styled.input`
   width: 70%;
   margin: 0px auto;
   font-size: 16px;
+
+  color: ${({ theme }) => theme.fontColor.color};
 `;
 
 export const LoginBtn = styled.button`
@@ -87,14 +103,39 @@ export const TitleArea = styled.div`
   gap: 15px;
 
   color: ${({ theme }) => theme.fontColor.subColor};
+
+  width: 100%;
+
+  .start {
+    font-size: 45px;
+  }
+  @media screen and (max-width: 620px) {
+    padding: 0px 15px;
+
+    p {
+      font-size: 12px;
+    }
+
+    .start {
+      font-size: 35px;
+    }
+  }
 `;
 
 export const VisibilityBtnArea = styled.div`
   position: absolute;
-  right: 150px;
+  right: 130px;
   margin-bottom: 15px;
-
+  color: ${({ theme }) => theme.fontColor.color};
   cursor: pointer;
+
+  @media screen and (max-width: 820px) {
+    right: 100px;
+  }
+
+  @media screen and (max-width: 620px) {
+    right: 50px;
+  }
 `;
 
 export const GitHubLogin = styled.div`
@@ -103,4 +144,15 @@ export const GitHubLogin = styled.div`
   align-items: center;
   gap: 15px;
   width: 100%;
+`;
+
+export const CloseBtnArea = styled.div`
+  display: none;
+
+  position: fixed;
+  top: 30px;
+  right: 30px;
+  @media screen and (max-width: 600px) {
+    display: block;
+  }
 `;

@@ -39,10 +39,12 @@ export const CardWrapper = styled.div<cardInit>`
   position: relative;
   min-width: 300px;
   min-height: 310px;
+  height: 100%;
   display: flex;
   flex-direction: column;
   border-radius: 5px;
-  background-color: #3f3f3f;
+  /* background-color: #3f3f3f; */
+  background-color: ${({ theme }) => theme.backgroundColor.subColor};
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9);
   color: #ffffff;
   text-align: justify;

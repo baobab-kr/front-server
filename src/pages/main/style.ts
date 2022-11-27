@@ -80,7 +80,7 @@ export const ItemTitleArea = styled.div`
   top: -44px;
   grid-column-start: 1;
 
-  @media screen and (max-width: 756px) {
+  @media screen and (max-width: 665px) {
     grid-column: 1;
     grid-row: 2;
   }

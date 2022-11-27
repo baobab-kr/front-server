@@ -48,6 +48,21 @@ export function getJobsBoardForAdmin(body: any): Promise<tJob[]> {
   });
 }
 
+export function getJobsBoardForHeadHunt(body: any): Promise<tJob[]> {
+  return new Promise<tJob[]>((resolve, reject) => {
+    API.get("/jobs/getJobs_inUser_forHeadHunt", { params: { ...body } })
+      .then((res) => {
+        if (res.data.message) {
+          reject(res.data.message);
+        }
+        resolve(res.data);
+      })
+      .catch((err) => {
+        reject(err.response);
+      });
+  });
+}
+
 export function approvalJobsBoardForAdmin(_id: number): Promise<string> {
   return new Promise<string>((resolve, reject) => {
     API.patch("/jobs/Approval_Jobs_ForServiceAdmin", { id: _id })

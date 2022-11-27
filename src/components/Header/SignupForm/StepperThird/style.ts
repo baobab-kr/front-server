@@ -20,7 +20,8 @@ export const InputWrapper = styled.div`
 
 export const CustomInput = styled.input`
   background: none;
-  color: #e4e5e7;
+  color: ${({ theme }) => theme.fontColor.color};
+
   padding: 0px 50px 5px 5px;
   width: 80%;
   font-size: 16px;

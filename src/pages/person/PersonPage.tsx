@@ -1,5 +1,18 @@
 import React, { Suspense, useEffect, useState } from "react";
-import { Wrapper, DivFlex, Properties, ThemeText, TagPlace, UserInfo, Content, Input, TagList, UserDiscrtprion } from "./style";
+import {
+  Wrapper,
+  DivFlex,
+  Properties,
+  ThemeText,
+  TagPlace,
+  UserInfo,
+  Content,
+  Input,
+  TagList,
+  UserDiscrtprion,
+  TagListTItle,
+  UserDescriptionChild,
+} from "./style";
 import Card from "../../components/Card/index";
 import { Board, TagCount, Writer } from "Types/main";
 import { getPersonalBoard, getBoardPersonalTag, DeleteBoard, getBoardPersonalTagCount, getBoardPersonalWriter } from "api/board";
@@ -8,6 +21,8 @@ import { useLocation } from "react-router-dom";
 import { PuffLoader } from "react-spinners";
 import { user } from "Types/user";
 import Avator from "components/Avator/Avator";
+import { USER_TYPE } from "constants/index";
+import Swal from "sweetalert2";
 
 type tState = {
   userId: number;
@@ -108,6 +123,12 @@ export default function PersonPage(): JSX.Element {
     getTagCount();
   }, []);
 
+  useEffect(() => {
+    if (userInfo?.id === undefined || userInfo.userid === undefined) {
+      Swal.fire("로그인 정보를 다시 확인 헤주세요.");
+    }
+  }, []);
+
   const deleteHandler = (id: number) => {
     DeleteBoard(id)
       .then((res) => {
@@ -131,71 +152,60 @@ export default function PersonPage(): JSX.Element {
       <Wrapper>
         <UserInfo>
           <div style={{ flexBasis: "15%" }}>
-            <Avator userId={userInfo!.userid.toString()} width={"100%"} height={"100%"} />
+            <DivFlex direction="column" style={{ alignItems: "center", gap: "15px" }}>
+              <Avator userId={userInfo!.userid.toString()} width={"100%"} height={"100%"} />
+            </DivFlex>
           </div>
           <div style={{ display: "flex", gap: "10px", flexDirection: "column", flexBasis: "85%" }}>
-            <ThemeText style={{ fontSize: "30px", fontWeight: "bold" }}>{writer?.username ?? ""}</ThemeText>
             <UserDiscrtprion>
-              <DivFlex direction="row" style={{ marginTop: "20px", gap: "15px" }}>
-                <DivFlex direction="column" style={{ gap: "15px", flexBasis: "50%" }}>
-                  <div style={{ color: "#999999" }}>Description</div>
-                  <ThemeText>{writer?.description ?? "데이터 분석을 통한 프로덕트 성장에 관심있습니다."}</ThemeText>
-                </DivFlex>
-                <DivFlex direction="row" style={{ gap: "15px", flexBasis: "50%" }}>
-                  <DivFlex direction="column" style={{ gap: "15px", flexBasis: "50%" }}>
-                    <div style={{ color: "#999999" }}>Expertise</div>
-                    <ThemeText>{writer?.techStack ?? ""}</ThemeText>
-                  </DivFlex>
+              <ThemeText style={{ fontSize: "30px", fontWeight: "bold" }}>{writer?.username ?? ""}</ThemeText>
 
-                  <DivFlex direction="column" style={{ gap: "15px", flexBasis: "50%" }}>
-                    <div style={{ color: "#999999" }}>Social Media</div>
-                    <ThemeText>{writer?.socialUrl ?? ""}</ThemeText>
-                  </DivFlex>
-                </DivFlex>
+              <DivFlex direction="column" style={{ gap: "15px", flexBasis: "50%" }}>
+                <div style={{ color: "#999999" }}>Description</div>
+                <ThemeText>{writer?.description ?? "데이터 분석을 통한 프로덕트 성장에 관심있습니다."}</ThemeText>
               </DivFlex>
+              <UserDescriptionChild>
+                <DivFlex direction="column" style={{ gap: "15px", flexBasis: "50%" }}>
+                  <div style={{ color: "#999999" }}>Expertise</div>
+                  <ThemeText>{writer?.techStack ?? ""}</ThemeText>
+                </DivFlex>
+
+                <DivFlex direction="column" style={{ gap: "15px", flexBasis: "50%" }}>
+                  <div style={{ color: "#999999" }}>Social Media</div>
+                  <ThemeText>{writer?.socialUrl ?? ""}</ThemeText>
+                </DivFlex>
+              </UserDescriptionChild>
             </UserDiscrtprion>
           </div>
         </UserInfo>
-        <Properties>
-          <div style={{ width: "100%" }}>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div>
+          <Properties>
+            <TagListTItle>
               <ThemeText style={{ width: "320px", gap: "5px", marginBottom: "8px" }} onClick={() => modeSelector("ALL")}>
                 태그 목록
               </ThemeText>
-
-              <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
-                {/* <div>게시글2</div> */}
-                <Input alt="검색어" placeholder="검색어를 입력해주세요" />
-              </div>
+              <hr style={{ maxWidth: "100%" }} />
+            </TagListTItle>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "15px", width: "100%" }}>
+              {/* <div>게시글2</div> */}
+              <Input alt="검색어" placeholder="검색어를 입력해주세요" />
             </div>
-            <hr style={{ maxWidth: "350px" }} />
-            <TagPlace>
-              {tag.length >= 1 &&
-                tag.map((t: TagCount, index: number) => {
-                  return (
-                    <TagList key={index} onClick={() => modeSelector(t.tag_name)}>
-                      {t.tag_name} {`(${t.tag_count})`}
-                    </TagList>
-                  );
-                })}
-            </TagPlace>
-          </div>
-        </Properties>
-
+          </Properties>
+          <TagPlace>
+            {tag.length >= 1 &&
+              tag.map((t: TagCount, index: number) => {
+                return (
+                  <TagList key={index} onClick={() => modeSelector(t.tag_name)}>
+                    {t.tag_name} {`(${t.tag_count})`}
+                  </TagList>
+                );
+              })}
+          </TagPlace>
+        </div>
         <Content>
           <InfiniteScroll loadFnc={getBoardInfo} data={board} isLast={mainState} isOnTop={true}>
             {board.map((blogInfo: Board, index: number) => {
-              return (
-                <Card
-                  key={index}
-                  board={blogInfo}
-                  width={"calc(50% - 25px)"}
-                  height={"495px"}
-                  imgHeight={"280px"}
-                  isMyHome={isMyHome}
-                  deleteBoard={deleteHandler}
-                />
-              );
+              return <Card key={index} board={blogInfo} width={"100%"} height={"495px"} imgHeight={"280px"} isMyHome={isMyHome} deleteBoard={deleteHandler} />;
             })}
           </InfiniteScroll>
         </Content>

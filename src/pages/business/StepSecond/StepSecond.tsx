@@ -166,7 +166,7 @@ export default function StepSecond({ value, setValue, stepperController }: tProp
           <div className="input">
             <InputText
               maxLength={60}
-              placeholder="채용분야를 입력해주세요"
+              placeholder="채용 제목를 입력해주세요"
               value={value.Title}
               setValue={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setValue((v) => {

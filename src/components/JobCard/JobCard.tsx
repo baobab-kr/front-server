@@ -64,7 +64,9 @@ export default function JobCard({ jobItem, board, width, height, isMyHome, delet
               </div>
             </CardTitle>
           </div>
-          <CardIntro>{jobItem.message}</CardIntro>
+          <div style={{ width: "290px", lineBreak: "anywhere" }}>
+            <CardIntro>{jobItem.message}</CardIntro>
+          </div>
           <CardDetail>
             <div className="experience">{orderType(jobItem.careerType)}</div>
             <div className="period">{jobItem.salary}만원</div>

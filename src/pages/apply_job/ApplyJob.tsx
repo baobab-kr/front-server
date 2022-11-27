@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import {
+  CareerArea,
+  EduArea,
+  TitleArea,
   Wrapper,
   SubTitle,
   Template,
@@ -15,6 +18,7 @@ import {
   CareerButton,
   CheckBoxBtn,
   ThumbnailArea,
+  UserInfoArea,
 } from "./style";
 import Select from "react-select";
 import photo from "assets/bg_photo_default.png";
@@ -67,7 +71,7 @@ export default function ApplyJob(): JSX.Element {
   };
 
   const jobHandler = (props: any) => {
-    setJob(props.value);
+    setJob(props);
   };
 
   const imageSelectHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -119,9 +123,7 @@ export default function ApplyJob(): JSX.Element {
       if (res.socialUrl !== null) setSocialUrl(res.socialUrl);
       if (res.techStack !== null) {
         const targetTechstack = JOB_GROUP.find((q) => q.label === res.techStack);
-        console.log("au", targetTechstack);
         if (targetTechstack?.value !== undefined) {
-          console.log("au", targetTechstack);
           setJob(targetTechstack);
         }
       }
@@ -133,10 +135,10 @@ export default function ApplyJob(): JSX.Element {
       <Template>
         <FormArea>
           <FormWrapper>
-            <div style={{ display: "flex", alignItems: "end", gap: "25px" }}>
+            <TitleArea>
               <Title>이력서 제목</Title>
               <SubTitle>∙ 최대 30자 까지 입력할 수 있습니다.</SubTitle>
-            </div>
+            </TitleArea>
             <div style={{ padding: "30px" }}>
               <Custominput
                 placeholder="ex) 최고를 위해 늘 성실하게 최선을 다 합니다."
@@ -147,10 +149,10 @@ export default function ApplyJob(): JSX.Element {
             </div>
           </FormWrapper>
           <FormWrapper>
-            <div style={{ display: "flex", alignItems: "end", gap: "25px" }}>
+            <TitleArea>
               <Title>기본 정보</Title>
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: "25px" }}>
+            </TitleArea>
+            <UserInfoArea>
               <div>
                 <input type="file" id="imgUpload" style={{ display: "none" }} onChange={imageSelectHandler} accept="image/jpg, image/jpeg, image/png"></input>
                 <label htmlFor="imgUpload">
@@ -160,7 +162,7 @@ export default function ApplyJob(): JSX.Element {
                 </label>
               </div>
               <div style={{ width: "80%" }}>
-                <div style={{ padding: "30px", display: "flex", flexDirection: "column", gap: "8px" }}>
+                <div className="info-area" style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                   <div style={{ display: "flex", alignItems: "center" }}>
                     <h1 style={{ width: "80px" }}>이름</h1>
                     <CustomEditinput placeholder="이름을 입력하세요." maxLength={30} value={name} onChange={(e) => setName(e.target.value)} />
@@ -175,29 +177,29 @@ export default function ApplyJob(): JSX.Element {
                   </div>
                   <div style={{ display: "flex", alignItems: "center" }}>
                     <h1 style={{ width: "80px" }}>TechStack</h1>
-                    <div style={{ marginLeft: "15px", width: "45%" }}>
+                    <div style={{ marginLeft: "15px", width: "100%" }}>
                       <Select value={job} options={JOB_GROUP} formatOptionLabel={formatOptionLabel} onChange={jobHandler} />
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
+            </UserInfoArea>
           </FormWrapper>
           <FormWrapper>
-            <div style={{ display: "flex", alignItems: "end", gap: "25px" }}>
+            <TitleArea>
               <Title>이력서 URL</Title>
               <SubTitle>∙ 로그인이 필요한 URL은 기업 담당자의 확인이 어려울 수 있으니 미리 확인바랍니다.</SubTitle>
-            </div>
+            </TitleArea>
             <div style={{ padding: "30px" }}>
-              <Custominput placeholder="http://" maxLength={30} value={url} onChange={(e) => setUrl(e.target.value)} />
+              <Custominput placeholder="http://" value={url} onChange={(e) => setUrl(e.target.value)} />
             </div>
           </FormWrapper>
           <FormWrapper>
-            <div style={{ display: "flex", alignItems: "end", gap: "25px" }}>
+            <TitleArea>
               <Title>학력사항</Title>
-            </div>
-            <div style={{ padding: "30px", display: "flex", alignItems: "center", gap: "25px" }}>
-              <div style={{ width: "30%" }}>
+            </TitleArea>
+            <EduArea>
+              <div className="edu-selector">
                 <Select defaultValue={EDUCATION_GROUP[0]} options={EDUCATION_GROUP} formatOptionLabel={formatOptionLabel} onChange={userTypeHandler} />
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
@@ -214,13 +216,13 @@ export default function ApplyJob(): JSX.Element {
                   <p>졸업</p>
                 </div>
               </div>
-            </div>
+            </EduArea>
           </FormWrapper>
           <FormWrapper>
             <div style={{ display: "flex", alignItems: "end", gap: "25px" }}>
               <Title>경력사항</Title>
             </div>
-            <div style={{ padding: "30px", display: "flex", alignItems: "center" }}>
+            <CareerArea>
               <CareerButton onClick={() => setCareerYear(null)}>
                 <p className={careerYear === null ? "isSelected" : ""}>신입</p>
               </CareerButton>
@@ -243,7 +245,7 @@ export default function ApplyJob(): JSX.Element {
                   년
                 </div>
               )}
-            </div>
+            </CareerArea>
           </FormWrapper>
         </FormArea>
         <SubmitArea>

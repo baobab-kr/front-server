@@ -74,6 +74,10 @@ export const ColumnLeft = styled.div`
   @media screen and (max-width: 1810px) {
     width: 300px;
   }
+
+  @media screen and (max-width: 950px) {
+    display: none;
+  }
 `;
 
 export const PreviewJobsWrap = styled.div`

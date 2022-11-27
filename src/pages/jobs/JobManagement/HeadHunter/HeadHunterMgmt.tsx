@@ -9,7 +9,7 @@ import Category from "../../Category/Category";
 import { getMainBoard } from "api/board";
 import JobCard from "components/JobCard/JobCard";
 import { tJob } from "Types/Jobs";
-import { getJobsBoardAll } from "api/jobs";
+import { getJobsBoardAll, getJobsBoardForHeadHunt } from "api/jobs";
 
 function getWindowSize() {
   const { innerWidth, innerHeight } = window;
@@ -38,10 +38,11 @@ export default function HeadHunterMgmt(): JSX.Element {
   const getInfo = async () => {
     if (mainState) return;
 
-    await getJobsBoardAll(page)
+    await getJobsBoardForHeadHunt({})
       .then((data) => {
-        setPage(page + 1);
+        // setPage(page + 1);
         setBoard((curInfoArray) => [...curInfoArray, ...data]); // state에 추가
+        setMainState(true);
       })
       .catch((err) => {
         setMainState(true);
