@@ -107,7 +107,7 @@ export default function JobDetail(): JSX.Element {
             <TitleArea>
               <CompanyName>{data?.companyName}</CompanyName>
               {userInfo?.role === USER_TYPE.DEVELOPER && <ApplyButton onClick={routeApplyJobPage}>입사 지원</ApplyButton>}
-              {userInfo?.role === USER_TYPE.HEADHUNTER && <ApplyButton onClick={jobDelete}>채용 마감</ApplyButton>}
+              {/* {userInfo?.role === USER_TYPE.HEADHUNTER && <ApplyButton onClick={jobDelete}>채용 마감</ApplyButton>} */}
               {userInfo?.role === USER_TYPE.ADMIN && data?.approvalStatus === 0 && <ApplyButton onClick={jobApply}>승인</ApplyButton>}
             </TitleArea>
             <Title>{data?.title}</Title>

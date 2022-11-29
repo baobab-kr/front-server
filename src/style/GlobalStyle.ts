@@ -79,6 +79,7 @@ const GlobalStyle = createGlobalStyle`
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
+    font-family: 'LINESeedKR-Bd';
   }
   select {
     -webkit-appearance: none;
@@ -89,16 +90,22 @@ const GlobalStyle = createGlobalStyle`
   input {
     border: none;
     border-bottom: 1px solid black;
+    font-family: 'LINESeedKR-Bd';
+
     &:focus {
       outline: none;
     }
   }
 
   input::-webkit-file-upload-button{
+    font-family: 'LINESeedKR-Bd';
+
     display:none
   }
   
   input::-webkit-inner-spin-button {
+    font-family: 'LINESeedKR-Bd';
+
     appearance: none;
     -moz-appearance: none;
     -webkit-appearance: none;

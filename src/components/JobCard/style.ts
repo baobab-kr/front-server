@@ -73,7 +73,8 @@ export const CardTitle = styled.div`
   padding-left: 60px;
 
   .jobLink {
-    color: #e4e5e7;
+    color: ${({ theme }) => theme.fontColor.color};
+
     display: inline-block;
     font-size: 18px;
     font-weight: 500;
@@ -85,21 +86,23 @@ export const CardTitle = styled.div`
     width: 100%;
   }
   div {
-    color: #e4e5e7;
+    /* color: #e4e5e7; */
+    color: ${({ theme }) => theme.fontColor.color};
+
     float: left;
     font-size: 14px;
     font-weight: 500;
     transition: all 0.15s;
   }
   .location {
-    color: #7a7c85;
+    color: #555555;
   }
 `;
 
 export const CardName = styled.div`
   margin-right: 3px;
   ::after {
-    color: #7a7c85;
+    color: #555555;
     content: " ・";
   }
 `;
@@ -107,7 +110,7 @@ export const CardName = styled.div`
 export const CardIntro = styled.div`
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
-  color: #7a7c85;
+  color: #555555;
   display: -webkit-box;
   font-size: 14px;
   font-weight: 400;
@@ -123,7 +126,7 @@ export const CardDetail = styled.div`
   div {
     margin-bottom: 7px;
 
-    color: #7a7c85;
+    color: #555555;
     font-size: 14px;
     font-weight: 500;
     margin-bottom: 5px;
@@ -131,7 +134,7 @@ export const CardDetail = styled.div`
     position: relative;
 
     ::before {
-      background: #7a7c85;
+      background: #555555;
       border-radius: 2px;
       content: "";
       height: 3px;

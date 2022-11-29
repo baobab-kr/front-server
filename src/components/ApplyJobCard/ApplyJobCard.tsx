@@ -4,6 +4,7 @@ import de from "../../baobab-data/develop1.jpg";
 import teslalogo from "../../baobab-data/tesla128.png";
 import { useNavigate } from "react-router-dom";
 import { tApplyJob, tJob } from "Types/Jobs";
+import { user } from "Types/user";
 
 type Props = {
   jobItem: tApplyJob;
@@ -16,11 +17,14 @@ type Props = {
 };
 
 export default function ApplyJobCard({ jobItem, board, width, height, isMyHome, deleteBoard, imgHeight }: Props): JSX.Element {
+  const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
+
   const navigate = useNavigate();
   const [logo, setLogo] = useState<string>("");
 
   const routeDetailPage = () => {
-    navigate(`/apply/${board}`);
+    // navigate(`/apply/${board}`);
+    navigate(`/@${userInfo?.userid}/my-apply-jobs/${board}`);
   };
   const orderType = (type: number | null) => {
     if (type === null) return "신입";

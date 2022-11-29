@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import {
   JobsBusinessWrap,
   HeaderLocalComp,
@@ -28,6 +29,7 @@ import test from "../../assets/Logo2.png";
 import { tJob } from "Types/Jobs";
 
 export default function BusinessPage(): JSX.Element {
+  const location: any = useLocation();
   const [stepper, setStepper] = useState<number>(0);
   const [stepFirst, setStepFirst] = useState<tStepFirst>({
     BusinessLicense: null,
@@ -92,6 +94,35 @@ export default function BusinessPage(): JSX.Element {
       };
     });
   }, [stepSecond]);
+
+  useEffect(() => {
+    console.log(location.state);
+    if (location.state !== null) {
+      const data: tJob = location.state.data;
+      setStepFirst({
+        BusinessLicense: null, //data.license,
+        ManagerEMail: "",
+        ManagerName: data.managerName,
+        ManagerPhone: data.managerContact,
+        URL: "",
+      });
+      setStepSecond({
+        CompanyLogo: null,
+        CompanyName: data.companyName,
+        EndDate: data.endDate,
+        Field: data.field,
+        Image: null,
+        InfoURL: data.url,
+        Location: data.location,
+        Message: data.message,
+        Salary: data.salary,
+        StartDate: data.startDate,
+        talent: data.talent,
+        Title: data.title,
+        Type: data.careerType,
+      });
+    }
+  }, []);
 
   const stepperController = (value: number) => {
     window.scrollTo({ top: 0, behavior: "auto" });

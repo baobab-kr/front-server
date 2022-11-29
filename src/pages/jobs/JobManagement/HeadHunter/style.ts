@@ -88,3 +88,30 @@ export const ItemArea = styled.div`
     grid-template-columns: repeat(1, 100%);
   }
 `;
+
+export const CustomCard = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+`;
+
+export const ActionArea = styled.div`
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+
+  margin-top: 30px;
+
+  .approval {
+    &:hover {
+      color: #448fff;
+      cursor: pointer;
+    }
+  }
+  .unapproved {
+    &:hover {
+      color: #448fff;
+      cursor: pointer;
+    }
+  }
+`;

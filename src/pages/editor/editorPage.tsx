@@ -20,6 +20,7 @@ import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
 import "@toast-ui/editor/dist/toastui-editor.css"; // Editor's Style
 import "@toast-ui/editor/dist/theme/toastui-editor-dark.css";
 import API from "api";
+import Swal from "sweetalert2";
 
 type props = {
   onClose: React.Dispatch<React.SetStateAction<boolean>>;
@@ -96,8 +97,25 @@ function Popup({ onClose, data, setData, boardId }: props) {
       });
   };
 
-  const onEdit = (data: IEditBoard) => {
-    EditBoard(data)
+  const onEdit = () => {
+    const formData: any = new FormData();
+    formData.append("board_id", boardId.toString());
+    formData.append("title", data.title);
+    formData.append("description", description);
+    formData.append("content", data.content);
+    formData.append("board_status", isPublic ? 0 : 1);
+    if (fileList) formData.append("thumbnail", fileList![0]);
+    console.log("data", data.tag_name);
+    if (data.tag_name.length === 1) {
+      formData.append("tag_name[0]", data.tag_name[0]);
+    } else {
+      for (let i = 0; i < data.tag_name.length; i++) {
+        formData.append("tag_name", data.tag_name[i]);
+      }
+    }
+    console.log("_createBoard", formData.get("tag_name"));
+    console.log(typeof formData.get("board_id"));
+    EditBoard(formData)
       .then((res) => {
         console.log("Board 수정 성공", res);
 
@@ -105,6 +123,7 @@ function Popup({ onClose, data, setData, boardId }: props) {
       })
       .catch((err) => {
         console.log("Board 수정 실패", err);
+        Swal.fire("Board 수정 실패 하였습니다.");
       });
   };
 
@@ -158,7 +177,7 @@ function Popup({ onClose, data, setData, boardId }: props) {
                   저장
                 </E.PopuoButton>
               ) : (
-                <E.PopuoButton active={true} onClick={onSave}>
+                <E.PopuoButton active={true} onClick={onEdit}>
                   수정
                 </E.PopuoButton>
               )}
@@ -212,7 +231,10 @@ export default function EditorPage() {
   useEffect(() => {
     if (location.state !== null) {
       editorRef.current?.getInstance().setHTML(location.state.data.content);
+      console.log();
+      tagHandler(location.state.data.tags.map((q: any) => q.tag_name));
     }
+
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);

@@ -57,8 +57,8 @@ export function patchDeleteReComment(_reCommemt_id: number): Promise<DeleteReCom
       });
   });
 }
-export function createComment(_content: string, _board_id: number): Promise<CreateComment> {
-  return new Promise<CreateComment>((resolve, reject) => {
+export function createComment(_content: string, _board_id: number): Promise<any> {
+  return new Promise<any>((resolve, reject) => {
     API.post("/board/CreateComment", { content: _content, board_id: _board_id, comment_status: 0 })
       .then((res) => {
         resolve(res.data);
@@ -68,8 +68,8 @@ export function createComment(_content: string, _board_id: number): Promise<Crea
       });
   });
 }
-export function createReComment(_content: string, _comment_id: number): Promise<CreateReComment> {
-  return new Promise<CreateReComment>((resolve, reject) => {
+export function createReComment(_content: string, _comment_id: number): Promise<any> {
+  return new Promise<any>((resolve, reject) => {
     API.post("/board/CreateReComment", { content: _content, comment_id: _comment_id, recomment_status: 0 })
       .then((res) => {
         resolve(res.data);
@@ -95,6 +95,30 @@ export function getCommentCount(board_id: number): Promise<number> {
 export function getReCommentCount(comment_id: number): Promise<number> {
   return new Promise<number>((resolve, reject) => {
     API.get("/board/ReCommentCount", { params: { comment_id: comment_id } })
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        reject(err.response);
+      });
+  });
+}
+
+export function CreateFilteringComment(comment_id: number, content: string): Promise<any> {
+  return new Promise<any>((resolve, reject) => {
+    API.post("/board/CreateFilteringComment", { comment_id: comment_id, content: content })
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        reject(err.response);
+      });
+  });
+}
+
+export function CreateFilteringReComment(comment_id: number, content: string): Promise<any> {
+  return new Promise<any>((resolve, reject) => {
+    API.post("/board/CreateFilteringReComment", { id: comment_id, content: content })
       .then((res) => {
         resolve(res.data);
       })

@@ -22,6 +22,7 @@ import NotFound from "pages/NotFound/NotFound";
 import { USER_TYPE } from "constants/index";
 import GithubLogin from "pages/github-login/GithubLogin";
 import MainSearchPage from "pages/main/MainSearchPage";
+import ApplyJobModify from "pages/apply_job/ApplyJobModify";
 
 export default function App(): JSX.Element {
   const [, setDarkMode] = useRecoilState<boolean>(Darkmode);
@@ -54,13 +55,17 @@ export default function App(): JSX.Element {
           <Route path="/search" element={<MainSearchPage />} />
           <Route path="/@:id" element={<PrivateRoute authentication={true} component={PersonPage} />} />
           <Route path="/@:id/:boardid" element={<PrivateRoute authentication={false} component={IndexPage} />} />
+          <Route path="/@:id/:boardid/modify" element={<PrivateRoute authentication={false} component={IndexPage} />} />
           <Route path="/@:id/my-apply-jobs" element={<PrivateRoute authentication={true} component={MyApplyJobs} role={USER_TYPE.DEVELOPER} />} />
+          <Route path="/@:id/my-apply-jobs/:jobid" element={<PrivateRoute authentication={true} component={ApplyJobModify} />} />
           <Route path="/@:id/job-management" element={<PrivateRoute authentication={true} component={JobMenagement} />} />
           <Route path="/setting" element={<Setting />} />
           <Route path="/editor" element={<PrivateRoute authentication={true} component={EditorPage} />} />
+          <Route path="/editor/:id" element={<PrivateRoute authentication={true} component={EditorPage} />} />
           <Route path="/jobs" element={<PrivateRoute authentication={false} component={JobsPage} />} />
           <Route path="/jobs/:id" element={<PrivateRoute authentication={false} component={JobDetail} />} />
           <Route path="/business" element={<PrivateRoute authentication={false} component={BusinessPage} />} />
+          <Route path="/business/:id" element={<PrivateRoute authentication={false} component={BusinessPage} />} />
           <Route path="/apply/:id" element={<PrivateRoute authentication={false} component={ApplyJob} />} />
           <Route path="/github-login" element={<GithubLogin />} />
           <Route path="*" element={<NotFound />} />

@@ -5,7 +5,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import Avator from "components/Avator/Avator";
 import CommentCard from "components/Comment/CommentCard/CommentCard";
 import { iComment } from "Types/indexPage";
-import { createComment, getCommentCount, getComments } from "api/indexPage";
+import { createComment, CreateFilteringComment, getCommentCount, getComments } from "api/indexPage";
 import InfiniteScroll from "components/InfiniteScroll";
 import { user } from "Types/user";
 
@@ -33,15 +33,20 @@ export default function Comment({ status, setStatus, boardID, commentCnt, setCom
   };
 
   const onRespond = async () => {
-    await createComment(comment, boardID!).then(async () => {
+    await createComment(comment, boardID!).then(async (res) => {
+      console.log("createComment", res);
       setComment("");
       setCommentCnt(commentCnt + 1);
-      await getCommentsFnc();
+      // await getCommentsFnc();
+      setIsLastPage(false);
+      setPage(page - 1 === -1 ? 0 : page - 1);
+      await CreateFilteringComment(res.comment_id, res.content);
     });
   };
 
   useEffect(() => {
     if (isLastPage) return;
+    console.log("asdasd");
     getCommentsFnc();
     getCommentCountFnc();
   }, [page]);

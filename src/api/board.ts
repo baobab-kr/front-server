@@ -87,7 +87,7 @@ export function CreateBoard(_createBoard: ICreateBoard): Promise<string> {
   });
 }
 
-export function EditBoard(_editBoard: IEditBoard): Promise<string> {
+export function EditBoard(_editBoard: any): Promise<string> {
   return new Promise<string>((resolve, reject) => {
     API.patch("/board/BoardUpdate", _editBoard)
       .then((res) => {

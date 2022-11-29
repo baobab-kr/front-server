@@ -4,7 +4,7 @@ import Avator from "components/Avator/Avator";
 import ReCommentCard from "components/Comment/CommentCard/ReCommentCard";
 import { iComment } from "Types/indexPage";
 import { user } from "Types/user";
-import { createReComment, getReCommentCount, getReComments, patchDeleteComment } from "api/indexPage";
+import { CreateFilteringReComment, createReComment, getReCommentCount, getReComments, patchDeleteComment } from "api/indexPage";
 import { CardWrapper, Card, UserContainer, UserInfo, Comment, CommentFooter, ShowReply, ReplyArea, Textarea, TextActionArea, LoadMoreBtn } from "./style";
 import { timeForToday } from "util/date";
 
@@ -74,11 +74,14 @@ export default function CommentCard({ data, comments, setComments, commentCnt, s
   };
 
   const onRespond = async () => {
-    await createReComment(reComment, data.id).then(async () => {
+    await createReComment(reComment, data.id).then(async (res) => {
+      console.log("re", res);
       setReComment("");
       await getReCommentsFnc();
       setCreateReply(false);
       setReCommentCnt(reCommentCnt + 1);
+
+      await CreateFilteringReComment(res.id, res.content);
     });
   };
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Suspense } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { PuffLoader } from "react-spinners";
-import { Wrapper, WrapperInner, NavArea, ContentArea, ItemTitleArea, ItemArea } from "./style";
+import { Wrapper, WrapperInner, NavArea, ContentArea, ItemTitleArea, ItemArea, CustomCard, ActionArea } from "./style";
 
 import { Board } from "Types/main";
 import InfiniteScroll from "components/InfiniteScroll";
@@ -9,7 +9,7 @@ import Category from "../../Category/Category";
 import { getMainBoard } from "api/board";
 import JobCard from "components/JobCard/JobCard";
 import { tJob } from "Types/Jobs";
-import { getJobsBoardAll, getJobsBoardForHeadHunt } from "api/jobs";
+import { getJobsBoardAll, getJobsBoardForHeadHunt, UpdateJobs } from "api/jobs";
 
 function getWindowSize() {
   const { innerWidth, innerHeight } = window;
@@ -18,6 +18,7 @@ function getWindowSize() {
 
 export default function HeadHunterMgmt(): JSX.Element {
   const navigate = useNavigate();
+  const location = useLocation();
   const [windowSize, setWindowSize] = useState(getWindowSize());
   const [board, setBoard] = useState<tJob[]>([]);
   const [mainState, setMainState] = useState<boolean>(false);
@@ -53,6 +54,14 @@ export default function HeadHunterMgmt(): JSX.Element {
     navigate("/business");
   };
 
+  const endJob = (item: tJob) => {
+    UpdateJobs({ ...item, jobStatus: 0 });
+  };
+
+  const modifyJob = (item: tJob) => {
+    navigate(`/business/${item.id}`, { state: { data: item } });
+  };
+
   const fallback = () => {
     return (
       <div style={{ height: "150px", textAlign: "center", color: "black" }}>
@@ -60,6 +69,7 @@ export default function HeadHunterMgmt(): JSX.Element {
       </div>
     );
   };
+
   return (
     <Suspense fallback={() => fallback()}>
       <div style={{ zIndex: "1", height: "100%" }}>
@@ -77,17 +87,42 @@ export default function HeadHunterMgmt(): JSX.Element {
                   <InfiniteScroll loadFnc={getInfo} data={board} isLast={mainState} isOnTop={true}>
                     {board?.map((item: tJob, index: number) => {
                       return (
-                        <JobCard
-                          key={index}
-                          jobItem={item}
-                          board={item.id}
-                          width={windowSize.innerWidth > 1810 ? "320px" : "300px"}
-                          height={windowSize.innerWidth > 1810 ? "330px" : "310px"}
-                          imgHeight={"45%"}
-                          isMyHome={false}
-                          previewLogo={""}
-                          deleteBoard={() => {}}
-                        />
+                        <CustomCard key={index}>
+                          <JobCard
+                            key={index}
+                            jobItem={item}
+                            board={item.id}
+                            width={windowSize.innerWidth > 1810 ? "320px" : "300px"}
+                            height={windowSize.innerWidth > 1810 ? "330px" : "310px"}
+                            imgHeight={"45%"}
+                            isMyHome={false}
+                            previewLogo={""}
+                            deleteBoard={() => {}}
+                          />
+                          <ActionArea>
+                            {item.jobStatus === 1 && (
+                              <>
+                                <div
+                                  className="approval"
+                                  onClick={() => {
+                                    modifyJob(item);
+                                  }}
+                                >
+                                  수정
+                                </div>
+                                <div
+                                  className="approval"
+                                  onClick={() => {
+                                    endJob(item);
+                                  }}
+                                >
+                                  마감
+                                </div>
+                              </>
+                            )}
+                            {item.jobStatus === 0 && <div className="approval">마감된 채용공고 입니다.</div>}
+                          </ActionArea>
+                        </CustomCard>
                       );
                     })}
                   </InfiniteScroll>

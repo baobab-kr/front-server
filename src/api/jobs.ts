@@ -147,6 +147,51 @@ export function getMyApplyJobs(): Promise<tApplyJob[]> {
   });
 }
 
+export function getApplyJobDetail(id: number): Promise<tApplyJob> {
+  return new Promise<tApplyJob>((resolve, reject) => {
+    API.get("/ApplyJob/GetApplyJob", { params: { id: id } })
+      .then((res) => {
+        if (res.data.message) {
+          reject(res.data.message);
+        }
+        resolve(res.data);
+      })
+      .catch((err) => {
+        reject(err.response);
+      });
+  });
+}
+
+export function UpdateApplyJob(body: any): Promise<tApplyJob[]> {
+  return new Promise<tApplyJob[]>((resolve, reject) => {
+    API.patch("/ApplyJob/UpdateApplyJob", body)
+      .then((res) => {
+        if (res.data.message) {
+          reject(res.data.message);
+        }
+        resolve(res.data);
+      })
+      .catch((err) => {
+        reject(err.response);
+      });
+  });
+}
+
+export function UpdateJobs(body: any): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
+    API.patch("/jobs/UpdateJobs", body)
+      .then((res) => {
+        if (res.data.message) {
+          reject(res.data.message);
+        }
+        resolve(res.data);
+      })
+      .catch((err) => {
+        reject(err.response);
+      });
+  });
+}
+
 // export function getJobsBoard(page: number): Promise<Board[]> {
 //   return new Promise<Board[]>((resolve, reject) => {
 //     API.get("/board/BoardMain", { page: page })
