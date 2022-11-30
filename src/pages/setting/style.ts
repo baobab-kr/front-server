@@ -2,8 +2,10 @@ import styled from "styled-components";
 
 const Wrapper = styled.div`
   display: grid;
-  grid-template-columns: 300px auto;
+  grid-template-columns: auto;
   padding: 0 40px;
+
+  color: ${({ theme }) => theme.fontColor.color};
 `;
 
 const ContentWrapper = styled.div`
@@ -51,6 +53,10 @@ const SettingArea = styled.div`
   /* width: 900px; */
   padding-top: 72px;
   margin: 0px auto;
+
+  @media screen and (max-width: 900px) {
+    width: 100%;
+  }
 `;
 
 const Header = styled.div`
@@ -91,6 +97,17 @@ const GroupItem = styled.div`
   justify-content: space-between;
   align-items: center;
   min-height: 90px;
+
+  @media screen and (max-width: 675px) {
+    flex-direction: column;
+    margin: 10px 0px;
+
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0 5px;
+
+    gap: 15px;
+  }
 `;
 
 const ProfileArea = styled.label`
@@ -171,6 +188,8 @@ const ActionArea = styled.div`
   width: 100%;
   display: flex;
   justify-content: flex-end;
+  gap: 15px;
+  color: white;
 `;
 
 const SaveBtn = styled.div`

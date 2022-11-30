@@ -14,12 +14,13 @@ export type tStepSecond = {
   CompanyName: string;
   Location: string;
   Message: string;
-  Description: string;
-  EndDate: string;
+  StartDate: string | null;
+  EndDate: string | null;
   Salary: string;
   InfoURL: string;
+  talent: string;
   /**
    * 경력 여부
    */
-  Type: string;
+  Type: number;
 };

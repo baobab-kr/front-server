@@ -18,6 +18,12 @@ export const SwitchContainer = styled.div`
   justify-content: space-evenly;
   align-items: center;
   z-index: 999;
+
+  @media screen and (max-width: 480px) {
+    visibility: hidden;
+  }
+
+  /* visibility: hidden; */
 `;
 
 export const Divider = styled.span`

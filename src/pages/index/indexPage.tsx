@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import "@toast-ui/editor/dist/theme/toastui-editor-dark.css";
 
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Avator from "components/Avator/Avator";
 
 import * as S from "./style";
@@ -16,6 +16,7 @@ import { BsFillChatFill } from "react-icons/bs";
 import Comment from "components/Comment/Comment";
 
 export default function IndexPage(): JSX.Element {
+  const navigate = useNavigate();
   const [detail, setDetail] = useState<iIndexPage>();
   const [titleList, setTitleList] = useState<HTMLElement[]>([]);
   const [commentStatus, setCommentStatus] = useState<boolean>(false);
@@ -46,12 +47,19 @@ export default function IndexPage(): JSX.Element {
     apiGet();
   }, []);
 
+  const navigateModify = () => {
+    navigate(`/editor/${board_id}`, { state: { data: detail, id: board_id } });
+  };
+
   return (
     <>
       <S.WrapperArea>
         <S.CenterPosition>
           <S.TitleArea>
             <S.Title>{detail?.title}</S.Title>
+            <div style={{ display: "flex", width: "100%", justifyContent: "flex-end", marginBottom: "-30px", cursor: "pointer" }} onClick={navigateModify}>
+              수정
+            </div>
             <S.UserArea>
               <Avator userId={"1"} width={"3.3rem"} height={"3.3rem"} />
               <div style={{ display: "flex", justifyContent: "space-around", flexDirection: "column" }}>

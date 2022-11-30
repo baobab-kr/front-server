@@ -6,6 +6,13 @@ export const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   padding: 0 20px;
+
+  color: ${({ theme }) => theme.fontColor.color};
+
+  @media screen and (max-width: 480px) {
+    padding: 0;
+    display: block;
+  }
 `;
 
 export const WrapperInner = styled.div`
@@ -67,11 +74,20 @@ export const ItemTitleArea = styled.div`
   font-size: 20px;
   font-weight: 700;
   height: 30px;
-  margin-bottom: 16px;
-  position: relative;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  top: -44px;
+  grid-column-start: 1;
+
+  @media screen and (max-width: 665px) {
+    grid-column: 1;
+    grid-row: 2;
+  }
 `;
 
 export const ItemArea = styled.div`
+  position: relative;
   grid-gap: 30px;
   display: grid;
   grid-template-columns: repeat(6, 330px);
@@ -90,6 +106,26 @@ export const ItemArea = styled.div`
   @media screen and (max-width: 1260px) {
     grid-gap: 25px;
     grid-template-columns: repeat(3, 300px);
+  }
+
+  @media screen and (max-width: 1080px) {
+    grid-gap: 25px;
+    grid-template-columns: repeat(2, 300px);
+  }
+
+  @media screen and (max-width: 754px) {
+    grid-row-gap: 25px;
+    grid-template-columns: repeat(2, 300px);
+  }
+
+  @media screen and (max-width: 665px) {
+    grid-row-gap: 25px;
+    grid-template-columns: repeat(1, 400px);
+  }
+
+  @media screen and (max-width: 480px) {
+    grid-row-gap: 25px;
+    grid-template-columns: repeat(1, 100%);
   }
 `;
 
@@ -110,8 +146,29 @@ export const JobArea = styled.div`
     grid-column: 4;
   }
   @media screen and (max-width: 1260px) {
+    grid-column: 3;
+    grid-row: 1;
+  }
+  @media screen and (max-width: 1080px) {
     grid-column: 2;
-    grid-row: 2;
+    grid-row: 1;
+  }
+  @media screen and (max-width: 754px) {
+    grid-column: 2;
+    grid-row: 1;
+    width: 100%;
+  }
+
+  @media screen and (max-width: 665px) {
+    grid-column: 1;
+    grid-row: 1;
+    width: 100%;
+  }
+
+  @media screen and (max-width: 480px) {
+    grid-column: 1;
+    grid-row: 1;
+    width: 100%;
   }
 `;
 
@@ -119,6 +176,7 @@ export const JobHeader = styled.div`
   position: absolute;
   top: -44px;
   width: 100%;
+  color: ${({ theme }) => theme.fontColor.color};
 
   display: flex;
   gap: 15px;

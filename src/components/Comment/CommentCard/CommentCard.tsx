@@ -4,7 +4,7 @@ import Avator from "components/Avator/Avator";
 import ReCommentCard from "components/Comment/CommentCard/ReCommentCard";
 import { iComment } from "Types/indexPage";
 import { user } from "Types/user";
-import { createReComment, getReCommentCount, getReComments, patchDeleteComment } from "api/indexPage";
+import { CreateFilteringReComment, createReComment, getReCommentCount, getReComments, patchDeleteComment } from "api/indexPage";
 import { CardWrapper, Card, UserContainer, UserInfo, Comment, CommentFooter, ShowReply, ReplyArea, Textarea, TextActionArea, LoadMoreBtn } from "./style";
 import { timeForToday } from "util/date";
 
@@ -12,8 +12,10 @@ type tProps = {
   data: iComment;
   comments: iComment[];
   setComments: Dispatch<SetStateAction<iComment[]>>;
+  commentCnt: number;
+  setCommentCnt: Dispatch<SetStateAction<number>>;
 };
-export default function CommentCard({ data, comments, setComments }: tProps): JSX.Element {
+export default function CommentCard({ data, comments, setComments, commentCnt, setCommentCnt }: tProps): JSX.Element {
   const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
 
   const [replyStatus, setReplyStatus] = useState<boolean>(false);
@@ -42,6 +44,7 @@ export default function CommentCard({ data, comments, setComments }: tProps): JS
   const deleteComment = async () => {
     await patchDeleteComment(data.id).then(() => {
       setComments(comments.filter((q) => q.id !== data.id));
+      setCommentCnt(commentCnt - 1);
     });
   };
 
@@ -61,7 +64,6 @@ export default function CommentCard({ data, comments, setComments }: tProps): JS
   const getReCommentsFnc = async () => {
     await getReComments(data.id, page)
       .then((res: iComment[]) => {
-        console.log("getComments", res);
         const ids = reComments.map((q) => q.id);
         const result = res.filter((q) => !ids.includes(q.id));
         setReComments([...reComments, ...result]);
@@ -72,11 +74,14 @@ export default function CommentCard({ data, comments, setComments }: tProps): JS
   };
 
   const onRespond = async () => {
-    await createReComment(reComment, data.id).then(async () => {
+    await createReComment(reComment, data.id).then(async (res) => {
+      console.log("re", res);
       setReComment("");
       await getReCommentsFnc();
       setCreateReply(false);
       setReCommentCnt(reCommentCnt + 1);
+
+      await CreateFilteringReComment(res.id, res.content);
     });
   };
 
@@ -114,7 +119,7 @@ export default function CommentCard({ data, comments, setComments }: tProps): JS
             Reply
           </div>
         </CommentFooter>
-        {createReply && (
+        {createReply && userInfo !== null && (
           <>
             <div style={{ display: "flex", flexDirection: "column" }}>
               <Textarea
@@ -135,11 +140,25 @@ export default function CommentCard({ data, comments, setComments }: tProps): JS
             </div>
           </>
         )}
+
+        {createReply && userInfo === null && (
+          <div style={{ width: "100%", textAlign: "center", marginTop: "15px" }}>댓글 작성을 하려면 로그인이 필요합니다.</div>
+        )}
+
         <ReplyArea>
           {replyStatus && (
             <>
               {reComments.map((data, index) => {
-                return <ReCommentCard data={data} reComments={reComments} setReComments={setReComments} key={index} />;
+                return (
+                  <ReCommentCard
+                    data={data}
+                    reComments={reComments}
+                    setReComments={setReComments}
+                    reCommentCnt={reCommentCnt}
+                    setReCommentCnt={setReCommentCnt}
+                    key={index}
+                  />
+                );
               })}
               <LoadMoreBtn onClick={loadMore}>더보기</LoadMoreBtn>
             </>

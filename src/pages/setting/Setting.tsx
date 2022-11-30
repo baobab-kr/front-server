@@ -7,9 +7,10 @@ import API from "api";
 import { FiEdit3, FiSettings } from "react-icons/fi";
 import { MdBusinessCenter } from "react-icons/md";
 import Avator from "components/Avator/Avator";
+import { useNavigate } from "react-router-dom";
 
 import * as S from "./style";
-import { ModifySocialUrl, ModifyTechStack, ModifyDescription, getUserInfo } from "api/user";
+import { ModifySocialUrl, ModifyTechStack, ModifyDescription, getUserInfo, deleteAllPostsForJobs, deleteAllPostsForBoard, deleteUser } from "api/user";
 
 type tProps = { value: string | number; label: string };
 const formatOptionLabel = ({ value, label }: tProps) => (
@@ -19,6 +20,7 @@ const formatOptionLabel = ({ value, label }: tProps) => (
 );
 export default function Setting(): JSX.Element {
   const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
+  const navigate = useNavigate();
 
   const [job, setJob] = useState<{ value: string; label: string }>(JOB_GROUP[0]);
   const [fileImage, setFileImage] = useState<string>("");
@@ -93,18 +95,21 @@ export default function Setting(): JSX.Element {
     window.location.reload();
   };
 
+  const secession = async () => {
+    await deleteAllPostsForJobs(userInfo!.id);
+    await deleteAllPostsForBoard(userInfo!.id);
+    await deleteUser(userInfo!.userid).then((res) => {
+      localStorage.removeItem("atexpires");
+      localStorage.removeItem("rtexpires");
+      localStorage.removeItem("user");
+      navigate("/");
+
+      window.location.reload();
+    });
+  };
+
   return (
     <S.Wrapper>
-      <S.RouterArea>
-        <S.Routers>
-          <MdBusinessCenter size={20} />
-          채용 관리
-        </S.Routers>
-        <S.Routers className="select">
-          <FiSettings />
-          설정
-        </S.Routers>
-      </S.RouterArea>
       <S.ContentWrapper>
         <S.SettingArea>
           <S.Header>
@@ -144,7 +149,7 @@ export default function Setting(): JSX.Element {
               <S.GroupItem>
                 <div>테크 스택</div>
                 <div style={{ width: "300px" }}>
-                  <Select defaultValue={job} options={JOB_GROUP} formatOptionLabel={formatOptionLabel} onChange={jobHandler} value={job} />
+                  <Select options={JOB_GROUP} formatOptionLabel={formatOptionLabel} onChange={jobHandler} value={job} />
                 </div>
               </S.GroupItem>
               <UnderLine color="white" margin="none" />
@@ -155,6 +160,9 @@ export default function Setting(): JSX.Element {
             </S.SettingContainer>
           </S.SettingGroupArea>
           <S.ActionArea>
+            <S.SaveBtn onClick={secession} style={{ backgroundColor: "#999999" }}>
+              회원 탈퇴
+            </S.SaveBtn>
             <S.SaveBtn onClick={saveController}>파일저장</S.SaveBtn>
           </S.ActionArea>
         </S.SettingArea>

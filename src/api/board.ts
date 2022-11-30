@@ -16,6 +16,21 @@ export function getMainBoard(page: number): Promise<Board[]> {
   });
 }
 
+export function getBoardSearchOfTitle(page: number, title: string): Promise<Board[]> {
+  return new Promise<Board[]>((resolve, reject) => {
+    API.post("/board/BoardSearchOfTitle", { page: page, title: title })
+      .then((res) => {
+        if (res.data.message) {
+          reject(res.data.message);
+        }
+        resolve(res.data);
+      })
+      .catch((err) => {
+        reject(err.response);
+      });
+  });
+}
+
 export function getPersonalBoard(page: number, userId: number): Promise<PersonalInfo> {
   return new Promise<PersonalInfo>((resolve, reject) => {
     API.post("/board/BoardPersonal", { page: page, user_id: userId })
@@ -72,7 +87,7 @@ export function CreateBoard(_createBoard: ICreateBoard): Promise<string> {
   });
 }
 
-export function EditBoard(_editBoard: IEditBoard): Promise<string> {
+export function EditBoard(_editBoard: any): Promise<string> {
   return new Promise<string>((resolve, reject) => {
     API.patch("/board/BoardUpdate", _editBoard)
       .then((res) => {

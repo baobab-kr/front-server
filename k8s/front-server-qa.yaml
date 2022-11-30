@@ -48,6 +48,21 @@ spec:
                 configMapKeyRef:
                   name: baobab-qa
                   key: generate_sourcemap
+            - name: REACT_APP_CLIENT_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: baobab-qa
+                  key: react_app_client_id
+            - name: REACT_APP_CLIENT_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  name: baobab-qa
+                  key: react_app_client_secret
+            - name: REACT_APP_GITHUB_CALLBACK_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: baobab-qa
+                  key: react_app_github_callback_url
 ---
 apiVersion: v1
 kind: Service

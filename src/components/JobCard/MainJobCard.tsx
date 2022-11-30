@@ -1,31 +1,33 @@
-import React from "react";
-import { MainJobCardWrapper } from "./style";
+import React, { useState, useEffect } from "react";
+import { MainJobCardWrapper, MainCardColor } from "./style";
 import { SiTesla, SiNaver, SiFacebook } from "react-icons/si";
 
 type tProps = {
   title: string;
   경력: string;
   wlrrms: string;
-  logo: string;
+  logo: any;
 };
 export default function MainJobCard({ title, 경력, wlrrms, logo }: tProps): JSX.Element {
-  const logoOrder = () => {
-    switch (logo) {
-      case "tesla":
-        return <SiTesla size={45} />;
-      case "naver":
-        return <SiNaver size={45} />;
-      case "meta":
-        return <SiFacebook size={45} />;
+  const [message, setMessage] = useState<string>("");
+  useEffect(() => {
+    if (경력.length > 39) {
+      setMessage(message.slice(0, 39) + "...");
+      // setMessage(경력);
+    } else {
+      setMessage(경력);
     }
-  };
+  }, [경력]);
+
   return (
     <MainJobCardWrapper>
-      <div style={{ width: "70px", display: "flex", justifyContent: "center" }}>{logoOrder()}</div>
+      <div style={{ width: "70px", display: "flex", justifyContent: "center" }}>{logo}</div>
       <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-        <p>{wlrrms}</p>
-        <p style={{ fontSize: "12px" }}>{title}</p>
-        <p style={{ fontSize: "12px" }}>{경력}</p>
+        <MainCardColor>{wlrrms}</MainCardColor>
+        <MainCardColor>{title}</MainCardColor>
+        <div style={{ width: "220px", lineBreak: "anywhere" }}>
+          <MainCardColor>{message}</MainCardColor>
+        </div>
       </div>
     </MainJobCardWrapper>
   );

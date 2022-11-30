@@ -11,7 +11,7 @@ export const Wrapper = styled.div`
 export const WrapperInner = styled.div`
   position: relative;
   display: grid;
-  grid-template-columns: 340px auto;
+  grid-template-columns: auto;
   text-align: left;
 `;
 
@@ -53,18 +53,65 @@ export const ItemArea = styled.div`
   grid-template-columns: repeat(6, 330px);
 
   @media screen and (max-width: 2170px) {
-    grid-template-columns: repeat(4, 330px);
+    grid-template-columns: repeat(5, 330px);
   }
   @media screen and (max-width: 1810px) {
     grid-gap: 25px;
-    grid-template-columns: repeat(4, 300px);
+    grid-template-columns: repeat(5, 300px);
   }
   @media screen and (max-width: 1600px) {
     grid-gap: 25px;
+    grid-template-columns: repeat(4, 300px);
+  }
+  @media screen and (max-width: 1278px) {
+    grid-gap: 25px;
     grid-template-columns: repeat(3, 300px);
   }
-  @media screen and (max-width: 1260px) {
+
+  @media screen and (max-width: 1080px) {
     grid-gap: 25px;
     grid-template-columns: repeat(2, 300px);
+  }
+
+  @media screen and (max-width: 754px) {
+    grid-row-gap: 25px;
+    grid-template-columns: repeat(2, 300px);
+  }
+
+  @media screen and (max-width: 665px) {
+    grid-row-gap: 25px;
+    grid-template-columns: repeat(1, 400px);
+  }
+
+  @media screen and (max-width: 480px) {
+    grid-row-gap: 25px;
+    grid-template-columns: repeat(1, 100%);
+  }
+`;
+
+export const CustomCard = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+`;
+
+export const ActionArea = styled.div`
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+
+  margin-top: 30px;
+
+  .approval {
+    &:hover {
+      color: #448fff;
+      cursor: pointer;
+    }
+  }
+  .unapproved {
+    &:hover {
+      color: #448fff;
+      cursor: pointer;
+    }
   }
 `;

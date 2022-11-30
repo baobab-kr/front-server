@@ -1,10 +1,12 @@
 import React, { Dispatch, SetStateAction, useState, KeyboardEvent, useEffect } from "react";
 import API from "../../../api";
 
-import { LoginOverlay, LoginContainer, LoginWrapper, CustomInput, VisibilityBtnArea, LoginArea, TitleArea, LoginBtn } from "./style";
+import { GitHubLogin, LoginOverlay, LoginContainer, LoginWrapper, CustomInput, VisibilityBtnArea, LoginArea, TitleArea, LoginBtn, CloseBtnArea } from "./style";
 import { MdVisibilityOff, MdVisibility } from "react-icons/md";
 import Wave from "./Wave/Wave";
 import Swal from "sweetalert2";
+import { AiFillGithub, AiOutlineClose } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
 
 type tOpen = {
   open: boolean;
@@ -12,6 +14,7 @@ type tOpen = {
 };
 
 export default function LoginForm({ open, setOpen }: tOpen): JSX.Element {
+  const navigate = useNavigate();
   const [id, setID] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [visibility, setVisibility] = useState<boolean>(false);
@@ -28,6 +31,7 @@ export default function LoginForm({ open, setOpen }: tOpen): JSX.Element {
   const handleSubmit = async () => {
     API.post("/users/login", { userid: id, password: password }, { withCredentials: true })
       .then((res) => {
+        console.log("/users/login => ", res);
         localStorage.setItem("atexpires", JSON.stringify(res.headers.atexpires));
         localStorage.setItem("rtexpires", JSON.stringify(res.headers.rtexpires));
         localStorage.setItem("user", JSON.stringify(res.data));
@@ -44,6 +48,14 @@ export default function LoginForm({ open, setOpen }: tOpen): JSX.Element {
     }
   };
 
+  const githubLogin = () => {
+    const url: string = `https://github.com/login/oauth/authorize?client_id=${process.env.REACT_APP_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_GITHUB_CALLBACK_URL}`;
+
+    // window.open(url);
+
+    document.location.href = url;
+  };
+
   useEffect(() => {
     setID("");
     setPassword("");
@@ -54,10 +66,16 @@ export default function LoginForm({ open, setOpen }: tOpen): JSX.Element {
     <LoginOverlay open={open} onClick={closeOverlay}>
       <LoginContainer onClick={prevet}>
         <Wave />
-
+        <CloseBtnArea
+          onClick={() => {
+            setOpen(false);
+          }}
+        >
+          <AiOutlineClose />
+        </CloseBtnArea>
         <LoginWrapper>
           <TitleArea>
-            <p style={{ fontSize: "45px" }}>시작하기</p>
+            <p className="start">시작하기</p>
             <p>지금 로그인하고 맞춤 커리어 콘텐츠로 하루를 시작하세요.</p>
             <p>매일 BAOBAB 콘텐츠가 새 탭에서 펼쳐집니다.</p>
           </TitleArea>
@@ -81,11 +99,17 @@ export default function LoginForm({ open, setOpen }: tOpen): JSX.Element {
             />
 
             <VisibilityBtnArea>
-              {visibility && <MdVisibility onClick={() => setVisibility(false)} size="24" color="#e4e5e7" />}
-              {!visibility && <MdVisibilityOff onClick={() => setVisibility(true)} size="24" color="#e4e5e7" />}
+              {visibility && <MdVisibility onClick={() => setVisibility(false)} size="24" />}
+              {!visibility && <MdVisibilityOff onClick={() => setVisibility(true)} size="24" />}
             </VisibilityBtnArea>
 
             <LoginBtn onClick={handleSubmit}>로그인</LoginBtn>
+            <LoginBtn style={{ marginTop: "-25px" }} onClick={githubLogin}>
+              <GitHubLogin>
+                <AiFillGithub size={20} />
+                <p>GitHub로 로그인 하기</p>
+              </GitHubLogin>
+            </LoginBtn>
           </LoginArea>
         </LoginWrapper>
       </LoginContainer>

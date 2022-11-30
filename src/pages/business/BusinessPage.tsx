@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import {
   JobsBusinessWrap,
   HeaderLocalComp,
@@ -24,7 +25,11 @@ import MainJobCard from "components/JobCard/MainJobCard";
 
 import { tStepFirst, tStepSecond } from "Types/Business";
 
+import test from "../../assets/Logo2.png";
+import { tJob } from "Types/Jobs";
+
 export default function BusinessPage(): JSX.Element {
+  const location: any = useLocation();
   const [stepper, setStepper] = useState<number>(0);
   const [stepFirst, setStepFirst] = useState<tStepFirst>({
     BusinessLicense: null,
@@ -41,12 +46,83 @@ export default function BusinessPage(): JSX.Element {
     CompanyName: "",
     Location: "",
     Message: "",
-    Description: "",
+    StartDate: "",
     EndDate: "",
     Salary: "",
     InfoURL: "",
-    Type: "",
+    talent: "",
+    Type: 0,
   });
+  const [previewLogo, setPreviewLogo] = useState<string>("");
+
+  const [previewData, setPreviewData] = useState<tJob>({
+    id: 0,
+    companyName: " ",
+    managerName: "",
+    managerContact: "",
+    license: "",
+    field: " ",
+    title: "",
+    logo: "",
+    location: "",
+    message: "",
+    talent: "",
+    careerType: 0,
+    url: "",
+    salary: "",
+    startDate: null,
+    endDate: null,
+    approvalStatus: 0,
+    jobStatus: 0,
+  });
+
+  useEffect(() => {
+    if (stepSecond.CompanyLogo !== null && stepSecond.CompanyLogo !== undefined) {
+      window.URL.revokeObjectURL(previewLogo);
+      setPreviewLogo(URL.createObjectURL(stepSecond!.CompanyLogo[0]));
+    }
+    setPreviewData((curr) => {
+      return {
+        ...curr,
+        field: stepSecond.Field,
+        title: stepSecond.Title,
+        companyName: stepSecond.CompanyName,
+        location: stepSecond.Location,
+        message: stepSecond.Message,
+        salary: stepSecond.Salary,
+        careerType: stepSecond.Type,
+      };
+    });
+  }, [stepSecond]);
+
+  useEffect(() => {
+    console.log(location.state);
+    if (location.state !== null) {
+      const data: tJob = location.state.data;
+      setStepFirst({
+        BusinessLicense: null, //data.license,
+        ManagerEMail: "",
+        ManagerName: data.managerName,
+        ManagerPhone: data.managerContact,
+        URL: "",
+      });
+      setStepSecond({
+        CompanyLogo: null,
+        CompanyName: data.companyName,
+        EndDate: data.endDate,
+        Field: data.field,
+        Image: null,
+        InfoURL: data.url,
+        Location: data.location,
+        Message: data.message,
+        Salary: data.salary,
+        StartDate: data.startDate,
+        talent: data.talent,
+        Title: data.title,
+        Type: data.careerType,
+      });
+    }
+  }, []);
 
   const stepperController = (value: number) => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -60,27 +136,31 @@ export default function BusinessPage(): JSX.Element {
   return (
     <JobsBusinessWrap>
       <div>
-        {/* <HeaderLocalComp>
-          <ul>
-            <li className="active">
-              <div>광고 신청</div>
-            </li>
-            <li>
-              <div>신청 내역</div>
-            </li>
-          </ul>
-        </HeaderLocalComp> */}
         <div className="container">
           <TemplateOneSidebar>
             <ColumnLeft>
               <PreviewJobsWrap>
                 <PreviewJobsBanner>
                   <h5 style={{ marginBottom: "15px" }}>홈피드 배너 미리보기</h5>
-                  <JobCard board={1} width={"300px"} height={"310px"} imgHeight={"45%"} isMyHome={false} deleteBoard={() => {}} />
+                  <JobCard
+                    jobItem={previewData}
+                    previewLogo={previewLogo}
+                    board={-1}
+                    width={"300px"}
+                    height={"310px"}
+                    imgHeight={"45%"}
+                    isMyHome={false}
+                    deleteBoard={() => {}}
+                  />
                 </PreviewJobsBanner>
                 <PreviewJobsCard>
                   <h5 style={{ marginBottom: "15px" }}>채용 탭 카드 미리보기</h5>
-                  <MainJobCard logo="" title="" wlrrms="" 경력="" />
+                  <MainJobCard
+                    logo={previewLogo !== "" ? <img src={previewLogo} alt="logo" width={55} height={55}></img> : ""}
+                    title={stepSecond.Title}
+                    wlrrms={`[${stepSecond.CompanyName}] ${stepSecond.Field}`}
+                    경력={stepSecond.Message}
+                  />
                 </PreviewJobsCard>
               </PreviewJobsWrap>
             </ColumnLeft>
@@ -121,7 +201,7 @@ export default function BusinessPage(): JSX.Element {
                 )}
                 {stepper === 2 && (
                   <div className="step-3">
-                    <StepThird stepperController={stepperController} />
+                    <StepThird stepFirst={stepFirst} stepSecond={stepSecond} stepperController={stepperController} />
                   </div>
                 )}
               </div>

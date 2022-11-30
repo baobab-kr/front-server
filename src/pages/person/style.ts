@@ -22,7 +22,7 @@ export const Wrapper = styled.div`
 
   @media screen and (max-width: 760px) {
     /* 모바일 세로 */
-    padding: 0px 48px;
+    padding: 0px 65px;
   }
 `;
 
@@ -32,7 +32,6 @@ export const Properties = styled.div`
   align-items: flex-start;
 
   @media screen and (max-width: 830px) {
-    /* 모바일 세로 */
     align-items: center;
 
     width: 100%;
@@ -45,6 +44,15 @@ export const Properties = styled.div`
     & div:nth-child(2) {
       order: 1;
     }
+  }
+`;
+
+export const TagListTItle = styled.div`
+  width: 100%;
+  max-width: 320px;
+
+  @media screen and (max-width: 830px) {
+    max-width: none;
   }
 `;
 
@@ -62,11 +70,6 @@ export const TagPlace = styled.div`
   margin-top: 8px;
   overflow-y: auto;
   flex-wrap: wrap;
-
-  @media screen and (max-width: 830px) {
-    /* 모바일 세로 */
-    width: 320px;
-  }
 `;
 
 export const UserInfo = styled.div`
@@ -82,15 +85,38 @@ export const UserInfo = styled.div`
 
   gap: 20px;
 
+  @media screen and (max-width: 862px) {
+    flex-direction: column;
+  }
   /* background-color: #252525; */
   /* padding: 15px 0px; */
   /* height: 350px; */
 `;
 
-export const UserDiscrtprion = styled.div``;
+export const UserDiscrtprion = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-top: 20px;
+  gap: 15px;
+
+  @media screen and (max-width: 1080px) {
+    flex-direction: column;
+  }
+`;
+
+export const UserDescriptionChild = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  flex-basis: 50%;
+
+  @media screen and (max-width: 1080px) {
+    flex-direction: column;
+  }
+`;
 
 export const Content = styled.div`
-  width: 100%;
+  /* width: 100%;
 
   display: flex;
   align-items: center;
@@ -100,16 +126,46 @@ export const Content = styled.div`
   margin: 25px auto;
 
   @media screen and (max-width: 830px) {
-    /* 모바일 세로 */
     justify-content: center;
+  } */
+  margin: 25px auto;
+  width: 100%;
+  position: relative;
+  grid-gap: 30px;
+  display: grid;
+  grid-template-columns: repeat(2, 50%);
+
+  @media screen and (max-width: 2170px) {
+    grid-template-columns: repeat(2, 50%);
+  }
+  @media screen and (max-width: 1810px) {
+    grid-gap: 25px;
+    grid-template-columns: repeat(2, 50%);
+  }
+  @media screen and (max-width: 1600px) {
+    grid-gap: 25px;
+    grid-template-columns: repeat(2, 50%);
+  }
+  @media screen and (max-width: 1260px) {
+    grid-gap: 25px;
+    grid-template-columns: repeat(2, 50%);
+  }
+
+  @media screen and (max-width: 1080px) {
+    grid-gap: 25px;
+    grid-template-columns: repeat(1, 100%);
   }
 `;
 
 export const Input = styled.input`
   width: 320px;
   height: 1.9rem;
-  border-radius: 8px;
+  border-radius: 3px;
   padding: 0px 30px 0px 15px;
+
+  @media screen and (max-width: 830px) {
+    width: 100%;
+  }
 `;
 
 export const TagList = styled.div`

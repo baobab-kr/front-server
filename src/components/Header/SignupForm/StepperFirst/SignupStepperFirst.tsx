@@ -132,7 +132,7 @@ export default function SignupStepperFirst(props: tStepperFirst): JSX.Element {
   return (
     <StepperFirst>
       <div>
-        <p style={{ marginBottom: "20px" }}>NAME</p>
+        <p>NAME</p>
         <InputWrapper>
           <CustomInput placeholder="Name" value={props.name} onChange={(e) => props.setName(e.target.value)} />
           <ConfirmButton
@@ -148,10 +148,12 @@ export default function SignupStepperFirst(props: tStepperFirst): JSX.Element {
             {props.confirm.name ? "사용 가능" : "확인"}
           </ConfirmButton>
         </InputWrapper>
-        <p style={{ marginTop: "15px", marginLeft: "5px", color: showError(nameErr.error), fontSize: "0.825rem" }}>{nameErr.text}</p>
+        <p className="error" style={{ marginLeft: "5px", color: showError(nameErr.error) }}>
+          {nameErr.text}
+        </p>
       </div>
       <div>
-        <p style={{ marginBottom: "20px" }}>ID</p>
+        <p>ID</p>
         <InputWrapper>
           <CustomInput placeholder="ID" value={props.id} onChange={(e) => props.setId(e.target.value)} />
           <ConfirmButton
@@ -167,11 +169,13 @@ export default function SignupStepperFirst(props: tStepperFirst): JSX.Element {
             {props.confirm.id ? "사용 가능" : "확인"}
           </ConfirmButton>
         </InputWrapper>
-        <p style={{ marginTop: "15px", marginLeft: "5px", color: showError(idErr.error), fontSize: "0.825rem" }}>{idErr.text}</p>
+        <p className="error" style={{ marginLeft: "5px", color: showError(idErr.error) }}>
+          {idErr.text}
+        </p>
       </div>
 
       <div style={{ position: "relative" }}>
-        <p style={{ marginBottom: "20px" }}>PASSWORD</p>
+        <p>PASSWORD</p>
         <InputWrapper>
           <CustomInput
             style={{ width: "100%" }}
@@ -182,14 +186,16 @@ export default function SignupStepperFirst(props: tStepperFirst): JSX.Element {
           />
         </InputWrapper>
         <VisibilityBtnArea>
-          {visibility && <MdVisibility onClick={() => setVisibility(false)} size="24" color="#e4e5e7" />}
-          {!visibility && <MdVisibilityOff onClick={() => setVisibility(true)} size="24" color="#e4e5e7" />}
+          {visibility && <MdVisibility onClick={() => setVisibility(false)} size="24" />}
+          {!visibility && <MdVisibilityOff onClick={() => setVisibility(true)} size="24" />}
         </VisibilityBtnArea>
-        <p style={{ marginTop: "15px", marginLeft: "5px", color: showError(passwordErr.error), fontSize: "0.825rem" }}>{passwordErr.text}</p>
+        <p className="error" style={{ marginLeft: "5px", color: showError(passwordErr.error) }}>
+          {passwordErr.text}
+        </p>
       </div>
 
       <div style={{ position: "relative" }}>
-        <p style={{ marginBottom: "20px" }}>CONFIRM PASSWORD</p>
+        <p>CONFIRM PASSWORD</p>
         <InputWrapper>
           <CustomInput
             style={{ width: "100%" }}
@@ -200,10 +206,12 @@ export default function SignupStepperFirst(props: tStepperFirst): JSX.Element {
           />
         </InputWrapper>
         <VisibilityBtnArea>
-          {cVisibility && <MdVisibility onClick={() => setCVisibility(false)} size="24" color="#e4e5e7" />}
-          {!cVisibility && <MdVisibilityOff onClick={() => setCVisibility(true)} size="24" color="#e4e5e7" />}
+          {cVisibility && <MdVisibility onClick={() => setCVisibility(false)} size="24" />}
+          {!cVisibility && <MdVisibilityOff onClick={() => setCVisibility(true)} size="24" />}
         </VisibilityBtnArea>
-        <p style={{ marginTop: "15px", marginLeft: "5px", color: showError(cPasswordErr.error), fontSize: "0.825rem" }}>{cPasswordErr.text}</p>
+        <p className="error" style={{ marginLeft: "5px", color: showError(cPasswordErr.error) }}>
+          {cPasswordErr.text}
+        </p>
       </div>
     </StepperFirst>
   );

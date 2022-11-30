@@ -37,7 +37,11 @@ export default function SignupStepperThird({ name, email, setEmail, emailCode, s
 
   useEffect(() => {
     if (!/([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/g.test(email)) {
-      setEmailError(true);
+      if (email === "") {
+        setEmailError(false);
+      } else {
+        setEmailError(true);
+      }
     } else {
       setEmailError(false);
     }

@@ -148,6 +148,8 @@ const FooterCommentArea = styled.div`
   align-items: center;
 
   margin-bottom: 50px;
+
+  color: ${({ theme }) => theme.fontColor.color};
 `;
 
 type tOpacityProps = {

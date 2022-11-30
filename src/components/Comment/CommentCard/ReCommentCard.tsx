@@ -10,14 +10,17 @@ type tProps = {
   data: iComment;
   reComments: iComment[];
   setReComments: Dispatch<SetStateAction<iComment[]>>;
+  reCommentCnt: number;
+  setReCommentCnt: Dispatch<SetStateAction<number>>;
 };
 
-export default function ReCommentCard({ data, reComments, setReComments }: tProps): JSX.Element {
+export default function ReCommentCard({ data, reComments, setReComments, reCommentCnt, setReCommentCnt }: tProps): JSX.Element {
   const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
 
   const deleteReComment = async () => {
     await patchDeleteReComment(data.id).then(() => {
       setReComments(reComments.filter((q) => q.id !== data.id));
+      setReCommentCnt(reCommentCnt - 1);
     });
   };
 
@@ -43,7 +46,6 @@ export default function ReCommentCard({ data, reComments, setReComments }: tProp
         <Comment>{data.content}</Comment>
         <CommentFooter>
           <div></div>
-          <div style={{ cursor: "pointer" }}>Reply</div>
         </CommentFooter>
       </Card>
     </CardWrapper>

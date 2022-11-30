@@ -49,6 +49,10 @@ export const InputWrap = styled.div`
   border-bottom: 1px solid #35363b;
   display: flex;
   padding: 0 8px;
+
+  @media screen and (max-width: 724px) {
+    flex-direction: column;
+  }
 `;
 
 export const LabelArea = styled.div`

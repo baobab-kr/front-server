@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Location } from "constants/index";
 import Select from "react-select";
-
+import { Title } from "./style";
 type tProps = { value: string; label: string };
 const formatOptionLabel = ({ value, label }: tProps) => (
   <div style={{ display: "flex", color: "black" }}>
@@ -21,8 +21,8 @@ export default function LocationSelector({ setValue }: tValue): JSX.Element {
     return { value: `gu_${index}`, label: _gu };
   });
   const [guGroup, setGuGroup] = useState<tProps[]>(guGroupDefault);
-  const [si, setSi] = useState<tProps>(siGroup[0]);
-  const [gu, setGu] = useState<tProps>(guGroup[0]);
+  const [si, setSi] = useState<tProps>();
+  const [gu, setGu] = useState<tProps>();
 
   const siHandler = (props: any) => {
     setSi(props);
@@ -32,28 +32,30 @@ export default function LocationSelector({ setValue }: tValue): JSX.Element {
   };
 
   useEffect(() => {
-    const newGroup: tProps[] = Location[si.label].map((_gu, index) => {
-      return { value: `gu_${index}`, label: _gu };
-    });
+    if (si !== undefined) {
+      const newGroup: tProps[] = Location[si!.label].map((_gu, index) => {
+        return { value: `gu_${index}`, label: _gu };
+      });
 
-    setGuGroup(newGroup);
-    setGu(newGroup[0]);
+      setGuGroup(newGroup);
+      setGu(newGroup[0]);
+    }
   }, [si]);
 
   useEffect(() => {
-    setValue(`${si.label} ${gu.label}`);
+    if (si !== undefined && gu !== undefined) {
+      setValue(`${si!.label} ${gu!.label}`);
+    }
   }, [gu]);
 
   return (
     <div style={{ display: "flex", gap: "15px", alignItems: "center", fontSize: "14px" }}>
-      <div style={{ minWidth: "60px" }}>광역시/도:</div>
-      <div style={{ minWidth: "150px" }}>
-        <Select defaultValue={si} options={siGroup} formatOptionLabel={formatOptionLabel} onChange={siHandler} value={si} />
+      <div style={{ minWidth: "35px" }}>
+        <Title>시/도:</Title>
       </div>
-      <div style={{ minWidth: "60px" }}>시/군/구:</div>
-      <div style={{ minWidth: "150px" }}>
-        <Select defaultValue={gu} options={guGroup} formatOptionLabel={formatOptionLabel} onChange={guHandler} value={gu} />
-      </div>
+      <Select options={siGroup} formatOptionLabel={formatOptionLabel} onChange={siHandler} value={si} />
+      <Title>구:</Title>
+      <Select options={guGroup} formatOptionLabel={formatOptionLabel} onChange={guHandler} value={gu} />
     </div>
   );
 }

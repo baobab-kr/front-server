@@ -21,6 +21,8 @@ const CommentWrapper = styled.div<tOpenStatus>`
   visibility: ${(props) => (props.status ? "visible" : "hidden")};
 
   overflow-y: auto;
+
+  color: ${({ theme }) => theme.fontColor.color};
 `;
 
 const HeaderArea = styled.div`
@@ -61,7 +63,6 @@ const UserContainer = styled.div`
   flex-direction: column;
   border-radius: 4px;
   background-color: ${({ theme }) => theme.backgroundColor.subColor};
-  box-shadow: rgb(0 0 0 / 12%) 0px 2px 8px;
 `;
 
 const UserInfo = styled.div`

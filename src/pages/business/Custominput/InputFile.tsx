@@ -6,5 +6,5 @@ type tProps = {
 };
 
 export default function InputFile({ fileController }: tProps): JSX.Element {
-  return <CustomInputFile type="file" onChange={fileController} />;
+  return <CustomInputFile type="file" onChange={fileController} accept="image/jpg, image/jpeg, image/png" />;
 }

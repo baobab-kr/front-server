@@ -23,7 +23,7 @@ export default function Avator({ userId, width, height }: Props): JSX.Element {
         overflow: "hidden",
       }}
     >
-      <ImageAvator src={`${process.env.REACT_APP_API_ROOT}users/read-profile?userid="${userId}"`} alt="avator"></ImageAvator>
+      <ImageAvator src={`${process.env.REACT_APP_API_ROOT}/users/read-profile?userid="${userId}"`} alt="avator"></ImageAvator>
       {/* <ImageAvator src={imag} alt="avator"></ImageAvator> */}
     </div>
   );

@@ -81,4 +81,5 @@ export const CheckBoxBtn = styled.div`
   border: 1px solid #35363b;
   border-radius: 3px;
   padding: 0px;
+  min-width: 24px;
 `;
