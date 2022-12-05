@@ -70,6 +70,9 @@ function Popup({ onClose, data, setData, boardId }: props) {
     }
   };
   const onSave = () => {
+    if (description === "") {
+      Swal.fire("필수입력", "설명을 입력해주세요!", "error");
+    }
     const formData: any = new FormData();
     formData.append("title", data.title);
     formData.append("description", description);
@@ -229,9 +232,9 @@ export default function EditorPage() {
   };
 
   useEffect(() => {
-    if (location.state !== null) {
+    console.log("location.state", location.state);
+    if (location.state !== null && location.state.data.content) {
       editorRef.current?.getInstance().setHTML(location.state.data.content);
-      console.log();
       tagHandler(location.state.data.tags.map((q: any) => q.tag_name));
     }
 

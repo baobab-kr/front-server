@@ -10,19 +10,18 @@ const formatOptionLabel = ({ value, label }: tProps) => (
 );
 
 type tValue = {
+  value: string;
   setValue: (location: string) => void;
 };
 
-export default function LocationSelector({ setValue }: tValue): JSX.Element {
+export default function LocationSelector({ value, setValue }: tValue): JSX.Element {
   const siGroup: tProps[] = Object.keys(Location).map((_si, index) => {
     return { value: `si_${index}`, label: _si };
   });
-  const guGroupDefault: tProps[] = Location[siGroup[0].label].map((_gu, index) => {
-    return { value: `gu_${index}`, label: _gu };
-  });
+  const guGroupDefault: tProps[] = [];
   const [guGroup, setGuGroup] = useState<tProps[]>(guGroupDefault);
-  const [si, setSi] = useState<tProps>();
-  const [gu, setGu] = useState<tProps>();
+  const [si, setSi] = useState<tProps | null>();
+  const [gu, setGu] = useState<tProps | null>();
 
   const siHandler = (props: any) => {
     setSi(props);
@@ -32,7 +31,16 @@ export default function LocationSelector({ setValue }: tValue): JSX.Element {
   };
 
   useEffect(() => {
-    if (si !== undefined) {
+    console.log("value", value);
+    if (value === "") {
+      guHandler(null);
+      siHandler(null);
+      setGuGroup([]);
+    }
+  }, [value]);
+
+  useEffect(() => {
+    if (si) {
       const newGroup: tProps[] = Location[si!.label].map((_gu, index) => {
         return { value: `gu_${index}`, label: _gu };
       });
@@ -43,7 +51,7 @@ export default function LocationSelector({ setValue }: tValue): JSX.Element {
   }, [si]);
 
   useEffect(() => {
-    if (si !== undefined && gu !== undefined) {
+    if (si && gu) {
       setValue(`${si!.label} ${gu!.label}`);
     }
   }, [gu]);

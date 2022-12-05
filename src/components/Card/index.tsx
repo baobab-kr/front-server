@@ -130,9 +130,6 @@ export default function Card({ board, width, height, isMyHome, deleteBoard, imgH
 
         <Footer>
           <User onClick={navigatePerson}>
-            {/* <div style={{ width: "1.5rem", height: "1.5rem", borderRadius: "50%", overflow: "hidden" }}>
-            <img src={DefaultAvator} style={{ width: "100%", height: "100%", objectFit: "cover" }} alt="avator"></img>
-          </div> */}
             <Avator userId={board.writer!.userid} width={"1.5rem"} height={"1.5rem"} />
             by {board.writer!.username}
           </User>

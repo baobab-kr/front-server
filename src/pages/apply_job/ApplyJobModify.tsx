@@ -63,6 +63,7 @@ export default function ApplyJobModify(): JSX.Element {
   const [email, setEmail] = useState<string>("");
   // const [job, setJob] = useState<string>(JOB_GROUP[0].value);
   const [job, setJob] = useState<{ value: string; label: string }>(JOB_GROUP[0]);
+  const [jobId, setJobId] = useState<number>();
 
   const [socialUrl, setSocialUrl] = useState<string>("");
 
@@ -96,7 +97,7 @@ export default function ApplyJobModify(): JSX.Element {
     }
     const body = {
       id: applyJobId,
-      jobs_Id: Number(id[id.length - 1]),
+      jobs_Id: jobId,
       user_id: userInfo?.id,
       title: title,
       name: name,
@@ -113,7 +114,7 @@ export default function ApplyJobModify(): JSX.Element {
 
     await UpdateApplyJob(body)
       .then((res) => {
-        navigate("/");
+        navigate("/jobs");
       })
       .catch((err) => {
         Swal.fire("Error 다시 입력해주세요");
@@ -142,7 +143,7 @@ export default function ApplyJobModify(): JSX.Element {
       setTitle(res.title);
       setName(res.name);
       setApplyJobId(res.id);
-      // setJob()
+      setJobId(Number(res.jobs_Id));
       console.log(res);
     });
   }, []);

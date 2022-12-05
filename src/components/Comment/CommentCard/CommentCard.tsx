@@ -24,7 +24,7 @@ export default function CommentCard({ data, comments, setComments, commentCnt, s
   const [reComment, setReComment] = useState<string>("");
   const [reCommentCnt, setReCommentCnt] = useState<number>(0);
 
-  const [page, setPage] = useState<number>(0);
+  const [page, setPage] = useState<number>(-1);
 
   const textArea = useRef<HTMLTextAreaElement>(null);
   const resize = () => {
@@ -37,7 +37,9 @@ export default function CommentCard({ data, comments, setComments, commentCnt, s
   const replyStatusHandler = (condition: boolean) => {
     setReplyStatus(condition);
     if (!condition) {
-      setPage(0);
+      setPage(-1);
+    } else {
+      loadMore();
     }
   };
 
@@ -48,9 +50,9 @@ export default function CommentCard({ data, comments, setComments, commentCnt, s
     });
   };
 
-  useEffect(() => {
-    getReCommentsFnc();
-  }, [page]);
+  // useEffect(() => {
+  //   getReCommentsFnc();
+  // }, [page]);
 
   useEffect(() => {
     const apiGet = async () => {
@@ -61,12 +63,30 @@ export default function CommentCard({ data, comments, setComments, commentCnt, s
     apiGet();
   }, []);
 
-  const getReCommentsFnc = async () => {
+  const getReCommentsFnc = async (page: number) => {
     await getReComments(data.id, page)
+      .then((res: iComment[]) => {
+        setPage(page);
+
+        const ids = reComments.map((q) => q.id);
+        const result = res.filter((q) => !ids.includes(q.id));
+        if (result.length === 0) {
+          throw new Error("is Last Page");
+        }
+        setReComments([...reComments, ...result]);
+      })
+      .catch((err) => {
+        console.log("getcommetn err => ", err);
+        setPage(page - 1);
+      });
+  };
+
+  const getNewReCommentsFnc = async () => {
+    await getReComments(data.id, 0)
       .then((res: iComment[]) => {
         const ids = reComments.map((q) => q.id);
         const result = res.filter((q) => !ids.includes(q.id));
-        setReComments([...reComments, ...result]);
+        setReComments([...result, ...reComments]);
       })
       .catch((err) => {
         console.log("getcommetn err => ", err);
@@ -77,7 +97,7 @@ export default function CommentCard({ data, comments, setComments, commentCnt, s
     await createReComment(reComment, data.id).then(async (res) => {
       console.log("re", res);
       setReComment("");
-      await getReCommentsFnc();
+      await getNewReCommentsFnc();
       setCreateReply(false);
       setReCommentCnt(reCommentCnt + 1);
 
@@ -86,7 +106,8 @@ export default function CommentCard({ data, comments, setComments, commentCnt, s
   };
 
   const loadMore = () => {
-    setPage(page + 1);
+    console.log(page + 1);
+    getReCommentsFnc(page + 1);
   };
 
   return (

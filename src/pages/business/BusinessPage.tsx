@@ -156,10 +156,11 @@ export default function BusinessPage(): JSX.Element {
                 <PreviewJobsCard>
                   <h5 style={{ marginBottom: "15px" }}>채용 탭 카드 미리보기</h5>
                   <MainJobCard
+                    id={null}
                     logo={previewLogo !== "" ? <img src={previewLogo} alt="logo" width={55} height={55}></img> : ""}
                     title={stepSecond.Title}
                     wlrrms={`[${stepSecond.CompanyName}] ${stepSecond.Field}`}
-                    경력={stepSecond.Message}
+                    description={stepSecond.Message}
                   />
                 </PreviewJobsCard>
               </PreviewJobsWrap>

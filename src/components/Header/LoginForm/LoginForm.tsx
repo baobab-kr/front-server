@@ -19,8 +19,10 @@ export default function LoginForm({ open, setOpen }: tOpen): JSX.Element {
   const [password, setPassword] = useState<string>("");
   const [visibility, setVisibility] = useState<boolean>(false);
 
-  const closeOverlay = () => {
-    setOpen(false);
+  const closeOverlay = (e: any) => {
+    if (e.target.id === "login-overlay") {
+      setOpen(false);
+    }
   };
 
   const prevet = (e: React.MouseEvent<HTMLElement>) => {
@@ -51,8 +53,6 @@ export default function LoginForm({ open, setOpen }: tOpen): JSX.Element {
   const githubLogin = () => {
     const url: string = `https://github.com/login/oauth/authorize?client_id=${process.env.REACT_APP_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_GITHUB_CALLBACK_URL}`;
 
-    // window.open(url);
-
     document.location.href = url;
   };
 
@@ -63,7 +63,7 @@ export default function LoginForm({ open, setOpen }: tOpen): JSX.Element {
   }, [open]);
 
   return (
-    <LoginOverlay open={open} onClick={closeOverlay}>
+    <LoginOverlay open={open} onMouseDown={closeOverlay} id="login-overlay">
       <LoginContainer onClick={prevet}>
         <Wave />
         <CloseBtnArea

@@ -77,7 +77,7 @@ export default function JobDetail(): JSX.Element {
 
   const dateOrder = () => {
     if (data?.endDate === undefined || data.startDate === undefined) return "";
-    if (data?.endDate === null || data?.startDate === null) {
+    if (data?.endDate === "null" || data?.startDate === "null" || data?.endDate === null || data?.startDate === null) {
       return "상시 채용";
     } else {
       return moment(data.endDate).format("YYYY-MM-DD");

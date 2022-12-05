@@ -23,10 +23,9 @@ export default function ThemeSwitch(): JSX.Element {
     }
   }, []);
 
-  console.log(location.pathname);
   return (
     <>
-      {!disalbeLocation.includes(location.pathname) && (
+      {!location.pathname.includes("editor") && (
         <SwitchContainer>
           <Mode isSelected={!darkMode} onClick={() => modeHandler(false)}>
             LIGHT

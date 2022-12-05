@@ -24,7 +24,7 @@ export default function ApplyJobCard({ jobItem, board, width, height, isMyHome, 
 
   const routeDetailPage = () => {
     // navigate(`/apply/${board}`);
-    navigate(`/@${userInfo?.userid}/my-apply-jobs/${board}`);
+    navigate(`/@${userInfo?.userid}/my-apply-jobs/${jobItem.id}`);
   };
   const orderType = (type: number | null) => {
     if (type === null) return "신입";
@@ -49,8 +49,6 @@ export default function ApplyJobCard({ jobItem, board, width, height, isMyHome, 
 
     return `${education} ${status}`;
   };
-
-  console.log("jobItem", jobItem);
 
   return (
     <CardWrapper>

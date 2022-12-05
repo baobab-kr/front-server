@@ -3,6 +3,7 @@ import { DefaultTheme } from "styled-components";
 const fontColor = {
   color: "#000000",
   subColor: "#7F7F7F",
+  jobCardColor: "#555555",
 };
 
 const mainColor = {

@@ -198,7 +198,7 @@ export default function StepSecond({ value, setValue, stepperController }: tProp
 
         <InputContainer title="근무 지역" description="">
           <div className="input">
-            <LocationSelector setValue={locationHandler} />
+            <LocationSelector value={value.Location} setValue={locationHandler} />
           </div>
         </InputContainer>
 
@@ -296,9 +296,24 @@ export default function StepSecond({ value, setValue, stepperController }: tProp
 
         <InputContainer title="인재상" description="회사에 필요한 인재상을 적어주세요.">
           <div className="input" style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-            <InputText maxLength={60} placeholder="예) 신입" value={talent[0]} setValue={(e: React.ChangeEvent<HTMLInputElement>) => talentHandler(e, 0)} />
-            <InputText maxLength={60} placeholder="예) 신입" value={talent[1]} setValue={(e: React.ChangeEvent<HTMLInputElement>) => talentHandler(e, 1)} />
-            <InputText maxLength={60} placeholder="예) 신입" value={talent[2]} setValue={(e: React.ChangeEvent<HTMLInputElement>) => talentHandler(e, 2)} />
+            <InputText
+              maxLength={60}
+              placeholder="인재상을 입력해주세요."
+              value={talent[0]}
+              setValue={(e: React.ChangeEvent<HTMLInputElement>) => talentHandler(e, 0)}
+            />
+            <InputText
+              maxLength={60}
+              placeholder="인재상을 입력해주세요."
+              value={talent[1]}
+              setValue={(e: React.ChangeEvent<HTMLInputElement>) => talentHandler(e, 1)}
+            />
+            <InputText
+              maxLength={60}
+              placeholder="인재상을 입력해주세요."
+              value={talent[2]}
+              setValue={(e: React.ChangeEvent<HTMLInputElement>) => talentHandler(e, 2)}
+            />
           </div>
         </InputContainer>
       </TemplateSection>

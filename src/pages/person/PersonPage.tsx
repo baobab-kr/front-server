@@ -125,18 +125,36 @@ export default function PersonPage(): JSX.Element {
 
   useEffect(() => {
     if (userInfo?.id === undefined || userInfo.userid === undefined) {
-      Swal.fire("로그인 정보를 다시 확인 헤주세요.");
+      Swal.fire("로그인 정보를 다시 확인 해주세요.");
     }
   }, []);
 
   const deleteHandler = (id: number) => {
-    DeleteBoard(id)
-      .then((res) => {
-        setMainState(false);
-        setPage(0);
-        modeSelector(tagMode);
-      })
-      .catch((err) => {});
+    Swal.fire({
+      title: "정말로 삭제 하시겠습니까?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "삭제",
+      cancelButtonText: "취소",
+      reverseButtons: true, // 버튼 순서 거꾸로
+    }).then(async (result: any) => {
+      if (result.isConfirmed) {
+        await DeleteBoard(id)
+          .then((res) => {
+            setMainState(false);
+            setPage(0);
+            modeSelector(tagMode);
+          })
+          .catch((err) => {});
+        Swal.fire("게시글 삭제", "삭제가 완료되었습니다.", "success");
+      }
+    });
+  };
+
+  const moveSocialUrl = (url: string) => {
+    window.open(url);
   };
 
   const fallback = () => {
@@ -158,11 +176,11 @@ export default function PersonPage(): JSX.Element {
           </div>
           <div style={{ display: "flex", gap: "10px", flexDirection: "column", flexBasis: "85%" }}>
             <UserDiscrtprion>
-              <ThemeText style={{ fontSize: "30px", fontWeight: "bold" }}>{writer?.username ?? ""}</ThemeText>
+              <ThemeText style={{ fontSize: "30px", fontWeight: "bold", flexBasis: "25%" }}>{writer?.username ?? ""}</ThemeText>
 
               <DivFlex direction="column" style={{ gap: "15px", flexBasis: "50%" }}>
                 <div style={{ color: "#999999" }}>Description</div>
-                <ThemeText>{writer?.description ?? "데이터 분석을 통한 프로덕트 성장에 관심있습니다."}</ThemeText>
+                <ThemeText>{writer?.description ?? ""}</ThemeText>
               </DivFlex>
               <UserDescriptionChild>
                 <DivFlex direction="column" style={{ gap: "15px", flexBasis: "50%" }}>
@@ -172,7 +190,9 @@ export default function PersonPage(): JSX.Element {
 
                 <DivFlex direction="column" style={{ gap: "15px", flexBasis: "50%" }}>
                   <div style={{ color: "#999999" }}>Social Media</div>
-                  <ThemeText>{writer?.socialUrl ?? ""}</ThemeText>
+                  <ThemeText className="draggable" style={{ cursor: "pointer" }} onClick={() => moveSocialUrl(writer?.socialUrl ?? "")}>
+                    {writer?.socialUrl ?? ""}
+                  </ThemeText>
                 </DivFlex>
               </UserDescriptionChild>
             </UserDiscrtprion>
@@ -187,8 +207,7 @@ export default function PersonPage(): JSX.Element {
               <hr style={{ maxWidth: "100%" }} />
             </TagListTItle>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "15px", width: "100%" }}>
-              {/* <div>게시글2</div> */}
-              <Input alt="검색어" placeholder="검색어를 입력해주세요" />
+              {/* <Input alt="검색어" placeholder="검색어를 입력해주세요" /> */}
             </div>
           </Properties>
           <TagPlace>

@@ -95,14 +95,15 @@ export const CardTitle = styled.div`
     transition: all 0.15s;
   }
   .location {
-    color: #555555;
+    color: ${({ theme }) => theme.fontColor.jobCardColor};
   }
 `;
 
 export const CardName = styled.div`
   margin-right: 3px;
   ::after {
-    color: #555555;
+    color: ${({ theme }) => theme.fontColor.jobCardColor};
+
     content: " ・";
   }
 `;
@@ -110,7 +111,7 @@ export const CardName = styled.div`
 export const CardIntro = styled.div`
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
-  color: #555555;
+  color: ${({ theme }) => theme.fontColor.jobCardColor};
   display: -webkit-box;
   font-size: 14px;
   font-weight: 400;
@@ -126,7 +127,8 @@ export const CardDetail = styled.div`
   div {
     margin-bottom: 7px;
 
-    color: #555555;
+    color: ${({ theme }) => theme.fontColor.jobCardColor};
+
     font-size: 14px;
     font-weight: 500;
     margin-bottom: 5px;
@@ -134,7 +136,8 @@ export const CardDetail = styled.div`
     position: relative;
 
     ::before {
-      background: #555555;
+      color: ${({ theme }) => theme.fontColor.jobCardColor};
+
       border-radius: 2px;
       content: "";
       height: 3px;
@@ -159,6 +162,8 @@ export const MainJobCardWrapper = styled.div`
   padding: 10px 0px;
 
   color: ${({ theme }) => theme.fontColor.color};
+
+  cursor: pointer;
 
   @media screen and (max-width: 1810px) {
     height: 90px;
