@@ -30,7 +30,7 @@ type tState = {
 
 export default function PersonPage(): JSX.Element {
   const [tag, setTag] = useState<TagCount[]>([]);
-  const [writer, setWriter] = useState<Writer>();
+  const [writer, setWriter] = useState<user>();
   const [board, setBoard] = useState<Board[]>([]);
   const [page, setPage] = useState<number>(0);
   const [tagMode, setTagMode] = useState<string>("ALL");
@@ -171,7 +171,7 @@ export default function PersonPage(): JSX.Element {
         <UserInfo>
           <div style={{ flexBasis: "15%" }}>
             <DivFlex direction="column" style={{ alignItems: "center", gap: "15px" }}>
-              <Avator userId={userInfo!.userid.toString()} width={"100%"} height={"100%"} />
+              <Avator user={writer!} userId={writer!.userid.toString()} width={"100%"} height={"100%"} />
             </DivFlex>
           </div>
           <div style={{ display: "flex", gap: "10px", flexDirection: "column", flexBasis: "85%" }}>

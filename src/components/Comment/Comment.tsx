@@ -100,7 +100,7 @@ export default function Comment({ status, setStatus, boardID, commentCnt, setCom
         {userInfo !== null && (
           <S.UserContainer>
             <S.UserInfo>
-              <Avator height="2em" width="2rem" userId={userInfo.userid} />
+              <Avator height="2em" width="2rem" userId={userInfo.userid} user={userInfo} />
               <div>{userInfo.username}</div>
             </S.UserInfo>
             <div style={{ display: "flex", flexDirection: "column" }}>

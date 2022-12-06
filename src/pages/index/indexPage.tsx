@@ -62,7 +62,7 @@ export default function IndexPage(): JSX.Element {
               수정
             </div>
             <S.UserArea>
-              <Avator userId={"1"} width={"3.3rem"} height={"3.3rem"} />
+              <Avator user={detail?.writer!} userId={detail?.writer.userid!} width={"3.3rem"} height={"3.3rem"} />
               <div style={{ display: "flex", justifyContent: "space-around", flexDirection: "column" }}>
                 <div>{detail?.writer.username}</div>
                 <div>{moment(detail?.date || "").format("YYYY년 MM월 DD일")}</div>

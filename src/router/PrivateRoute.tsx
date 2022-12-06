@@ -1,6 +1,8 @@
 import { user } from "Types/user";
 import React from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import POPUP from "store/store.popup";
 
 interface Props {
   component: React.ComponentType;
@@ -11,12 +13,15 @@ interface Props {
 }
 
 export const PrivateRoute: React.FC<Props> = ({ component: RouteComponent, authentication, path, role }) => {
+  const location = useLocation();
+  const [popup, setPopup] = useRecoilState<boolean>(POPUP);
+
   const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
   if (path === "login" && userInfo !== null) return <Navigate to="/" />;
   if (role !== undefined && userInfo?.role !== role) return <Navigate to="/" />;
 
   if (authentication && userInfo === null) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/" />;
   } else if ((authentication && userInfo !== null) || !authentication) {
     return <RouteComponent />;
   }

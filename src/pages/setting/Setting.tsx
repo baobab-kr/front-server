@@ -131,7 +131,7 @@ export default function Setting(): JSX.Element {
                       <img src={fileImage} style={{ width: "100%", height: "100%", objectFit: "cover" }} alt="avator"></img>
                     </div>
                   )}
-                  {fileImage === "" && userInfo?.userid && <Avator userId={userInfo?.userid} height="150px" width="150px" />}
+                  {fileImage === "" && userInfo?.userid && <Avator user={userInfo} userId={userInfo?.userid} height="150px" width="150px" />}
                   <div className="profile-overlay"></div>
                   <div className="profile-btn">
                     <FiEdit3 size={35} />

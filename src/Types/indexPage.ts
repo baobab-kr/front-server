@@ -1,3 +1,5 @@
+import { user } from "Types/user";
+
 export interface iIndexPage {
   borad_id: number;
   content: string;
@@ -6,7 +8,7 @@ export interface iIndexPage {
   likes_count: number;
   title: string;
   tags: [];
-  writer: Writer;
+  writer: user;
 }
 export interface getComment {
   comments: string;
@@ -45,5 +47,5 @@ export interface iComment {
   id: number;
   content: string;
   date: string;
-  writer: Writer;
+  writer: user;
 }

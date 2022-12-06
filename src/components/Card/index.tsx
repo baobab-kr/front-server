@@ -131,7 +131,7 @@ export default function Card({ board, width, height, isMyHome, deleteBoard, imgH
 
         <Footer>
           <User onClick={navigatePerson}>
-            <Avator userId={board.writer!.userid} width={"1.5rem"} height={"1.5rem"} />
+            <Avator user={board.writer!} userId={board.writer!.userid} width={"1.5rem"} height={"1.5rem"} />
             by {board.writer!.username}
           </User>
           <LikeComponent onClick={liking}>{likeState}</LikeComponent>

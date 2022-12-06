@@ -7,6 +7,8 @@ import Wave from "./Wave/Wave";
 import Swal from "sweetalert2";
 import { AiFillGithub, AiOutlineClose } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import POPUP from "store/store.popup";
 
 type tOpen = {
   open: boolean;
@@ -18,10 +20,12 @@ export default function LoginForm({ open, setOpen }: tOpen): JSX.Element {
   const [id, setID] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [visibility, setVisibility] = useState<boolean>(false);
+  const [popup, setPopup] = useRecoilState<boolean>(POPUP);
 
   const closeOverlay = (e: any) => {
     if (e.target.id === "login-overlay") {
       setOpen(false);
+      setPopup(false);
     }
   };
 
@@ -60,6 +64,12 @@ export default function LoginForm({ open, setOpen }: tOpen): JSX.Element {
     setPassword("");
     setVisibility(false);
   }, [open]);
+
+  useEffect(() => {
+    if (popup) {
+      setOpen(popup);
+    }
+  }, [popup]);
 
   return (
     <LoginOverlay open={open} onMouseDown={closeOverlay} id="login-overlay">

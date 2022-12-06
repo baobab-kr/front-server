@@ -1,5 +1,6 @@
 import API from ".";
 import { Board, PersonalInfo, ICreateBoard, Like, TagCount, Writer, IEditBoard } from "Types/main";
+import { user } from "Types/user";
 
 export function getMainBoard(page: number): Promise<Board[]> {
   return new Promise<Board[]>((resolve, reject) => {
@@ -123,8 +124,8 @@ export function getBoardPersonalTagCount(user_id: number): Promise<TagCount[]> {
   });
 }
 
-export function getBoardPersonalWriter(user_id: number): Promise<Writer> {
-  return new Promise<Writer>((resolve, reject) => {
+export function getBoardPersonalWriter(user_id: number): Promise<user> {
+  return new Promise<user>((resolve, reject) => {
     API.post("/board/BoardPersonalWriter", { user_id: user_id })
       .then((res) => {
         resolve(res.data);

@@ -171,10 +171,10 @@ export default function Header(): JSX.Element {
             <div ref={wrapperRef} onClick={toggleUserInfo}>
               <Arrow scale={toggleUser} />
               <UserContainer>
-                <Avator userId={userInfo.userid} height={"40px"} width={"40px"} />
+                <Avator user={userInfo} userId={userInfo.userid} height={"40px"} width={"40px"} />
                 <UserActionList scale={toggleUser}>
                   <div style={{ margin: "10px", display: "flex", gap: "15px", alignItems: "center" }}>
-                    <Avator userId={userInfo.userid} height={"40px"} width={"40px"} />
+                    <Avator user={userInfo} userId={userInfo.userid} height={"40px"} width={"40px"} />
                     <p>{userInfo.username}</p>
                   </div>
                   <hr color="#999999" />
