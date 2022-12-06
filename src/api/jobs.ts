@@ -17,7 +17,6 @@ export function CreateJob(body: any): Promise<string> {
 }
 
 export function getJobsBoardAll(body: any): Promise<tJob[]> {
-  console.log(body);
   return new Promise<tJob[]>((resolve, reject) => {
     API.get("/jobs/getJobsAll", { params: { ...body } })
       .then((res) => {
@@ -33,7 +32,6 @@ export function getJobsBoardAll(body: any): Promise<tJob[]> {
 }
 
 export function getJobsBoardForAdmin(body: any): Promise<tJob[]> {
-  console.log(body);
   return new Promise<tJob[]>((resolve, reject) => {
     API.get("/jobs/getJobsAll_ForServiceAdmin", { params: { page: body } })
       .then((res) => {

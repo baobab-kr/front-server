@@ -96,7 +96,6 @@ export default function BusinessPage(): JSX.Element {
   }, [stepSecond]);
 
   useEffect(() => {
-    console.log(location.state);
     if (location.state !== null) {
       const data: tJob = location.state.data;
       setStepFirst({

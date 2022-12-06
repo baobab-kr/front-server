@@ -12,7 +12,6 @@ interface Props {
 
 export const PrivateRoute: React.FC<Props> = ({ component: RouteComponent, authentication, path, role }) => {
   const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
-  console.log("role", role);
   if (path === "login" && userInfo !== null) return <Navigate to="/" />;
   if (role !== undefined && userInfo?.role !== role) return <Navigate to="/" />;
 

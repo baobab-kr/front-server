@@ -7,6 +7,7 @@ import { user } from "Types/user";
 import { CreateFilteringReComment, createReComment, getReCommentCount, getReComments, patchDeleteComment } from "api/indexPage";
 import { CardWrapper, Card, UserContainer, UserInfo, Comment, CommentFooter, ShowReply, ReplyArea, Textarea, TextActionArea, LoadMoreBtn } from "./style";
 import { timeForToday } from "util/date";
+import Swal from "sweetalert2";
 
 type tProps = {
   data: iComment;
@@ -76,7 +77,6 @@ export default function CommentCard({ data, comments, setComments, commentCnt, s
         setReComments([...reComments, ...result]);
       })
       .catch((err) => {
-        console.log("getcommetn err => ", err);
         setPage(page - 1);
       });
   };
@@ -89,13 +89,12 @@ export default function CommentCard({ data, comments, setComments, commentCnt, s
         setReComments([...result, ...reComments]);
       })
       .catch((err) => {
-        console.log("getcommetn err => ", err);
+        Swal.fire("댓글", "댓글 작성을 실패했습니다.", "error");
       });
   };
 
   const onRespond = async () => {
     await createReComment(reComment, data.id).then(async (res) => {
-      console.log("re", res);
       setReComment("");
       await getNewReCommentsFnc();
       setCreateReply(false);
@@ -106,7 +105,6 @@ export default function CommentCard({ data, comments, setComments, commentCnt, s
   };
 
   const loadMore = () => {
-    console.log(page + 1);
     getReCommentsFnc(page + 1);
   };
 

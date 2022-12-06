@@ -14,6 +14,7 @@ import TagComponent from "components/Tag/Tag";
 
 import { BsFillChatFill } from "react-icons/bs";
 import Comment from "components/Comment/Comment";
+import Swal from "sweetalert2";
 
 export default function IndexPage(): JSX.Element {
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ export default function IndexPage(): JSX.Element {
           });
         })
         .catch((err) => {
-          console.log(err);
+          Swal.fire("정보", "정보 불러오기를 실패했습니다.", "error");
         });
 
       await getCommentCount(parseInt(board_id)).then((res) => {

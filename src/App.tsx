@@ -23,9 +23,12 @@ import { USER_TYPE } from "constants/index";
 import GithubLogin from "pages/github-login/GithubLogin";
 import MainSearchPage from "pages/main/MainSearchPage";
 import ApplyJobModify from "pages/apply_job/ApplyJobModify";
+import USER from "./store/store.user";
+import { user } from "Types/user";
 
 export default function App(): JSX.Element {
   const [, setDarkMode] = useRecoilState<boolean>(Darkmode);
+  const [, setUser] = useRecoilState<user>(USER);
 
   useEffect(() => {
     getUserInfoFnc();
@@ -37,11 +40,23 @@ export default function App(): JSX.Element {
     await getUserInfo()
       .then((data) => {
         localStorage.setItem("user", JSON.stringify(data));
+        setUser(data);
       })
       .catch((err) => {
         localStorage.removeItem("atexpires");
         localStorage.removeItem("rtexpires");
         localStorage.removeItem("user");
+        setUser({
+          id: -1,
+          userid: "",
+          username: "",
+          email: "",
+          role: null,
+          description: null,
+          avatar_image: null,
+          socialUrl: "",
+          techStack: "",
+        });
       });
   };
 

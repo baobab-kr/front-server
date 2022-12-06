@@ -12,7 +12,6 @@ export function checkUsername(username_: string): Promise<userName> {
         resolve(res.data);
       })
       .catch((err) => {
-        console.log("err", err);
         reject(err.response);
       });
   });
@@ -28,7 +27,6 @@ export function checkId(id_: string): Promise<id> {
         resolve(res.data);
       })
       .catch((err) => {
-        console.log("err", err);
         reject(err.response);
       });
   });
@@ -45,7 +43,6 @@ export function checkEmail(email_: string): Promise<email> {
         resolve(res.data);
       })
       .catch((err) => {
-        console.log("err", err);
         reject(err.response);
       });
   });
@@ -95,7 +92,6 @@ export function users_register(
         resolve(res.data);
       })
       .catch((err) => {
-        console.log("err", err);
         reject(err.response);
       });
   });

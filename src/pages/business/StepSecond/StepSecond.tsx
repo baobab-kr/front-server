@@ -72,7 +72,6 @@ export default function StepSecond({ value, setValue, stepperController }: tProp
   };
 
   const logoFileController = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.files);
     if (e.target.files?.length) {
       setValue((v) => {
         return {
@@ -91,7 +90,6 @@ export default function StepSecond({ value, setValue, stepperController }: tProp
   };
 
   const imageFileController = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.files);
     if (e.target.files?.length) {
       setValue((v) => {
         return {

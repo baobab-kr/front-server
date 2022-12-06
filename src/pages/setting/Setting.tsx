@@ -38,10 +38,6 @@ export default function Setting(): JSX.Element {
     setJob(techStack || JOB_GROUP[0]);
   }, []);
 
-  useEffect(() => {
-    console.log("fileImage", fileImage);
-  }, [fileImage]);
-
   const imageSelectHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileLists = e.target.files;
     if (fileLists !== null) {

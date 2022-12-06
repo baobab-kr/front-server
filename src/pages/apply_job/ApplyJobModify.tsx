@@ -84,7 +84,6 @@ export default function ApplyJobModify(): JSX.Element {
       // setFileImage(fileImage);
       setFileImage(URL.createObjectURL(fileLists[0]));
       setFileList(fileLists);
-      console.log("asd", fileList);
     }
   };
 
@@ -110,7 +109,6 @@ export default function ApplyJobModify(): JSX.Element {
       education: education,
       educationStatus: educationStatus,
     };
-    console.log(body);
 
     await UpdateApplyJob(body)
       .then((res) => {
@@ -124,7 +122,6 @@ export default function ApplyJobModify(): JSX.Element {
 
   useEffect(() => {
     const id = location.pathname.split("/");
-    console.log(Number(id[id.length - 1]));
 
     getApplyJobDetail(Number(id[id.length - 1])).then((res: tApplyJob) => {
       setEmail(res.email);
@@ -144,7 +141,6 @@ export default function ApplyJobModify(): JSX.Element {
       setName(res.name);
       setApplyJobId(res.id);
       setJobId(Number(res.jobs_Id));
-      console.log(res);
     });
   }, []);
 

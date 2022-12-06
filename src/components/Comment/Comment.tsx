@@ -34,7 +34,6 @@ export default function Comment({ status, setStatus, boardID, commentCnt, setCom
 
   const onRespond = async () => {
     await createComment(comment, boardID!).then(async (res) => {
-      console.log("createComment", res);
       setComment("");
       setCommentCnt(commentCnt + 1);
       setIsLastPage(false);
@@ -59,7 +58,6 @@ export default function Comment({ status, setStatus, boardID, commentCnt, setCom
         setComments([...comments, ...result]);
       })
       .catch((err) => {
-        console.log("getcommetn err => ", err);
         setIsLastPage(true);
         setPage(page - 1);
       });
@@ -77,20 +75,18 @@ export default function Comment({ status, setStatus, boardID, commentCnt, setCom
         getCommentCountFnc();
       })
       .catch((err) => {
-        console.log("getcommetn err => ", err);
         setIsLastPage(true);
       });
   };
 
   const getCommentCountFnc = async () => {
     await getCommentCount(boardID!).then((res) => {
-      console.log(res);
+      setCommentCnt(res);
     });
   };
 
   const loadMore = () => {
     if (isLastPage) return;
-    console.log(page + 1);
     getCommentsFnc(page + 1);
   };
 

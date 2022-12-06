@@ -60,7 +60,6 @@ export default function MainPage(): JSX.Element {
 
   const getInfo = async () => {
     if (mainState) return;
-    console.log(page);
 
     await getMainBoard(page)
       .then((data) => {
@@ -68,7 +67,6 @@ export default function MainPage(): JSX.Element {
         setBoard((curInfoArray) => [...curInfoArray, ...data]); // state에 추가
       })
       .catch((err) => {
-        console.log(err);
         setMainState(true);
       });
   };

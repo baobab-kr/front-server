@@ -77,10 +77,8 @@ export default function ApplyJob(): JSX.Element {
   const imageSelectHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileLists = e.target.files;
     if (fileLists !== null) {
-      // setFileImage(fileImage);
       setFileImage(URL.createObjectURL(fileLists[0]));
       setFileList(fileLists);
-      console.log("asd", fileList);
     }
   };
 
@@ -105,7 +103,6 @@ export default function ApplyJob(): JSX.Element {
       education: education,
       educationStatus: educationStatus,
     };
-    console.log(body);
 
     await CreateApplyJob(body)
       .then((res) => {

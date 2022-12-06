@@ -16,7 +16,6 @@ export default function JobMenagement(): JSX.Element {
     }
 
     const id = location.pathname.split("/");
-    console.log(id);
     if (userInfo!.userid !== id[1].split("@")[1]) {
       navigate("/");
     }

@@ -7,6 +7,7 @@ import { getBoardThumbnail, touchLikes } from "api/board";
 
 import Avator from "../Avator/Avator";
 import TagComponent from "components/Tag/Tag";
+import Swal from "sweetalert2";
 // import de from "../../baobab-data/develop1.jpg";
 
 type Props = {
@@ -57,7 +58,7 @@ export default function Card({ board, width, height, isMyHome, deleteBoard, imgH
         likeIcon(count, board.likes);
       })
       .catch((err) => {
-        console.log(err);
+        Swal.fire("좋아요", "다시 시도해주세요", "error");
       });
   };
 

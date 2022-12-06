@@ -31,7 +31,6 @@ export default function LocationSelector({ value, setValue }: tValue): JSX.Eleme
   };
 
   useEffect(() => {
-    console.log("value", value);
     if (value === "") {
       guHandler(null);
       siHandler(null);

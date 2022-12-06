@@ -23,6 +23,7 @@ import { USER_TYPE } from "constants/index";
 import { approvalJobsBoardForAdmin, deleteJobsBoardForAdmin, getJobsBoardDetail } from "api/jobs";
 import { tDetailJob, tJob } from "Types/Jobs";
 import moment from "moment";
+import Swal from "sweetalert2";
 
 export default function JobDetail(): JSX.Element {
   const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
@@ -33,29 +34,15 @@ export default function JobDetail(): JSX.Element {
   const location = useLocation();
 
   const routeApplyJobPage = () => {
-    console.log(location.pathname);
     const id = location.pathname.split("/");
     navigate(`/apply/${id[id.length - 1]}`);
   };
 
-  const jobDelete = async () => {
-    const id = location.pathname.split("/");
-    console.log(id[id.length - 1]);
-    const targetId: number = Number(id[id.length - 1]);
-    //TODO Error
-    if (targetId === undefined) return;
-    await deleteJobsBoardForAdmin(targetId);
-    navigate("/jobs");
-  };
-
   const jobApply = async () => {
     const id = location.pathname.split("/");
-    console.log(id[id.length - 1]);
     const targetId: number = Number(id[id.length - 1]);
-    //TODO Error
     if (targetId === undefined) return;
     await approvalJobsBoardForAdmin(targetId);
-
     navigate("/jobs");
   };
 
@@ -67,11 +54,10 @@ export default function JobDetail(): JSX.Element {
     const id = location.pathname.split("/");
     await getJobsBoardDetail(Number(id[id.length - 1]))
       .then((res) => {
-        console.log(res);
         setData(res);
       })
       .catch((err) => {
-        console.log("getJobsBoardDetail - error", err);
+        Swal.fire("정보", "정보 불러오기를 실패했습니다.", "error");
       });
   };
 

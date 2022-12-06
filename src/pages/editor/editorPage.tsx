@@ -39,36 +39,15 @@ function Popup({ onClose, data, setData, boardId }: props) {
   const imageSelectHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileLists = e.target.files;
     if (fileLists !== null) {
-      // setFileImage(fileImage);
       setFileImage(URL.createObjectURL(fileLists[0]));
       setFileList(fileLists);
-      console.log("asd", fileList);
     }
-  };
-
-  const saveFileImage = (e: any) => {
-    setData({ ...data, thumbnail: e.target.files[0] });
-  };
-  const deleteFileImage = () => {
-    URL.revokeObjectURL(data.thumbnail);
-    setData({ ...data, thumbnail: "" });
-  };
-
-  const descriptionHandle = (e: any) => {
-    setData({ ...data, description: e.target.value });
   };
 
   const onClick = () => {
     onClose(false);
   };
 
-  const onSaveClick = () => {
-    if (isPublic) {
-      onSave();
-    } else {
-      onOnlyMe();
-    }
-  };
   const onSave = () => {
     if (description === "") {
       Swal.fire("필수입력", "설명을 입력해주세요!", "error");
@@ -79,7 +58,6 @@ function Popup({ onClose, data, setData, boardId }: props) {
     formData.append("content", data.content);
     formData.append("board_status", isPublic ? 0 : 1);
     if (fileList) formData.append("thumbnail", fileList![0]);
-    console.log("data", data.tag_name);
     if (data.tag_name.length === 1) {
       formData.append("tag_name[0]", data.tag_name[0]);
     } else {
@@ -87,16 +65,13 @@ function Popup({ onClose, data, setData, boardId }: props) {
         formData.append("tag_name", data.tag_name[i]);
       }
     }
-    console.log("_createBoard", formData.get("tag_name"));
 
     CreateBoard(formData)
       .then((res) => {
-        console.log("Board 생성 성공", res);
-
         navigate("/");
       })
       .catch((err) => {
-        console.log("Board 생성 실패", err);
+        Swal.fire("포스트", "포스트 생성을 실패했습니다.", "error");
       });
   };
 
@@ -108,7 +83,6 @@ function Popup({ onClose, data, setData, boardId }: props) {
     formData.append("content", data.content);
     formData.append("board_status", isPublic ? 0 : 1);
     if (fileList) formData.append("thumbnail", fileList![0]);
-    console.log("data", data.tag_name);
     if (data.tag_name.length === 1) {
       formData.append("tag_name[0]", data.tag_name[0]);
     } else {
@@ -116,30 +90,12 @@ function Popup({ onClose, data, setData, boardId }: props) {
         formData.append("tag_name", data.tag_name[i]);
       }
     }
-    console.log("_createBoard", formData.get("tag_name"));
-    console.log(typeof formData.get("board_id"));
     EditBoard(formData)
       .then((res) => {
-        console.log("Board 수정 성공", res);
-
         navigate("/");
       })
       .catch((err) => {
-        console.log("Board 수정 실패", err);
         Swal.fire("Board 수정 실패 하였습니다.");
-      });
-  };
-
-  const onOnlyMe = () => {
-    setData({ ...data, board_status: 1 });
-    CreateBoard(data)
-      .then((res) => {
-        console.log("Board 생성 성공", res);
-
-        navigate("/");
-      })
-      .catch((err) => {
-        console.log("Board 생성 실패", err);
       });
   };
 
@@ -232,7 +188,6 @@ export default function EditorPage() {
   };
 
   useEffect(() => {
-    console.log("location.state", location.state);
     if (location.state !== null && location.state.data.content) {
       editorRef.current?.getInstance().setHTML(location.state.data.content);
       tagHandler(location.state.data.tags.map((q: any) => q.tag_name));
@@ -284,8 +239,6 @@ export default function EditorPage() {
             const formData = new FormData();
             formData.append("ToastImage", blob);
 
-            console.log("add", blob);
-
             API({
               method: "post",
               url: "/jobs/UploadToastUiImage",
@@ -296,7 +249,6 @@ export default function EditorPage() {
                 callback(`${process.env.REACT_APP_API_ROOT}/jobs/getToastImage?file_name=${response.data}`, "image");
               })
               .catch(function (response) {
-                console.log("err", response);
                 callback("image_load_fail", "image");
               });
           },
