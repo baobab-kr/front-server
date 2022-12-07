@@ -15,8 +15,11 @@ import TagComponent from "components/Tag/Tag";
 import { BsFillChatFill } from "react-icons/bs";
 import Comment from "components/Comment/Comment";
 import Swal from "sweetalert2";
+import { user } from "Types/user";
 
 export default function IndexPage(): JSX.Element {
+  const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
+
   const navigate = useNavigate();
   const [detail, setDetail] = useState<iIndexPage>();
   const [titleList, setTitleList] = useState<HTMLElement[]>([]);
@@ -58,9 +61,11 @@ export default function IndexPage(): JSX.Element {
         <S.CenterPosition>
           <S.TitleArea>
             <S.Title>{detail?.title}</S.Title>
-            <div style={{ display: "flex", width: "100%", justifyContent: "flex-end", marginBottom: "-30px", cursor: "pointer" }} onClick={navigateModify}>
-              수정
-            </div>
+            {detail?.writer.userid === userInfo?.userid && (
+              <div style={{ display: "flex", width: "100%", justifyContent: "flex-end", marginBottom: "-30px", cursor: "pointer" }} onClick={navigateModify}>
+                수정
+              </div>
+            )}
             <S.UserArea>
               <Avator user={detail?.writer!} userId={detail?.writer.userid!} width={"3.3rem"} height={"3.3rem"} />
               <div style={{ display: "flex", justifyContent: "space-around", flexDirection: "column" }}>
