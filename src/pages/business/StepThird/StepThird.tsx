@@ -70,6 +70,12 @@ export default function StepThird({ stepFirst, stepSecond, stepperController }: 
   };
 
   function saveLogo(): Promise<string> {
+    if (typeof stepSecond.CompanyLogo === typeof "") {
+      return new Promise<string>((resolve, reject) => {
+        resolve(location.state.data.logo);
+      });
+    }
+
     const formData: any = new FormData();
     formData.append("CompanyLogo", stepSecond.CompanyLogo![0]);
     return new Promise<string>((resolve, reject) => {
@@ -278,7 +284,8 @@ export default function StepThird({ stepFirst, stepSecond, stepperController }: 
           <InputAreaFooter className="footer">
             <div className="input">
               {location.state === null && <CustomButton onClick={saveContorller}>제출</CustomButton>}
-              {location.state !== null && <CustomButton onClick={saveContorller}>수정</CustomButton>}
+              {location.state !== null && location.state.data.approvalStatus === 0 && <CustomButton onClick={saveContorller}>수정</CustomButton>}
+              {location.state !== null && location.state.data.approvalStatus === 1 && <p>채용 공고가 승인되어 수정할 수 없습니다.</p>}
             </div>
           </InputAreaFooter>
         </InputWrap>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Location } from "constants/index";
 import Select from "react-select";
 import { Title } from "./style";
+
 type tProps = { value: string; label: string };
 const formatOptionLabel = ({ value, label }: tProps) => (
   <div style={{ display: "flex", color: "black" }}>
@@ -35,6 +36,17 @@ export default function LocationSelector({ value, setValue }: tValue): JSX.Eleme
       guHandler(null);
       siHandler(null);
       setGuGroup([]);
+    } else {
+      const loc = value.split(" ");
+      const nSi = siGroup.find((q) => q.label === loc[0]);
+      setSi(nSi);
+
+      const newGroup: tProps[] = Location[nSi!.label].map((_gu, index) => {
+        return { value: `gu_${index}`, label: _gu };
+      });
+
+      setGuGroup(newGroup);
+      setGu(newGroup[0]);
     }
   }, [value]);
 

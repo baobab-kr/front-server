@@ -1,6 +1,5 @@
 import React from "react";
 import { ImageAvator } from "./style";
-import imag from "../../assets/Avatart.png";
 import { useNavigate } from "react-router-dom";
 import { user } from "Types/user";
 import { useRecoilState } from "recoil";
@@ -11,19 +10,22 @@ type Props = {
   userId: string;
   width: string;
   height: string;
+  state?: boolean | null;
 };
 
-export default function Avator({ user, userId, width, height }: Props): JSX.Element {
+export default function Avator({ user, userId, width, height, state }: Props): JSX.Element {
   const navigate = useNavigate();
   const [popup, setPopup] = useRecoilState<boolean>(POPUP);
+  const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
 
   const navigateUser = () => {
-    // if (userInfo === null) {
-    //   setPopup(true);
-    //   return;
-    // }
-    navigate(`/@${userId}`);
+    if (userInfo === null) {
+      setPopup(true);
+      return;
+    }
+    if (state === true || state === null) navigate(`/@${userId}`);
   };
+
   return (
     <div
       onClick={navigateUser}

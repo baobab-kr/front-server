@@ -59,7 +59,7 @@ export function getBoardPersonalTag(page: number, userId: number, tag: string[])
         resolve(res.data);
       })
       .catch((err) => {
-        reject(err.response);
+        reject(err.response.data.message);
       });
   });
 }
@@ -71,7 +71,7 @@ export function touchLikes(board_id: number): Promise<Like> {
         resolve(res.data[0]);
       })
       .catch((err) => {
-        reject(err.response);
+        reject(err.response.data.message);
       });
   });
 }
@@ -83,7 +83,7 @@ export function CreateBoard(_createBoard: ICreateBoard): Promise<string> {
         resolve(res.statusText);
       })
       .catch((err) => {
-        reject(err.response);
+        reject(err.response.data.message);
       });
   });
 }
@@ -95,7 +95,7 @@ export function EditBoard(_editBoard: any): Promise<string> {
         resolve(res.statusText);
       })
       .catch((err) => {
-        reject(err.response);
+        reject(err.response.data.message);
       });
   });
 }

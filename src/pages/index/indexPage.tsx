@@ -38,7 +38,7 @@ export default function IndexPage(): JSX.Element {
           });
         })
         .catch((err) => {
-          Swal.fire("정보", "정보 불러오기를 실패했습니다.", "error");
+          Swal.fire("정보 불러오기 실패", err, "error");
         });
 
       await getCommentCount(parseInt(board_id)).then((res) => {

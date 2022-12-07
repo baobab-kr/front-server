@@ -27,6 +27,7 @@ import { tStepFirst, tStepSecond } from "Types/Business";
 
 import test from "../../assets/Logo2.png";
 import { tJob } from "Types/Jobs";
+import { JOB_GROUP } from "constants/index";
 
 export default function BusinessPage(): JSX.Element {
   const location: any = useLocation();
@@ -78,8 +79,13 @@ export default function BusinessPage(): JSX.Element {
 
   useEffect(() => {
     if (stepSecond.CompanyLogo !== null && stepSecond.CompanyLogo !== undefined) {
-      window.URL.revokeObjectURL(previewLogo);
-      setPreviewLogo(URL.createObjectURL(stepSecond!.CompanyLogo[0]));
+      console.log(typeof stepSecond.CompanyLogo);
+      if (typeof stepSecond.CompanyLogo !== typeof "") {
+        window.URL.revokeObjectURL(previewLogo);
+        setPreviewLogo(URL.createObjectURL(stepSecond!.CompanyLogo[0]));
+      } else {
+        setPreviewLogo(stepSecond!.CompanyLogo);
+      }
     }
     setPreviewData((curr) => {
       return {
@@ -98,6 +104,7 @@ export default function BusinessPage(): JSX.Element {
   useEffect(() => {
     if (location.state !== null) {
       const data: tJob = location.state.data;
+
       setStepFirst({
         BusinessLicense: null, //data.license,
         ManagerEMail: "",
@@ -105,8 +112,11 @@ export default function BusinessPage(): JSX.Element {
         ManagerPhone: data.managerContact,
         URL: "",
       });
+
+      // const techStack = JOB_GROUP.find((q: any) => q.label === data.field);
+      console.log(data.field);
       setStepSecond({
-        CompanyLogo: null,
+        CompanyLogo: `${process.env.REACT_APP_API_ROOT}/users/read-profile?userid="${data.logo}"`,
         CompanyName: data.companyName,
         EndDate: data.endDate,
         Field: data.field,

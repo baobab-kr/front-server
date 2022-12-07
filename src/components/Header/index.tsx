@@ -143,7 +143,7 @@ export default function Header(): JSX.Element {
         <Tabs onClick={navagateJob} current={tab === TITLE_TAB.JOB}>
           채용
         </Tabs>
-        {userInfo.id === -1 && (
+        {userInfo.id !== -1 && (
           <>
             <div style={{ width: "2px", backgroundColor: "gray" }} />
             <Tabs onClick={navagateJobManagement} current={tab === TITLE_TAB.JOB_MANAGEMENT}>
@@ -171,10 +171,10 @@ export default function Header(): JSX.Element {
             <div ref={wrapperRef} onClick={toggleUserInfo}>
               <Arrow scale={toggleUser} />
               <UserContainer>
-                <Avator user={userInfo} userId={userInfo.userid} height={"40px"} width={"40px"} />
+                <Avator user={userInfo} userId={userInfo.userid} height={"40px"} width={"40px"} state={false} />
                 <UserActionList scale={toggleUser}>
                   <div style={{ margin: "10px", display: "flex", gap: "15px", alignItems: "center" }}>
-                    <Avator user={userInfo} userId={userInfo.userid} height={"40px"} width={"40px"} />
+                    <Avator user={userInfo} userId={userInfo.userid} height={"40px"} width={"40px"} state={false} />
                     <p>{userInfo.username}</p>
                   </div>
                   <hr color="#999999" />

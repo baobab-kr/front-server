@@ -130,6 +130,21 @@ export function getAutoCompleteAPI(): Promise<tAutoUser> {
   });
 }
 
+export function getApplyJobAll(id: number): Promise<tApplyJob[]> {
+  return new Promise<tApplyJob[]>((resolve, reject) => {
+    API.get("/ApplyJob/GetApplyJobAll", { params: { jobs_id: id } })
+      .then((res) => {
+        if (res.data.message) {
+          reject(res.data.message);
+        }
+        resolve(res.data);
+      })
+      .catch((err) => {
+        reject(err.response);
+      });
+  });
+}
+
 export function getMyApplyJobs(): Promise<tApplyJob[]> {
   return new Promise<tApplyJob[]>((resolve, reject) => {
     API.get("/ApplyJob/GetMyApplyJobs")

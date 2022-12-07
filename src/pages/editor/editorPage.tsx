@@ -5,7 +5,7 @@ import * as E from "./editorStyle";
 import ReactTagInput from "@pathofdev/react-tag-input";
 
 import { ICreateBoard, IEditBoard } from "Types/main";
-import { CreateBoard, EditBoard } from "api/board";
+import { CreateBoard, EditBoard, getBoardThumbnail } from "api/board";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import ThumbnailImg from "assets/ThumbnailImg.png";
@@ -29,10 +29,12 @@ type props = {
   boardId: string;
 };
 function Popup({ onClose, data, setData, boardId }: props) {
+  const location: any = useLocation();
+
   const [isPublic, setIsPublic] = useState<boolean>(true);
   const [description, setDescription] = useState<string>("");
   const [fileImage, setFileImage] = useState<string>("");
-  const [fileList, setFileList] = useState<FileList>();
+  const [fileList, setFileList] = useState<FileList | string>();
 
   const navigate = useNavigate();
 
@@ -71,18 +73,21 @@ function Popup({ onClose, data, setData, boardId }: props) {
         navigate("/");
       })
       .catch((err) => {
-        Swal.fire("포스트", "포스트 생성을 실패했습니다.", "error");
+        Swal.fire("포스트 생성 실패", err, "error");
       });
   };
 
   const onEdit = () => {
     const formData: any = new FormData();
-    formData.append("board_id", boardId.toString());
+    formData.append("board_id", Number(17));
     formData.append("title", data.title);
     formData.append("description", description);
     formData.append("content", data.content);
     formData.append("board_status", isPublic ? 0 : 1);
-    if (fileList) formData.append("thumbnail", fileList![0]);
+
+    if (fileList && typeof fileList !== typeof "") formData.append("thumbnail", fileList![0]);
+    else formData.append("thumbnail", location.state.data.thumbnail);
+
     if (data.tag_name.length === 1) {
       formData.append("tag_name[0]", data.tag_name[0]);
     } else {
@@ -90,13 +95,32 @@ function Popup({ onClose, data, setData, boardId }: props) {
         formData.append("tag_name", data.tag_name[i]);
       }
     }
+
     EditBoard(formData)
       .then((res) => {
         navigate("/");
       })
       .catch((err) => {
-        Swal.fire("Board 수정 실패 하였습니다.");
+        console.log(err);
+        Swal.fire("포스트 수정 실패", err, "error");
       });
+  };
+
+  useEffect(() => {
+    if (location.state !== null) {
+      console.log(location.state.data);
+      setDescription(location.state.data.description);
+      getThumbnail(location.state.data.thumbnail);
+    }
+  }, []);
+
+  const getThumbnail = async (name: string) => {
+    await getBoardThumbnail(name).then((data) => {
+      const blob = new Blob([data.data], { type: data.type });
+      const url = URL.createObjectURL(blob);
+      setFileList(url);
+      setFileImage(url);
+    });
   };
 
   return (

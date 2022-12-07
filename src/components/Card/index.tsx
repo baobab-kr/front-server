@@ -58,7 +58,7 @@ export default function Card({ board, width, height, isMyHome, deleteBoard, imgH
         likeIcon(count, board.likes);
       })
       .catch((err) => {
-        Swal.fire("좋아요", "다시 시도해주세요", "error");
+        Swal.fire("좋아요 실패", err, "error");
       });
   };
 

@@ -26,8 +26,8 @@ import checkImg from "../../assets/selected.png";
 import { JOB_GROUP } from "constants/index";
 import { user } from "Types/user";
 import Swal from "sweetalert2";
-import { CreateApplyJob, getAutoCompleteAPI } from "api/jobs";
-import API from "api";
+import { CreateApplyJob, getApplyJobDetail, getAutoCompleteAPI, UpdateApplyJob } from "api/jobs";
+import { tApplyJob } from "Types/Jobs";
 
 const formatOptionLabel = ({ value, label }: tProps) => (
   <div style={{ display: "flex", color: "black" }}>
@@ -46,11 +46,13 @@ export const EDUCATION_GROUP = [
 
 type tProps = { value: string; label: string };
 
-export default function ApplyJob(): JSX.Element {
+export default function ApplyJobViewer(): JSX.Element {
   const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
 
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [applyJobId, setApplyJobId] = useState<number>(-1);
 
   const [education, setEducation] = useState<string>(EDUCATION_GROUP[0].value);
   const [educationStatus, setEducationStatus] = useState<number>(0);
@@ -61,6 +63,7 @@ export default function ApplyJob(): JSX.Element {
   const [email, setEmail] = useState<string>("");
   // const [job, setJob] = useState<string>(JOB_GROUP[0].value);
   const [job, setJob] = useState<{ value: string; label: string }>(JOB_GROUP[0]);
+  const [jobId, setJobId] = useState<number>();
 
   const [socialUrl, setSocialUrl] = useState<string>("");
 
@@ -78,40 +81,22 @@ export default function ApplyJob(): JSX.Element {
   const imageSelectHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileLists = e.target.files;
     if (fileLists !== null) {
+      // setFileImage(fileImage);
       setFileImage(URL.createObjectURL(fileLists[0]));
       setFileList(fileLists);
     }
   };
 
-  function saveProfile(): Promise<string> {
-    const formData: any = new FormData();
-    console.log(fileList![0]);
-    formData.append("file", fileList![0]);
-    return new Promise<string>((resolve, reject) => {
-      API({
-        method: "post",
-        url: "/ApplyJob/UploadProfile",
-        data: formData,
-        headers: { "Content-Type": "multipart/form-data" },
-      })
-        .then(function (response) {
-          resolve(response.data);
-        })
-        .catch(function (response) {
-          reject(response);
-        });
-    });
-  }
-
   const submit = async () => {
     const id = location.pathname.split("/");
 
-    if (title === "" || name === "" || email === "" || url === "" || socialUrl === "" || fileList === undefined) {
+    if (title === "" || name === "" || email === "" || url === "" || socialUrl === "") {
       Swal.fire("다시 확인해주세요");
       return;
     }
     const body = {
-      jobs_Id: Number(id[id.length - 1]),
+      id: applyJobId,
+      jobs_Id: jobId,
       user_id: userInfo?.id,
       title: title,
       name: name,
@@ -120,14 +105,14 @@ export default function ApplyJob(): JSX.Element {
       careerYear: careerYear,
       resumeUrl: url,
       socialUrl: socialUrl,
+      profile: "test",
       education: education,
       educationStatus: educationStatus,
     };
-    const filename = await saveProfile();
-    console.log(filename);
-    await CreateApplyJob({ ...body, profile: filename })
+
+    await UpdateApplyJob(body)
       .then((res) => {
-        navigate("/");
+        navigate("/jobs");
       })
       .catch((err) => {
         Swal.fire("Error 다시 입력해주세요");
@@ -136,7 +121,9 @@ export default function ApplyJob(): JSX.Element {
   };
 
   useEffect(() => {
-    getAutoCompleteAPI().then((res) => {
+    const id = location.pathname.split("/");
+
+    getApplyJobDetail(Number(id[id.length - 1])).then((res: tApplyJob) => {
       setEmail(res.email);
       if (res.socialUrl !== null) setSocialUrl(res.socialUrl);
       if (res.techStack !== null) {
@@ -145,6 +132,15 @@ export default function ApplyJob(): JSX.Element {
           setJob(targetTechstack);
         }
       }
+
+      setEducation(String(res.education));
+      setEducationStatus(res.educationStatus);
+      setCareerYear(res.careerYear);
+      setUrl(res.resumeUrl);
+      setTitle(res.title);
+      setName(res.name);
+      setApplyJobId(res.id);
+      setJobId(Number(res.jobs_Id));
     });
   }, []);
 
@@ -159,6 +155,7 @@ export default function ApplyJob(): JSX.Element {
             </TitleArea>
             <div style={{ padding: "30px" }}>
               <Custominput
+                disabled
                 placeholder="ex) 최고를 위해 늘 성실하게 최선을 다 합니다."
                 maxLength={30}
                 value={title}
@@ -172,7 +169,14 @@ export default function ApplyJob(): JSX.Element {
             </TitleArea>
             <UserInfoArea>
               <div>
-                <input type="file" id="imgUpload" style={{ display: "none" }} onChange={imageSelectHandler} accept="image/jpg, image/jpeg, image/png"></input>
+                <input
+                  disabled
+                  type="file"
+                  id="imgUpload"
+                  style={{ display: "none" }}
+                  onChange={imageSelectHandler}
+                  accept="image/jpg, image/jpeg, image/png"
+                />
                 <label htmlFor="imgUpload">
                   <ThumbnailArea>
                     <img src={fileImage === "" ? photo : fileImage} alt="이미지 등록하기" />
@@ -183,20 +187,26 @@ export default function ApplyJob(): JSX.Element {
                 <div className="info-area" style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                   <div style={{ display: "flex", alignItems: "center" }}>
                     <h1 style={{ width: "80px" }}>이름</h1>
-                    <CustomEditinput placeholder="이름을 입력하세요." maxLength={30} value={name} onChange={(e) => setName(e.target.value)} />
+                    <CustomEditinput disabled placeholder="이름을 입력하세요." maxLength={30} value={name} onChange={(e) => setName(e.target.value)} />
                   </div>
                   <div style={{ display: "flex", alignItems: "center" }}>
                     <h1 style={{ width: "80px" }}>이메일</h1>
-                    <CustomEditinput placeholder="이메일을 입력하세요." maxLength={30} value={email} onChange={(e) => setEmail(e.target.value)} />
+                    <CustomEditinput disabled placeholder="이메일을 입력하세요." maxLength={30} value={email} onChange={(e) => setEmail(e.target.value)} />
                   </div>
                   <div style={{ display: "flex", alignItems: "center" }}>
                     <h1 style={{ width: "80px" }}>Social Url</h1>
-                    <CustomEditinput placeholder="Socual Url을 입력하세요." maxLength={30} value={socialUrl} onChange={(e) => setSocialUrl(e.target.value)} />
+                    <CustomEditinput
+                      disabled
+                      placeholder="Socual Url을 입력하세요."
+                      maxLength={30}
+                      value={socialUrl}
+                      onChange={(e) => setSocialUrl(e.target.value)}
+                    />
                   </div>
                   <div style={{ display: "flex", alignItems: "center" }}>
                     <h1 style={{ width: "80px" }}>TechStack</h1>
                     <div style={{ marginLeft: "15px", width: "100%" }}>
-                      <Select value={job} options={JOB_GROUP} formatOptionLabel={formatOptionLabel} onChange={jobHandler} />
+                      <Select isDisabled={true} value={job} options={JOB_GROUP} formatOptionLabel={formatOptionLabel} onChange={jobHandler} />
                     </div>
                   </div>
                 </div>
@@ -209,7 +219,7 @@ export default function ApplyJob(): JSX.Element {
               <SubTitle>∙ 로그인이 필요한 URL은 기업 담당자의 확인이 어려울 수 있으니 미리 확인바랍니다.</SubTitle>
             </TitleArea>
             <div style={{ padding: "30px" }}>
-              <Custominput placeholder="http://" value={url} onChange={(e) => setUrl(e.target.value)} />
+              <Custominput disabled placeholder="http://" value={url} onChange={(e) => setUrl(e.target.value)} />
             </div>
           </FormWrapper>
           <FormWrapper>
@@ -218,19 +228,21 @@ export default function ApplyJob(): JSX.Element {
             </TitleArea>
             <EduArea>
               <div className="edu-selector">
-                <Select defaultValue={EDUCATION_GROUP[0]} options={EDUCATION_GROUP} formatOptionLabel={formatOptionLabel} onChange={userTypeHandler} />
+                <Select
+                  isDisabled={true}
+                  defaultValue={EDUCATION_GROUP[0]}
+                  options={EDUCATION_GROUP}
+                  formatOptionLabel={formatOptionLabel}
+                  onChange={userTypeHandler}
+                />
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
-                  <CheckBoxBtn onClick={() => setEducationStatus(0)}>
-                    {educationStatus === 0 && <img src={checkImg} alt="aa" style={{ width: "100%" }} />}
-                  </CheckBoxBtn>
+                  <CheckBoxBtn>{educationStatus === 0 && <img src={checkImg} alt="aa" style={{ width: "100%" }} />}</CheckBoxBtn>
                   <p>졸업 예정</p>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
-                  <CheckBoxBtn onClick={() => setEducationStatus(1)}>
-                    {educationStatus === 1 && <img src={checkImg} alt="aa" style={{ width: "100%" }} />}
-                  </CheckBoxBtn>
+                  <CheckBoxBtn>{educationStatus === 1 && <img src={checkImg} alt="aa" style={{ width: "100%" }} />}</CheckBoxBtn>
                   <p>졸업</p>
                 </div>
               </div>
@@ -241,15 +253,16 @@ export default function ApplyJob(): JSX.Element {
               <Title>경력사항</Title>
             </div>
             <CareerArea>
-              <CareerButton onClick={() => setCareerYear(null)}>
+              <CareerButton>
                 <p className={careerYear === null ? "isSelected" : ""}>신입</p>
               </CareerButton>
-              <CareerButton onClick={() => setCareerYear(0)}>
+              <CareerButton>
                 <p className={careerYear !== null ? "isSelected" : ""}>경력</p>
               </CareerButton>
               {careerYear !== null && (
                 <div>
                   <CustomEditinput
+                    disabled
                     value={careerYear!}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       if (!isNaN(Number(e.target.value))) {
@@ -266,9 +279,6 @@ export default function ApplyJob(): JSX.Element {
             </CareerArea>
           </FormWrapper>
         </FormArea>
-        <SubmitArea>
-          <SubmitBtn onClick={submit}>지원하기</SubmitBtn>
-        </SubmitArea>
       </Template>
     </Wrapper>
   );

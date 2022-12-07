@@ -89,7 +89,7 @@ export default function CommentCard({ data, comments, setComments, commentCnt, s
         setReComments([...result, ...reComments]);
       })
       .catch((err) => {
-        Swal.fire("댓글", "댓글 작성을 실패했습니다.", "error");
+        Swal.fire("댓글 작성 실패", err, "error");
       });
   };
 

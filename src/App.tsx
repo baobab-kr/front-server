@@ -25,6 +25,8 @@ import MainSearchPage from "pages/main/MainSearchPage";
 import ApplyJobModify from "pages/apply_job/ApplyJobModify";
 import USER from "./store/store.user";
 import { user } from "Types/user";
+import JobForApplyList from "pages/jobs/job-apply-list/JobForApplyList";
+import ApplyJobViewer from "pages/apply_job/ApplyJobViewer";
 
 export default function App(): JSX.Element {
   const [, setDarkMode] = useRecoilState<boolean>(Darkmode);
@@ -74,6 +76,8 @@ export default function App(): JSX.Element {
           <Route path="/@:id/my-apply-jobs" element={<PrivateRoute authentication={true} component={MyApplyJobs} role={USER_TYPE.DEVELOPER} />} />
           <Route path="/@:id/my-apply-jobs/:jobid" element={<PrivateRoute authentication={true} component={ApplyJobModify} />} />
           <Route path="/@:id/job-management" element={<PrivateRoute authentication={true} component={JobMenagement} />} />
+          <Route path="/@:id/job-management/:jobID/list" element={<PrivateRoute authentication={false} component={JobForApplyList} />} />
+          <Route path="/@:id/job-management/:jobID/list/:applyID" element={<PrivateRoute authentication={false} component={ApplyJobViewer} />} />
           <Route path="/setting" element={<Setting />} />
           <Route path="/editor" element={<PrivateRoute authentication={true} component={EditorPage} />} />
           <Route path="/editor/:id" element={<PrivateRoute authentication={true} component={EditorPage} />} />

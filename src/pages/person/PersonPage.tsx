@@ -169,9 +169,9 @@ export default function PersonPage(): JSX.Element {
     <Suspense fallback={() => fallback()}>
       <Wrapper>
         <UserInfo>
-          <div style={{ flexBasis: "15%" }}>
+          <div style={{ flexBasis: "10%" }}>
             <DivFlex direction="column" style={{ alignItems: "center", gap: "15px" }}>
-              <Avator user={writer!} userId={writer!.userid.toString()} width={"100%"} height={"100%"} />
+              {writer && <Avator user={writer!} userId={writer!.userid.toString()} width={"100%"} height={"100%"} />}
             </DivFlex>
           </div>
           <div style={{ display: "flex", gap: "10px", flexDirection: "column", flexBasis: "85%" }}>

@@ -33,6 +33,12 @@ export default function JobDetail(): JSX.Element {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const jobApplyList = () => {
+    const id = location.pathname.split("/");
+
+    navigate(`/@${userInfo?.userid}/job-management/${id[id.length - 1]}/list`, { state: { data: data } });
+  };
+
   const routeApplyJobPage = () => {
     const id = location.pathname.split("/");
     navigate(`/apply/${id[id.length - 1]}`);
@@ -57,7 +63,7 @@ export default function JobDetail(): JSX.Element {
         setData(res);
       })
       .catch((err) => {
-        Swal.fire("정보", "정보 불러오기를 실패했습니다.", "error");
+        Swal.fire("정보 불러오기 실패", err, "error");
       });
   };
 
@@ -93,7 +99,9 @@ export default function JobDetail(): JSX.Element {
             <TitleArea>
               <CompanyName>{data?.companyName}</CompanyName>
               {userInfo?.role === USER_TYPE.DEVELOPER && <ApplyButton onClick={routeApplyJobPage}>입사 지원</ApplyButton>}
-              {/* {userInfo?.role === USER_TYPE.HEADHUNTER && <ApplyButton onClick={jobDelete}>채용 마감</ApplyButton>} */}
+              {userInfo?.role === USER_TYPE.HEADHUNTER && data?.user_id.userid === userInfo.userid && (
+                <ApplyButton onClick={jobApplyList}>채용 리스트 확인</ApplyButton>
+              )}
               {userInfo?.role === USER_TYPE.ADMIN && data?.approvalStatus === 0 && <ApplyButton onClick={jobApply}>승인</ApplyButton>}
             </TitleArea>
             <Title>{data?.title}</Title>
