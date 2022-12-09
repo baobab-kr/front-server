@@ -20,7 +20,6 @@ export const UserContainer = styled.div`
   display: flex;
   flex-direction: column;
   border-radius: 4px;
-  box-shadow: rgb(0 0 0 / 12%) 0px 2px 8px;
 `;
 
 export const UserInfo = styled.div`

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Overlay, CardWrapper, CardImage, CardText, Date, Title, Content, Footer, User, TagWrapper, LikeComponent, DeleteButton } from "./style";
+import { HoverArea, Overlay, CardWrapper, CardImage, CardText, Date, Title, Content, Footer, User, TagWrapper, LikeComponent, DeleteButton } from "./style";
 import { Board, Tag, Like } from "Types/main";
 import { useNavigate, useLocation } from "react-router-dom";
 import { timeForToday } from "util/date";
@@ -7,6 +7,7 @@ import { getBoardThumbnail, touchLikes } from "api/board";
 
 import Avator from "../Avator/Avator";
 import TagComponent from "components/Tag/Tag";
+import Swal from "sweetalert2";
 // import de from "../../baobab-data/develop1.jpg";
 
 type Props = {
@@ -49,10 +50,6 @@ export default function Card({ board, width, height, isMyHome, deleteBoard, imgH
     getThumbnail(board.thumbnail);
   }, []);
 
-  useEffect(() => {
-    console.log("asdasd =>", imgSrc);
-  }, [imgSrc]);
-
   const liking = async () => {
     await touchLikes(board.id)
       .then((res) => {
@@ -61,7 +58,7 @@ export default function Card({ board, width, height, isMyHome, deleteBoard, imgH
         likeIcon(count, board.likes);
       })
       .catch((err) => {
-        console.log(err);
+        Swal.fire("좋아요 실패", err, "error");
       });
   };
 
@@ -80,71 +77,67 @@ export default function Card({ board, width, height, isMyHome, deleteBoard, imgH
     if (board.thumbnail === "") return;
 
     await getBoardThumbnail(name).then((data) => {
-      console.log("data=>", data);
       const blob = new Blob([data.data], { type: data.type });
-      console.log("blob", blob);
       const url = URL.createObjectURL(blob);
-      console.log("url", url);
-
       setImgSrc(url);
     });
   };
   //
 
   return (
-    <CardWrapper
-      width={width}
-      height={height}
-      isHover={location.pathname === "/"}
-      onMouseEnter={() => {
-        setIsListHover(true);
-      }} // 마우스엔터 이벤트이면 hide가 false가 된다.
-      onMouseLeave={() => {
-        setIsListHover(false);
-      }}
-    >
-      {/* {board.thumbnail !== "" && <CardImage onClick={navigateIndex} src={board.thumbnail} alt="이미지"></CardImage>} */}
-      {board.thumbnail !== "" && <CardImage imgHeight={imgHeight} src={imgSrc} alt="이미지"></CardImage>}
+    <HoverArea isHover={location.pathname === "/"} height={height} width={width}>
+      <CardWrapper
+        className="card"
+        width={width}
+        height={height}
+        isHover={location.pathname === "/"}
+        onMouseEnter={() => {
+          setIsListHover(true);
+        }} // 마우스엔터 이벤트이면 hide가 false가 된다.
+        onMouseLeave={() => {
+          setIsListHover(false);
+        }}
+      >
+        {/* {board.thumbnail !== "" && <CardImage onClick={navigateIndex} src={board.thumbnail} alt="이미지"></CardImage>} */}
+        {board.thumbnail !== "" && <CardImage imgHeight={imgHeight} src={imgSrc} alt="이미지"></CardImage>}
 
-      <CardText onClick={navigateIndex}>
-        <Title>{board.title}</Title>
-        <Content>{board.description}</Content>
-      </CardText>
+        <CardText onClick={navigateIndex}>
+          <Title>{board.title}</Title>
+          <Content>{board.description}</Content>
+        </CardText>
 
-      <Date>{timeForToday(board.date)}</Date>
+        <Date>{timeForToday(board.date)}</Date>
 
-      {isListHover && (
-        <>
-          <Overlay onClick={navigateIndex} />
-          <TagWrapper>
-            {board.tags.map((tag: Tag, index: number) => {
-              return <TagComponent key={index} tag_name={tag.tag_name} />;
-            })}
-          </TagWrapper>
-        </>
-      )}
+        {isListHover && (
+          <>
+            <Overlay onClick={navigateIndex} />
+            <TagWrapper>
+              {board.tags.map((tag: Tag, index: number) => {
+                return <TagComponent key={index} tag_name={tag.tag_name} />;
+              })}
+            </TagWrapper>
+          </>
+        )}
 
-      {isMyHome && (
-        <DeleteButton
-          onClick={() => {
-            deleteBoard(board.id);
-          }}
-        >
-          🗑
-        </DeleteButton>
-      )}
+        {isMyHome && (
+          <DeleteButton
+            onClick={() => {
+              deleteBoard(board.id);
+            }}
+          >
+            🗑
+          </DeleteButton>
+        )}
 
-      <Footer>
-        <User onClick={navigatePerson}>
-          {/* <div style={{ width: "1.5rem", height: "1.5rem", borderRadius: "50%", overflow: "hidden" }}>
-            <img src={DefaultAvator} style={{ width: "100%", height: "100%", objectFit: "cover" }} alt="avator"></img>
-          </div> */}
-          <Avator userId={board.writer!.userid} width={"1.5rem"} height={"1.5rem"} />
-          by {board.writer!.username}
-        </User>
-        <LikeComponent onClick={liking}>{likeState}</LikeComponent>
-        {/* 🍃->🌿->🌴  => 추후 좋아요 수에 따라 이모티콘 변경 예정*/}
-      </Footer>
-    </CardWrapper>
+        <Footer>
+          <User onClick={navigatePerson}>
+            <Avator user={board.writer!} userId={board.writer!.userid} width={"1.5rem"} height={"1.5rem"} />
+            by {board.writer!.username}
+          </User>
+          <LikeComponent onClick={liking}>{likeState}</LikeComponent>
+          {/* 🍃->🌿->🌴  => 추후 좋아요 수에 따라 이모티콘 변경 예정*/}
+        </Footer>
+      </CardWrapper>
+    </HoverArea>
   );
 }

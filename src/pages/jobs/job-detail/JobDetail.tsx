@@ -2,74 +2,143 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import JobOption from "pages/business/StepThird/JobOption";
-import { WrapperArea, Template, TemplateArea, TitleArea, Title, CompanyName, JobOptionArea, TalentArea, ImageArea, ApplyButton } from "./style";
+import {
+  WrapperArea,
+  Template,
+  WrapperInner,
+  TemplateArea,
+  TitleArea,
+  Title,
+  CompanyName,
+  JobsDescriptionArea,
+  JobOptionArea,
+  TalentArea,
+  ImageArea,
+  ApplyButton,
+} from "./style";
 import tossimage from "baobab-data/toss_job.png";
 import TemplateSection from "pages/business/TemplateSection/TemplateSection";
+import { user } from "Types/user";
+import { USER_TYPE } from "constants/index";
+import { approvalJobsBoardForAdmin, deleteJobsBoardForAdmin, getJobsBoardDetail } from "api/jobs";
+import { tDetailJob, tJob } from "Types/Jobs";
+import moment from "moment";
+import Swal from "sweetalert2";
 
 export default function JobDetail(): JSX.Element {
+  const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
+
+  const [data, setData] = useState<tDetailJob>();
+
   const navigate = useNavigate();
   const location = useLocation();
-  const talent = [
-    "꿈과 열정을 가지고 세계 최고에 도전하는 사람",
-    "고객을 최우선으로 생각하고 끊임없이 혁신하는 사람",
-    "팀워크를 이루며 자율적이고 창의적으로 일하는 사람",
-  ];
+
+  const jobApplyList = () => {
+    const id = location.pathname.split("/");
+
+    navigate(`/@${userInfo?.userid}/job-management/${id[id.length - 1]}/list`, { state: { data: data } });
+  };
 
   const routeApplyJobPage = () => {
-    console.log(location.pathname);
     const id = location.pathname.split("/");
     navigate(`/apply/${id[id.length - 1]}`);
   };
 
+  const jobApply = async () => {
+    const id = location.pathname.split("/");
+    const targetId: number = Number(id[id.length - 1]);
+    if (targetId === undefined) return;
+    await approvalJobsBoardForAdmin(targetId);
+    navigate("/jobs");
+  };
+
+  useEffect(() => {
+    getInfo();
+  }, []);
+
+  const getInfo = async () => {
+    const id = location.pathname.split("/");
+    await getJobsBoardDetail(Number(id[id.length - 1]))
+      .then((res) => {
+        setData(res);
+      })
+      .catch((err) => {
+        Swal.fire("정보 불러오기 실패", err, "error");
+      });
+  };
+
+  const dateOrder = () => {
+    if (data?.endDate === undefined || data.startDate === undefined) return "";
+    if (data?.endDate === "null" || data?.startDate === "null" || data?.endDate === null || data?.startDate === null) {
+      return "상시 채용";
+    } else {
+      return moment(data.endDate).format("YYYY-MM-DD");
+    }
+  };
+
+  const orderType = (type: number) => {
+    switch (type) {
+      case 0:
+        return "경력무관";
+      case 1:
+        return "인턴";
+      case 2:
+        return "신입";
+      case 3:
+        return "경력";
+      default:
+        return "경력무관";
+    }
+  };
+
   return (
     <WrapperArea>
-      <div style={{ width: "60%", margin: "0px auto" }}>
+      <WrapperInner>
         <Template>
           <TemplateArea>
             <TitleArea>
-              <CompanyName>TESLA</CompanyName>
-              <ApplyButton onClick={routeApplyJobPage}>입사 지원</ApplyButton>
+              <CompanyName>{data?.companyName}</CompanyName>
+              {userInfo?.role === USER_TYPE.DEVELOPER && <ApplyButton onClick={routeApplyJobPage}>입사 지원</ApplyButton>}
+              {userInfo?.role === USER_TYPE.HEADHUNTER && data?.user_id.userid === userInfo.userid && (
+                <ApplyButton onClick={jobApplyList}>채용 리스트 확인</ApplyButton>
+              )}
+              {userInfo?.role === USER_TYPE.ADMIN && data?.approvalStatus === 0 && <ApplyButton onClick={jobApply}>승인</ApplyButton>}
             </TitleArea>
-            <Title>TESLA 엔지니어 모집</Title>
+            <Title>{data?.title}</Title>
             <div style={{ display: "flex", padding: "6px 0px 6px 0px", color: "rgba(255, 7, 110, 1)" }}>
               <div>마감일 : &nbsp;</div>
-              <div>2022-12-15</div>
+              <div>{dateOrder()}</div>
             </div>
 
-            <div style={{ display: "flex", gap: "40px" }}>
+            <JobsDescriptionArea>
               <JobOptionArea>
-                <JobOption title="채용 분야" data="채용 분야" />
-                <JobOption title="학력" data="대졸(2,3년제) 이상 부문별 학력조건 다름" />
-                <JobOption title="근무 지역" data="경기도 시흥시" />
+                <JobOption title="채용 분야" data={data?.field || ""} />
+                <JobOption title="근무 지역" data={data?.location || ""} />
               </JobOptionArea>
 
               <JobOptionArea>
-                <JobOption title="근무 형태" data="정규직" />
-                <JobOption title="경력" data="신입" />
-                <JobOption title="급여" data="회사 내규에 따름" />
+                <JobOption title="경력" data={orderType(data?.careerType || 0)} />
+                <JobOption title="급여" data={`${data?.salary} 만원`} />
               </JobOptionArea>
-            </div>
-
-            <ImageArea>
-              <img src={tossimage} alt="채용 이미지" style={{ width: "100%" }} />
-            </ImageArea>
+            </JobsDescriptionArea>
 
             <TalentArea>
               <h1 style={{ fontSize: "18px", marginBottom: "10px" }}>인재상</h1>
               <ul style={{ marginLeft: "15px" }}>
-                {talent.map((q) => {
-                  return <li style={{ listStyleType: "disc" }}>{q}</li>;
-                })}
+                {data?.talent &&
+                  data?.talent.split(",").map((q: string, index) => {
+                    if (q === "") return <div key={index}></div>;
+                    return (
+                      <li style={{ listStyleType: "disc" }} key={index}>
+                        {q}
+                      </li>
+                    );
+                  })}
               </ul>
             </TalentArea>
             <TalentArea>
               <h1 style={{ fontSize: "18px", marginBottom: "10px" }}>채용 설명</h1>
-              <div style={{ lineHeight: "1.2rem" }}>
-                세상은 매우 빠르게 변화하고 있습니다. 불과 10여 년 전 기업들의 성공에 도움이 되었던 많은 기술들이 사라졌거나 새로운 기술로 대체되었습니다. 더욱
-                더 빠르고 민첩하게 새로운 아이디어를 실험하며, 시장 기회를 포착하는 것은 이제 스타트업 뿐만 아니라 모든 기업에게 생존의 문제가 되었습니다. AWS는
-                고객들이 기존의 상용 소프트웨어 및 하드웨어 벤더 에서 벗어날수 있도록, 탄력적이고 안전한 글로벌 인프라 뿐만 아니라 머신러닝, 빅데이터, 분석,
-                DevOps 및 컨테이너에서 IoT, 모바일에 이르기까지 모든 기술 분야에 걸쳐 다양한 서비스를 제공하고 있습니다.
-              </div>
+              <div style={{ lineHeight: "1.2rem" }}>{data?.message}</div>
             </TalentArea>
           </TemplateArea>
         </Template>
@@ -78,14 +147,14 @@ export default function JobDetail(): JSX.Element {
             <TemplateArea>
               <div style={{ display: "flex", marginLeft: "-30px" }}>
                 <div> 회사 정보 : &nbsp;</div>
-                <a href="https://www.notion.so/baobab-tree/Baobab-661df2d661204d1b8cfef17797fee76b" target="_blank" rel="noopener noreferrer">
-                  https://www.notion.so/baobab-tree/Baobab-661df2d661204d1b8cfef17797fee76b
+                <a href={data?.url} target="_blank" rel="noopener noreferrer">
+                  {data?.url}
                 </a>
               </div>
             </TemplateArea>
           </TemplateSection>
         </div>
-      </div>
+      </WrapperInner>
     </WrapperArea>
   );
 }

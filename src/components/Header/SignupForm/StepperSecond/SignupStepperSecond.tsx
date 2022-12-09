@@ -25,6 +25,10 @@ export default function SignupStepperSecond({ userType, setUserType, job, setJob
 
   const userTypeHandler = (props: any) => {
     setUserType(props.value);
+
+    if (props.value === USER_TYPE.DEVELOPER) {
+      setJob("");
+    }
   };
 
   return (

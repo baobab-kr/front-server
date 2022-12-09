@@ -9,17 +9,18 @@ export type tStepFirst = {
 export type tStepSecond = {
   Field: string;
   Title: string;
-  CompanyLogo: FileList | null;
-  Image: FileList | null;
+  CompanyLogo: FileList | null | any;
+  Image: FileList | null | any;
   CompanyName: string;
   Location: string;
   Message: string;
-  Description: string;
-  EndDate: string;
+  StartDate: string | null;
+  EndDate: string | null;
   Salary: string;
   InfoURL: string;
+  talent: string;
   /**
    * 경력 여부
    */
-  Type: string;
+  Type: number;
 };

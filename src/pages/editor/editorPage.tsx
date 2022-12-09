@@ -5,7 +5,7 @@ import * as E from "./editorStyle";
 import ReactTagInput from "@pathofdev/react-tag-input";
 
 import { ICreateBoard, IEditBoard } from "Types/main";
-import { CreateBoard, EditBoard } from "api/board";
+import { CreateBoard, EditBoard, getBoardThumbnail } from "api/board";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import ThumbnailImg from "assets/ThumbnailImg.png";
@@ -19,6 +19,8 @@ import "tui-color-picker/dist/tui-color-picker.css";
 import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
 import "@toast-ui/editor/dist/toastui-editor.css"; // Editor's Style
 import "@toast-ui/editor/dist/theme/toastui-editor-dark.css";
+import API from "api";
+import Swal from "sweetalert2";
 
 type props = {
   onClose: React.Dispatch<React.SetStateAction<boolean>>;
@@ -27,93 +29,100 @@ type props = {
   boardId: string;
 };
 function Popup({ onClose, data, setData, boardId }: props) {
+  const location: any = useLocation();
+
   const [isPublic, setIsPublic] = useState<boolean>(true);
   const [description, setDescription] = useState<string>("");
   const [fileImage, setFileImage] = useState<string>("");
-  const [fileList, setFileList] = useState<FileList>();
+  const [fileList, setFileList] = useState<FileList | string>();
 
   const navigate = useNavigate();
 
   const imageSelectHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileLists = e.target.files;
     if (fileLists !== null) {
-      // setFileImage(fileImage);
       setFileImage(URL.createObjectURL(fileLists[0]));
       setFileList(fileLists);
-      console.log("asd", fileList);
     }
-  };
-
-  const saveFileImage = (e: any) => {
-    setData({ ...data, thumbnail: e.target.files[0] });
-  };
-  const deleteFileImage = () => {
-    URL.revokeObjectURL(data.thumbnail);
-    setData({ ...data, thumbnail: "" });
-  };
-
-  const descriptionHandle = (e: any) => {
-    setData({ ...data, description: e.target.value });
   };
 
   const onClick = () => {
     onClose(false);
   };
 
-  const onSaveClick = () => {
-    if (isPublic) {
-      onSave();
-    } else {
-      onOnlyMe();
-    }
-  };
   const onSave = () => {
+    if (description === "") {
+      Swal.fire("필수입력", "설명을 입력해주세요!", "error");
+    }
     const formData: any = new FormData();
     formData.append("title", data.title);
     formData.append("description", description);
     formData.append("content", data.content);
     formData.append("board_status", isPublic ? 0 : 1);
     if (fileList) formData.append("thumbnail", fileList![0]);
-    for (let i = 0; i < data.tag_name.length; i++) {
-      formData.append("tag_name", data.tag_name[i]);
+    if (data.tag_name.length === 1) {
+      formData.append("tag_name[0]", data.tag_name[0]);
+    } else {
+      for (let i = 0; i < data.tag_name.length; i++) {
+        formData.append("tag_name", data.tag_name[i]);
+      }
     }
 
     CreateBoard(formData)
       .then((res) => {
-        console.log("Board 생성 성공", res);
-
         navigate("/");
       })
       .catch((err) => {
-        console.log("Board 생성 실패", err);
+        Swal.fire("포스트 생성 실패", err, "error");
       });
   };
 
-  const onEdit = (data: IEditBoard) => {
-    EditBoard(data)
+  const onEdit = () => {
+    const formData: any = new FormData();
+    formData.append("board_id", Number(17));
+    formData.append("title", data.title);
+    formData.append("description", description);
+    formData.append("content", data.content);
+    formData.append("board_status", isPublic ? 0 : 1);
+
+    if (fileList && typeof fileList !== typeof "") formData.append("thumbnail", fileList![0]);
+    else formData.append("thumbnail", location.state.data.thumbnail);
+
+    if (data.tag_name.length === 1) {
+      formData.append("tag_name[0]", data.tag_name[0]);
+    } else {
+      for (let i = 0; i < data.tag_name.length; i++) {
+        formData.append("tag_name", data.tag_name[i]);
+      }
+    }
+
+    EditBoard(formData)
       .then((res) => {
-        console.log("Board 수정 성공", res);
-
         navigate("/");
       })
       .catch((err) => {
-        console.log("Board 수정 실패", err);
+        console.log(err);
+        Swal.fire("포스트 수정 실패", err, "error");
       });
   };
 
-  const onOnlyMe = () => {
-    setData({ ...data, board_status: 1 });
-    CreateBoard(data)
-      .then((res) => {
-        console.log("Board 생성 성공", res);
+  useEffect(() => {
+    if (location.state !== null) {
+      console.log(location.state.data);
+      setDescription(location.state.data.description);
+      getThumbnail(location.state.data.thumbnail);
+    }
+  }, []);
 
-        navigate("/");
-      })
-      .catch((err) => {
-        console.log("Board 생성 실패", err);
-      });
+  const getThumbnail = async (name: string) => {
+    await getBoardThumbnail(name).then((data) => {
+      const blob = new Blob([data.data], { type: data.type });
+      const url = URL.createObjectURL(blob);
+      setFileList(url);
+      setFileImage(url);
+    });
   };
-  const editdata = { title: data.title, content: data.content, description: data.description, tag_name: data.tag_name, board_id: parseInt(boardId) };
+
   return (
     <>
       <E.popup>
@@ -151,7 +160,7 @@ function Popup({ onClose, data, setData, boardId }: props) {
                   저장
                 </E.PopuoButton>
               ) : (
-                <E.PopuoButton active={true} onClick={onSave}>
+                <E.PopuoButton active={true} onClick={onEdit}>
                   수정
                 </E.PopuoButton>
               )}
@@ -203,9 +212,11 @@ export default function EditorPage() {
   };
 
   useEffect(() => {
-    if (location.state !== null) {
+    if (location.state !== null && location.state.data.content) {
       editorRef.current?.getInstance().setHTML(location.state.data.content);
+      tagHandler(location.state.data.tags.map((q: any) => q.tag_name));
     }
+
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
@@ -217,7 +228,7 @@ export default function EditorPage() {
       <E.TitleWrpper>
         <E.titleInput placeholder="제목을 입력하세요." onChange={titleHandler} value={editor.title}></E.titleInput>
         <div style={{ display: "flex", gap: "10px", width: "100%", justifyContent: "space-between" }}>
-          <div style={{ width: "50%" }}>
+          <E.TagSelectorArea>
             <ReactTagInput
               tags={editor.tag_name}
               placeholder="태그를 입력하세요"
@@ -227,7 +238,7 @@ export default function EditorPage() {
               maxTags={14}
               onChange={(newTags) => tagHandler(newTags)}
             />
-          </div>
+          </E.TagSelectorArea>
           {location.state !== null ? (
             <E.saveBtn className="btn_edit" onClick={onClickEvent}>
               Edit
@@ -247,6 +258,25 @@ export default function EditorPage() {
         ref={editorRef}
         placeholder="당신의 바오밥 나무에 가지를 추가해보세요..."
         plugins={[[codeSyntaxHighlight, { highlighter: Prism }], colorSyntax]}
+        hooks={{
+          addImageBlobHook: (blob, callback) => {
+            const formData = new FormData();
+            formData.append("ToastImage", blob);
+
+            API({
+              method: "post",
+              url: "/jobs/UploadToastUiImage",
+              data: formData,
+              headers: { "Content-Type": "multipart/form-data" },
+            })
+              .then(async function (response) {
+                callback(`${process.env.REACT_APP_API_ROOT}/jobs/getToastImage?file_name=${response.data}`, "image");
+              })
+              .catch(function (response) {
+                callback("image_load_fail", "image");
+              });
+          },
+        }}
       />
       {showPopup ? <Popup onClose={setShowPopup} data={editor} setData={setEditor} boardId={location.state !== null ? location.state.id : ""} /> : null}
     </>

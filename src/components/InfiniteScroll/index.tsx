@@ -7,14 +7,17 @@ import { Board } from "Types/main";
 import { TopButton } from "./style";
 
 import { FiArrowUp } from "react-icons/fi";
+import { iComment } from "Types/indexPage";
+import { tApplyJob, tJob } from "Types/Jobs";
 
 type Props = {
   children: ReactNode;
   loadFnc: () => void;
-  data: Board[];
+  data: Board[] | iComment[] | tJob[] | tApplyJob[];
   isLast: boolean;
+  isOnTop: boolean;
 };
-export default function InfiniteScroll({ loadFnc, data, children, isLast }: Props): JSX.Element {
+export default function InfiniteScroll({ loadFnc, data, children, isLast, isOnTop }: Props): JSX.Element {
   const [isTopButton, setIsTopButton] = useState<boolean>(false);
   const [darkMode] = useRecoilState<boolean>(Darkmode);
 
@@ -70,7 +73,7 @@ export default function InfiniteScroll({ loadFnc, data, children, isLast }: Prop
         </div>
       )}
 
-      {isTopButton && (
+      {isOnTop && isTopButton && (
         <TopButton onClick={topScroll}>
           <FiArrowUp size={25} color={darkMode ? "#FFFFFF" : "#999999"} />
         </TopButton>

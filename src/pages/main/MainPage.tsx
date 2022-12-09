@@ -25,6 +25,8 @@ import { IoBusinessSharp } from "react-icons/io5";
 import "../../style/tagInputStyle.css";
 import { PuffLoader } from "react-spinners";
 import Category from "./Category/Category";
+import { tJob } from "Types/Jobs";
+import { getJobsBoardAll } from "api/jobs";
 
 function getWindowSize() {
   const { innerWidth, innerHeight } = window;
@@ -37,6 +39,7 @@ export default function MainPage(): JSX.Element {
   // const [tags, setTags] = useState<string[]>([]);
   const [page, setPage] = useState<number>(0);
   const [mainState, setMainState] = useState<boolean>(false);
+  const [jobs, setJobs] = useState<tJob[]>([]);
 
   useEffect(() => {
     function handleWindowResize() {
@@ -49,13 +52,19 @@ export default function MainPage(): JSX.Element {
     };
   }, []);
 
+  useEffect(() => {
+    getJobsBoardAll({ page: 0 }).then((res) => {
+      setJobs(res);
+    });
+  }, []);
+
   const getInfo = async () => {
     if (mainState) return;
 
     await getMainBoard(page)
       .then((data) => {
         setPage(page + 1);
-        setBoard((curInfoArray) => [...data, ...curInfoArray].reverse()); // state에 추가
+        setBoard((curInfoArray) => [...curInfoArray, ...data]); // state에 추가
       })
       .catch((err) => {
         setMainState(true);
@@ -72,7 +81,7 @@ export default function MainPage(): JSX.Element {
 
   return (
     <Suspense fallback={() => fallback()}>
-      <div style={{ zIndex: "1", height: "100%" }}>
+      <div style={{ zIndex: "1", height: "100%", width: "100%" }}>
         <MainBanner>
           <div>
             <BannerImageArea>
@@ -88,23 +97,23 @@ export default function MainPage(): JSX.Element {
               <p style={{ marginTop: "20px" }}>이제 바오밥에서 커리어를 쌓아보세요.</p>
             </BannerTitle>
             <BannerDesc>
-              <h1>Spotify - Moved by Music</h1>
-              <p>by BAOBAB</p>
+              {/* <h1>Spotify - Moved by Music</h1> */}
+              {/* <p>by BAOBAB</p> */}
             </BannerDesc>
           </div>
         </MainBanner>
         <Wrapper>
           <WrapperInner>
-            <NavArea>
+            {/* <NavArea>
               <Category />
-            </NavArea>
+            </NavArea> */}
             <ContentArea>
               <div>
-                <ItemTitleArea>
-                  <span>최신 아티클</span>
-                </ItemTitleArea>
                 <ItemArea>
-                  <InfiniteScroll loadFnc={getInfo} data={board} isLast={mainState}>
+                  <ItemTitleArea>
+                    <span>최신 아티클</span>
+                  </ItemTitleArea>
+                  <InfiniteScroll loadFnc={getInfo} data={board} isLast={mainState} isOnTop={true}>
                     {board?.map((item: Board, index: number) => {
                       return (
                         <Card
@@ -121,26 +130,59 @@ export default function MainPage(): JSX.Element {
                   </InfiniteScroll>
                   <JobArea>
                     <div style={{ height: "100%" }}>
-                      {windowSize.innerWidth > 1260 && (
-                        <JobHeader>
-                          <IoBusinessSharp />
-                          새로운 채용 공고
-                        </JobHeader>
-                      )}
+                      <JobHeader>
+                        <IoBusinessSharp />
+                        새로운 채용 공고
+                      </JobHeader>
                       <JobList>
-                        {/* <JobCard>
-                          <div style={{ width: "70px", display: "flex", justifyContent: "center" }}>
-                            <SiTesla size={45} />
-                          </div>
-                          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                            <p>[Tesla] Field Service Engineer</p>
-                            <p style={{ fontSize: "12px" }}>Tesla</p>
-                            <p style={{ fontSize: "12px" }}>경력 (3년이상), 대졸이상</p>
-                          </div>
-                        </JobCard> */}
-                        <MainJobCard logo="tesla" title="Tesla" wlrrms="[Tesla] Field Service Engineer" 경력="경력 (3년이상), 대졸이상" />
-                        <MainJobCard logo="naver" title="Naver" wlrrms="[NAVER] 프론트엔드 개발자" 경력="경력 신입" />
-                        <MainJobCard logo="meta" title="Facebook" wlrrms="[Facebook] 백엔드 개발자" 경력="경력 (3년이상), 대졸이상" />
+                        {jobs.length > 0 && (
+                          <MainJobCard
+                            id={jobs[0].id}
+                            logo={
+                              <img
+                                src={`${process.env.REACT_APP_API_ROOT}/jobs/getToastImage?file_name=${jobs[0].logo}`}
+                                alt="logo"
+                                width={55}
+                                height={55}
+                              ></img>
+                            }
+                            title={jobs[0].title}
+                            wlrrms={`[${jobs[0].companyName}] ${jobs[0].field}`}
+                            description={jobs[0].message}
+                          />
+                        )}
+                        {jobs.length > 1 && (
+                          <MainJobCard
+                            id={jobs[1].id}
+                            logo={
+                              <img
+                                src={`${process.env.REACT_APP_API_ROOT}/jobs/getToastImage?file_name=${jobs[1].logo}`}
+                                alt="logo"
+                                width={55}
+                                height={55}
+                              ></img>
+                            }
+                            title={jobs[1].title}
+                            wlrrms={`[${jobs[1].companyName}] ${jobs[1].field}`}
+                            description={jobs[1].message}
+                          />
+                        )}
+                        {jobs.length > 2 && (
+                          <MainJobCard
+                            id={jobs[2].id}
+                            logo={
+                              <img
+                                src={`${process.env.REACT_APP_API_ROOT}/jobs/getToastImage?file_name=${jobs[2].logo}`}
+                                alt="logo"
+                                width={55}
+                                height={55}
+                              ></img>
+                            }
+                            title={jobs[2].title}
+                            wlrrms={`[${jobs[2].companyName}] ${jobs[2].field}`}
+                            description={jobs[2].message}
+                          />
+                        )}
                       </JobList>
                     </div>
                   </JobArea>

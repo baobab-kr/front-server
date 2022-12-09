@@ -6,4 +6,6 @@ export interface user {
   role?: number | null;
   description?: string | null;
   avatar_image?: string | null;
+  techStack: string;
+  socialUrl: string;
 }

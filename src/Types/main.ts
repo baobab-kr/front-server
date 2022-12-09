@@ -1,3 +1,5 @@
+import { user } from "Types/user";
+
 export interface PersonalInfo {
   board: Board[];
   tagCount: TagCount[];
@@ -15,7 +17,7 @@ export interface Board {
   board_status: number;
   likes_count: number;
   tags: Tag[];
-  writer: Writer | null;
+  writer: user | null;
   likes: Like[];
 }
 

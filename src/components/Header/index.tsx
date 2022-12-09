@@ -13,6 +13,8 @@ import {
   Arrow,
   UserActionList,
   UserActionListItem,
+  SearchBtn,
+  UserActionSearch,
 } from "./style";
 import LogoImg2 from "../../assets/Logo2.png";
 import { userLogout } from "../../api/user";
@@ -24,7 +26,9 @@ import { BsSearch } from "react-icons/bs";
 import LoginForm from "./LoginForm/LoginForm";
 import SignupForm from "./SignupForm/SignupForm";
 
-import { TITLE_TAB } from "../../constants/index";
+import { TITLE_TAB, USER_TYPE } from "../../constants/index";
+import USER from "store/store.user";
+import { useRecoilState } from "recoil";
 
 type tState = {
   state: tUesrId;
@@ -38,8 +42,9 @@ export default function Header(): JSX.Element {
   const navigate = useNavigate();
   const location = useLocation();
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const [userInfo, setUser] = useRecoilState<user>(USER);
 
-  const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
+  // let userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
   const [toggleUser, setToggleUser] = useState<number>(0);
   const [loginModal, setLoginModal] = useState<boolean>(false);
   const [signupModal, setSignupModal] = useState<boolean>(false);
@@ -56,6 +61,10 @@ export default function Header(): JSX.Element {
       window.removeEventListener("click", handleCloseModal);
     };
   }, []);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, [location.pathname]);
 
   const navagateHome = () => {
     navigate("/");
@@ -85,6 +94,10 @@ export default function Header(): JSX.Element {
     navigate("/jobs");
   };
 
+  const navagateJobManagement = () => {
+    navigate(`/@${userInfo!.userid}/job-management`);
+  };
+
   const logout = async () => {
     await userLogout()
       .then((res) => {
@@ -102,12 +115,17 @@ export default function Header(): JSX.Element {
     setOpen(true);
   };
 
+  const navagateJobMagt = () => {
+    navigate(`/@${userInfo!.userid}/job-management`);
+  };
+
   useEffect(() => {
-    console.log(location.pathname);
     if (location.pathname === "/") {
       setTab(TITLE_TAB.MAIN);
     } else if (location.pathname === "/jobs") {
       setTab(TITLE_TAB.JOB);
+    } else if (location.pathname === "/job-management") {
+      setTab(TITLE_TAB.JOB_MANAGEMENT);
     } else {
       setTab(TITLE_TAB.NOT);
     }
@@ -125,16 +143,26 @@ export default function Header(): JSX.Element {
         <Tabs onClick={navagateJob} current={tab === TITLE_TAB.JOB}>
           채용
         </Tabs>
+        {userInfo.id !== -1 && (
+          <>
+            <div style={{ width: "2px", backgroundColor: "gray" }} />
+            <Tabs onClick={navagateJobManagement} current={tab === TITLE_TAB.JOB_MANAGEMENT}>
+              채용 관리
+            </Tabs>
+          </>
+        )}
       </TabArea>
       <ItemWrapper>
         <SearchContainer>
-          <BsSearch onClick={seachClick} />
+          <SearchBtn>
+            <BsSearch onClick={seachClick} />
+          </SearchBtn>
           <SearchArea open={open} setOpen={setOpen} />
         </SearchContainer>
         <LoginForm open={loginModal} setOpen={setLoginModal} />
         <SignupForm open={signupModal} setOpen={setSignupModal} />
         <Sign>
-          {userInfo === null ? (
+          {userInfo.id === -1 ? (
             <div style={{ display: "flex", gap: "15px" }}>
               <Button onClick={navagateLogin}>로그인</Button>
               <Button onClick={navagateSignup}>회원가입</Button>
@@ -143,15 +171,21 @@ export default function Header(): JSX.Element {
             <div ref={wrapperRef} onClick={toggleUserInfo}>
               <Arrow scale={toggleUser} />
               <UserContainer>
-                <Avator userId={userInfo.userid} height={"40px"} width={"40px"} />
+                <Avator user={userInfo} userId={userInfo.userid} height={"40px"} width={"40px"} state={false} />
                 <UserActionList scale={toggleUser}>
-                  <div style={{ margin: "10px" }}>
-                    <Avator userId={userInfo.userid} height={"40px"} width={"40px"} />
+                  <div style={{ margin: "10px", display: "flex", gap: "15px", alignItems: "center" }}>
+                    <Avator user={userInfo} userId={userInfo.userid} height={"40px"} width={"40px"} state={false} />
+                    <p>{userInfo.username}</p>
                   </div>
                   <hr color="#999999" />
-                  <UserActionListItem onClick={navagateMy}>My Home</UserActionListItem>
+                  <UserActionSearch>
+                    <UserActionListItem onClick={seachClick}>검색</UserActionListItem>
+                  </UserActionSearch>
+                  {userInfo?.role === USER_TYPE.DEVELOPER && <UserActionListItem onClick={navagateMy}>My Home</UserActionListItem>}
+                  {userInfo?.role === USER_TYPE.HEADHUNTER && <UserActionListItem onClick={navagateJobMagt}>채용 관리</UserActionListItem>}
+                  {userInfo?.role === USER_TYPE.ADMIN && <UserActionListItem onClick={navagateJobMagt}>채용 관리</UserActionListItem>}
                   <UserActionListItem onClick={navagateSetting}>설정</UserActionListItem>
-                  <UserActionListItem onClick={navagateEditor}>글쓰기</UserActionListItem>
+                  {userInfo?.role === USER_TYPE.DEVELOPER && <UserActionListItem onClick={navagateEditor}>글쓰기</UserActionListItem>}
                   <UserActionListItem onClick={logout}>로그아웃</UserActionListItem>
                 </UserActionList>
               </UserContainer>

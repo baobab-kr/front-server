@@ -1,9 +1,25 @@
 import API from ".";
 import { Board, PersonalInfo, ICreateBoard, Like, TagCount, Writer, IEditBoard } from "Types/main";
+import { user } from "Types/user";
 
 export function getMainBoard(page: number): Promise<Board[]> {
   return new Promise<Board[]>((resolve, reject) => {
     API.post("/board/BoardMain", { page: page })
+      .then((res) => {
+        if (res.data.message) {
+          reject(res.data.message);
+        }
+        resolve(res.data);
+      })
+      .catch((err) => {
+        reject(err.response);
+      });
+  });
+}
+
+export function getBoardSearchOfTitle(page: number, title: string): Promise<Board[]> {
+  return new Promise<Board[]>((resolve, reject) => {
+    API.post("/board/BoardSearchOfTitle", { page: page, title: title })
       .then((res) => {
         if (res.data.message) {
           reject(res.data.message);
@@ -43,7 +59,7 @@ export function getBoardPersonalTag(page: number, userId: number, tag: string[])
         resolve(res.data);
       })
       .catch((err) => {
-        reject(err.response);
+        reject(err.response.data.message);
       });
   });
 }
@@ -55,7 +71,7 @@ export function touchLikes(board_id: number): Promise<Like> {
         resolve(res.data[0]);
       })
       .catch((err) => {
-        reject(err.response);
+        reject(err.response.data.message);
       });
   });
 }
@@ -67,19 +83,19 @@ export function CreateBoard(_createBoard: ICreateBoard): Promise<string> {
         resolve(res.statusText);
       })
       .catch((err) => {
-        reject(err.response);
+        reject(err.response.data.message);
       });
   });
 }
 
-export function EditBoard(_editBoard: IEditBoard): Promise<string> {
+export function EditBoard(_editBoard: any): Promise<string> {
   return new Promise<string>((resolve, reject) => {
     API.patch("/board/BoardUpdate", _editBoard)
       .then((res) => {
         resolve(res.statusText);
       })
       .catch((err) => {
-        reject(err.response);
+        reject(err.response.data.message);
       });
   });
 }
@@ -108,8 +124,8 @@ export function getBoardPersonalTagCount(user_id: number): Promise<TagCount[]> {
   });
 }
 
-export function getBoardPersonalWriter(user_id: number): Promise<Writer> {
-  return new Promise<Writer>((resolve, reject) => {
+export function getBoardPersonalWriter(user_id: number): Promise<user> {
+  return new Promise<user>((resolve, reject) => {
     API.post("/board/BoardPersonalWriter", { user_id: user_id })
       .then((res) => {
         resolve(res.data);
@@ -130,7 +146,6 @@ export function getBoardThumbnail(name: string): Promise<any> {
       },
     )
       .then((res) => {
-        console.log("array", res.data);
         resolve({ data: res.data, type: res.headers["content-type"] });
       })
       .catch((err) => {

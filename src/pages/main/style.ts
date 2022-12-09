@@ -6,12 +6,19 @@ export const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   padding: 0 20px;
+
+  color: ${({ theme }) => theme.fontColor.color};
+
+  @media screen and (max-width: 480px) {
+    padding: 0;
+    display: block;
+  }
 `;
 
 export const WrapperInner = styled.div`
   position: relative;
   display: grid;
-  grid-template-columns: 340px auto;
+  grid-template-columns: auto;
   text-align: left;
 `;
 
@@ -67,33 +74,58 @@ export const ItemTitleArea = styled.div`
   font-size: 20px;
   font-weight: 700;
   height: 30px;
-  margin-bottom: 16px;
-  position: relative;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  top: -44px;
+  grid-column-start: 1;
+
+  @media screen and (max-width: 665px) {
+    grid-column: 1;
+    grid-row: 2;
+  }
 `;
 
 export const ItemArea = styled.div`
+  position: relative;
   grid-gap: 30px;
   display: grid;
   grid-template-columns: repeat(6, 330px);
 
   @media screen and (max-width: 2170px) {
-    grid-template-columns: repeat(4, 330px);
+    grid-template-columns: repeat(5, 330px);
   }
   @media screen and (max-width: 1810px) {
     grid-gap: 25px;
-    grid-template-columns: repeat(4, 300px);
+    grid-template-columns: repeat(5, 300px);
   }
   @media screen and (max-width: 1600px) {
     grid-gap: 25px;
-    grid-template-columns: repeat(3, 300px);
+    grid-template-columns: repeat(4, 300px);
   }
   @media screen and (max-width: 1260px) {
     grid-gap: 25px;
+    grid-template-columns: repeat(3, 300px);
+  }
+
+  @media screen and (max-width: 1080px) {
+    grid-gap: 25px;
     grid-template-columns: repeat(2, 300px);
+  }
+
+  @media screen and (max-width: 754px) {
+    grid-row-gap: 25px;
+    grid-template-columns: repeat(2, 300px);
+  }
+
+  @media screen and (max-width: 665px) {
+    grid-row-gap: 25px;
+    grid-template-columns: repeat(1, 400px);
+  }
+
+  @media screen and (max-width: 480px) {
+    grid-row-gap: 25px;
+    grid-template-columns: repeat(1, 100%);
   }
 `;
 
@@ -103,17 +135,40 @@ export const JobArea = styled.div`
   height: 330px;
   position: relative;
   width: 330px;
-
+  @media screen and (max-width: 2170px) {
+    grid-column: 5;
+  }
   @media screen and (max-width: 1810px) {
     height: 310px;
     width: 300px;
   }
   @media screen and (max-width: 1600px) {
-    grid-column: 3;
+    grid-column: 4;
   }
   @media screen and (max-width: 1260px) {
+    grid-column: 3;
+    grid-row: 1;
+  }
+  @media screen and (max-width: 1080px) {
     grid-column: 2;
-    grid-row: 2;
+    grid-row: 1;
+  }
+  @media screen and (max-width: 754px) {
+    grid-column: 2;
+    grid-row: 1;
+    width: 100%;
+  }
+
+  @media screen and (max-width: 665px) {
+    grid-column: 1;
+    grid-row: 1;
+    width: 100%;
+  }
+
+  @media screen and (max-width: 480px) {
+    grid-column: 1;
+    grid-row: 1;
+    width: 100%;
   }
 `;
 
@@ -121,6 +176,7 @@ export const JobHeader = styled.div`
   position: absolute;
   top: -44px;
   width: 100%;
+  color: ${({ theme }) => theme.fontColor.color};
 
   display: flex;
   gap: 15px;

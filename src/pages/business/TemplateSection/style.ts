@@ -5,6 +5,7 @@ export const Template = styled.div`
   border-radius: 10px;
   box-shadow: 10px 20px 20px 0 rgb(11 12 14 / 8%);
   margin-top: 30px;
+  color: ${({ theme }) => theme.fontColor.color};
 `;
 
 type Props = {

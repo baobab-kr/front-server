@@ -7,6 +7,7 @@ declare module "styled-components" {
     fontColor: {
       color: string;
       subColor: string;
+      jobCardColor: string;
     };
     mainColor: {
       main: string;

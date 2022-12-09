@@ -4,6 +4,24 @@ export const WrapperArea = styled.div`
   position: relative;
   display: flex;
   width: 100%;
+  color: ${({ theme }) => theme.fontColor.color};
+`;
+
+export const WrapperInner = styled.div`
+  width: 60%;
+  margin: 0px auto;
+
+  @media screen and (max-width: 1000px) {
+    width: 70%;
+  }
+
+  @media screen and (max-width: 800px) {
+    width: 80%;
+  }
+
+  @media screen and (max-width: 600px) {
+    width: 90%;
+  }
 `;
 
 export const Template = styled.div`
@@ -18,7 +36,7 @@ export const TemplateArea = styled.div`
   position: relative;
 `;
 
-export const CompanyName = styled.h3`
+export const CompanyName = styled.div`
   font-size: 20px;
   margin-bottom: 10px;
 `;
@@ -135,6 +153,18 @@ export const BackButton = styled.button`
 export const TitleArea = styled.div`
   display: flex;
   justify-content: space-between;
+
+  @media screen and (max-width: 665px) {
+    flex-direction: column;
+
+    gap: 30px;
+    & div:nth-child(1) {
+      order: 2;
+    }
+    & div:nth-child(2) {
+      order: 1;
+    }
+  }
 `;
 
 export const ApplyButton = styled.div`
@@ -148,4 +178,17 @@ export const ApplyButton = styled.div`
   border-radius: 8px;
   font-size: 1.5rem;
   cursor: pointer;
+
+  @media screen and (max-width: 665px) {
+    width: 100%;
+  }
+`;
+
+export const JobsDescriptionArea = styled.div`
+  display: flex;
+  gap: 40px;
+
+  @media screen and (max-width: 1000px) {
+    flex-direction: column;
+  }
 `;

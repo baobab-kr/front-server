@@ -4,24 +4,28 @@ import Avator from "components/Avator/Avator";
 import ReCommentCard from "components/Comment/CommentCard/ReCommentCard";
 import { iComment } from "Types/indexPage";
 import { user } from "Types/user";
-import { createReComment, getReComments, patchDeleteComment } from "api/indexPage";
+import { CreateFilteringReComment, createReComment, getReCommentCount, getReComments, patchDeleteComment } from "api/indexPage";
 import { CardWrapper, Card, UserContainer, UserInfo, Comment, CommentFooter, ShowReply, ReplyArea, Textarea, TextActionArea, LoadMoreBtn } from "./style";
 import { timeForToday } from "util/date";
+import Swal from "sweetalert2";
 
 type tProps = {
   data: iComment;
   comments: iComment[];
   setComments: Dispatch<SetStateAction<iComment[]>>;
+  commentCnt: number;
+  setCommentCnt: Dispatch<SetStateAction<number>>;
 };
-export default function CommentCard({ data, comments, setComments }: tProps): JSX.Element {
+export default function CommentCard({ data, comments, setComments, commentCnt, setCommentCnt }: tProps): JSX.Element {
   const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
 
   const [replyStatus, setReplyStatus] = useState<boolean>(false);
   const [createReply, setCreateReply] = useState<boolean>(false);
   const [reComments, setReComments] = useState<iComment[]>([]);
   const [reComment, setReComment] = useState<string>("");
+  const [reCommentCnt, setReCommentCnt] = useState<number>(0);
 
-  const [page, setPage] = useState<number>(0);
+  const [page, setPage] = useState<number>(-1);
 
   const textArea = useRef<HTMLTextAreaElement>(null);
   const resize = () => {
@@ -34,43 +38,74 @@ export default function CommentCard({ data, comments, setComments }: tProps): JS
   const replyStatusHandler = (condition: boolean) => {
     setReplyStatus(condition);
     if (!condition) {
-      setPage(0);
+      setPage(-1);
+    } else {
+      loadMore();
     }
   };
 
   const deleteComment = async () => {
     await patchDeleteComment(data.id).then(() => {
       setComments(comments.filter((q) => q.id !== data.id));
+      setCommentCnt(commentCnt - 1);
     });
   };
 
-  useEffect(() => {
-    getReCommentsFnc();
-  }, [page]);
+  // useEffect(() => {
+  //   getReCommentsFnc();
+  // }, [page]);
 
-  const getReCommentsFnc = async () => {
+  useEffect(() => {
+    const apiGet = async () => {
+      await getReCommentCount(data.id).then((res) => {
+        setReCommentCnt(res);
+      });
+    };
+    apiGet();
+  }, []);
+
+  const getReCommentsFnc = async (page: number) => {
     await getReComments(data.id, page)
       .then((res: iComment[]) => {
-        console.log("getComments", res);
+        setPage(page);
+
         const ids = reComments.map((q) => q.id);
         const result = res.filter((q) => !ids.includes(q.id));
+        if (result.length === 0) {
+          throw new Error("is Last Page");
+        }
         setReComments([...reComments, ...result]);
       })
       .catch((err) => {
-        console.log("getcommetn err => ", err);
+        setPage(page - 1);
+      });
+  };
+
+  const getNewReCommentsFnc = async () => {
+    await getReComments(data.id, 0)
+      .then((res: iComment[]) => {
+        const ids = reComments.map((q) => q.id);
+        const result = res.filter((q) => !ids.includes(q.id));
+        setReComments([...result, ...reComments]);
+      })
+      .catch((err) => {
+        Swal.fire("댓글 작성 실패", err, "error");
       });
   };
 
   const onRespond = async () => {
-    await createReComment(reComment, data.id).then(async () => {
+    await createReComment(reComment, data.id).then(async (res) => {
       setReComment("");
-      await getReCommentsFnc();
+      await getNewReCommentsFnc();
       setCreateReply(false);
+      setReCommentCnt(reCommentCnt + 1);
+
+      await CreateFilteringReComment(res.id, res.content);
     });
   };
 
   const loadMore = () => {
-    setPage(page + 1);
+    getReCommentsFnc(page + 1);
   };
 
   return (
@@ -79,7 +114,7 @@ export default function CommentCard({ data, comments, setComments }: tProps): JS
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <UserContainer>
             <UserInfo>
-              <Avator height="2em" width="2rem" userId={"1"} />
+              <Avator height="2em" width="2rem" userId={data.writer.userid} user={data.writer} />
               <div style={{ display: "flex", flexDirection: "column" }}>
                 <div>{data.writer.username}</div>
                 <div style={{ color: "rgba(255, 7, 110, 1)", fontSize: "12px", marginTop: "5px" }}>{timeForToday(data.date)}</div>
@@ -96,14 +131,14 @@ export default function CommentCard({ data, comments, setComments }: tProps): JS
         <CommentFooter>
           <ShowReply style={{ cursor: "pointer" }} onClick={() => replyStatusHandler(!replyStatus)}>
             <BsFillChatFill />
-            {!replyStatus && <div>Show Reply</div>}
+            {!replyStatus && <div>{reCommentCnt} replies</div>}
             {replyStatus && <div>Hide Reply</div>}
           </ShowReply>
           <div style={{ cursor: "pointer" }} onClick={() => setCreateReply(!createReply)}>
             Reply
           </div>
         </CommentFooter>
-        {createReply && (
+        {createReply && userInfo !== null && (
           <>
             <div style={{ display: "flex", flexDirection: "column" }}>
               <Textarea
@@ -124,11 +159,25 @@ export default function CommentCard({ data, comments, setComments }: tProps): JS
             </div>
           </>
         )}
+
+        {createReply && userInfo === null && (
+          <div style={{ width: "100%", textAlign: "center", marginTop: "15px" }}>댓글 작성을 하려면 로그인이 필요합니다.</div>
+        )}
+
         <ReplyArea>
           {replyStatus && (
             <>
               {reComments.map((data, index) => {
-                return <ReCommentCard data={data} reComments={reComments} setReComments={setReComments} key={index} />;
+                return (
+                  <ReCommentCard
+                    data={data}
+                    reComments={reComments}
+                    setReComments={setReComments}
+                    reCommentCnt={reCommentCnt}
+                    setReCommentCnt={setReCommentCnt}
+                    key={index}
+                  />
+                );
               })}
               <LoadMoreBtn onClick={loadMore}>더보기</LoadMoreBtn>
             </>

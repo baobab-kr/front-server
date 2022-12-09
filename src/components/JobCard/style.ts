@@ -3,9 +3,13 @@ import styled from "styled-components";
 export const CardWrapper = styled.div`
   position: relative;
   width: 330px;
+  height: 380px;
 
   @media screen and (max-width: 1810px) {
     width: 300px;
+  }
+  @media screen and (max-width: 480px) {
+    width: 100%;
   }
 `;
 
@@ -69,7 +73,8 @@ export const CardTitle = styled.div`
   padding-left: 60px;
 
   .jobLink {
-    color: #e4e5e7;
+    color: ${({ theme }) => theme.fontColor.color};
+
     display: inline-block;
     font-size: 18px;
     font-weight: 500;
@@ -78,23 +83,27 @@ export const CardTitle = styled.div`
     padding-right: 40px;
     position: relative;
     transition: all 0.15s;
+    width: 100%;
   }
   div {
-    color: #e4e5e7;
+    /* color: #e4e5e7; */
+    color: ${({ theme }) => theme.fontColor.color};
+
     float: left;
     font-size: 14px;
     font-weight: 500;
     transition: all 0.15s;
   }
   .location {
-    color: #7a7c85;
+    color: ${({ theme }) => theme.fontColor.jobCardColor};
   }
 `;
 
 export const CardName = styled.div`
   margin-right: 3px;
   ::after {
-    color: #7a7c85;
+    color: ${({ theme }) => theme.fontColor.jobCardColor};
+
     content: " ・";
   }
 `;
@@ -102,7 +111,7 @@ export const CardName = styled.div`
 export const CardIntro = styled.div`
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
-  color: #7a7c85;
+  color: ${({ theme }) => theme.fontColor.jobCardColor};
   display: -webkit-box;
   font-size: 14px;
   font-weight: 400;
@@ -118,7 +127,8 @@ export const CardDetail = styled.div`
   div {
     margin-bottom: 7px;
 
-    color: #7a7c85;
+    color: ${({ theme }) => theme.fontColor.jobCardColor};
+
     font-size: 14px;
     font-weight: 500;
     margin-bottom: 5px;
@@ -126,7 +136,8 @@ export const CardDetail = styled.div`
     position: relative;
 
     ::before {
-      background: #7a7c85;
+      color: ${({ theme }) => theme.fontColor.jobCardColor};
+
       border-radius: 2px;
       content: "";
       height: 3px;
@@ -142,7 +153,7 @@ export const CardDetail = styled.div`
 export const MainJobCardWrapper = styled.div`
   width: 100%;
   height: 100px;
-  background-color: #1d1d1d;
+  background-color: ${({ theme }) => theme.backgroundColor.bg};
   box-shadow: 2px 2px 8px rgb(0 0 0 / 90%);
   border-radius: 5px;
 
@@ -150,7 +161,16 @@ export const MainJobCardWrapper = styled.div`
 
   padding: 10px 0px;
 
+  color: ${({ theme }) => theme.fontColor.color};
+
+  cursor: pointer;
+
   @media screen and (max-width: 1810px) {
     height: 90px;
   }
+`;
+
+export const MainCardColor = styled.p`
+  color: ${({ theme }) => theme.fontColor.color};
+  font-size: 12px;
 `;

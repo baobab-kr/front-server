@@ -18,34 +18,38 @@ export const Overlay = styled.span`
   height: 85%;
 `;
 
-export const CardWrapper = styled.div<cardInit>`
-  position: relative;
+export const HoverArea = styled.div<cardInit>`
+  &:hover {
+    .card {
+      transform: translateY(-8px);
+      transition: 0.2s;
+      box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.9);
+    }
+  }
   width: ${(props) => props.width};
   height: ${(props) => props.height};
+
+  @media screen and (max-width: 665px) {
+    width: 100%;
+    height: auto;
+  }
+`;
+
+export const CardWrapper = styled.div<cardInit>`
+  position: relative;
   min-width: 300px;
   min-height: 310px;
-  /* width: 320px;
-  height: 330px; */
+  height: 100%;
   display: flex;
   flex-direction: column;
   border-radius: 5px;
-  /* background: ${({ theme }) => theme.backgroundColor.subColor}; */
-  background-color: #3f3f3f;
+  /* background-color: #3f3f3f; */
+  background-color: ${({ theme }) => theme.backgroundColor.subColor};
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9);
-  /* color: ${({ theme }) => theme.fontColor.color}; */
   color: #ffffff;
   text-align: justify;
   cursor: pointer;
   transition: 0.2s;
-
-  ${(props) =>
-    props.isHover
-      ? ` &:hover {
-            transform: translate(0px, -10px);
-            transition: 0.2s;
-            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.9);
-          }`
-      : ""};
 
   @media screen and (max-width: 1339px) {
     /* 타블렛 가로 */
@@ -53,6 +57,11 @@ export const CardWrapper = styled.div<cardInit>`
       transform: translate(0px, 0px);
       transition: 0s;
     }
+  }
+
+  @media screen and (max-width: 480px) {
+    width: 100%;
+    height: auto;
   }
 `;
 
@@ -77,13 +86,15 @@ export const CardText = styled.div`
 
 export const Title = styled.p`
   position: absolute;
-  font-size: 25px;
+  font-size: 24px;
   font-weight: bold;
+  word-break: break-all;
 
-  top: 45%;
+  top: 35%;
   padding-right: 20px;
 
   text-shadow: 1px 1px 1px gray;
+  line-height: 2rem;
 `;
 
 export const Content = styled.p`

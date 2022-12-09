@@ -2,13 +2,14 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import { users_register } from "../../../api/signup";
 import { JOB_GROUP, USER_TYPE_SELECT } from "constants/index";
-import { SignupOverlay, SignupContainer, TitleArea, Button, ButtonArea, SiginupArea, SignupWrapper } from "./style";
+import { SignupOverlay, SignupContainer, TitleArea, Button, ButtonArea, SiginupArea, SignupWrapper, CloseBtnArea } from "./style";
 import Swal from "sweetalert2";
 
 import SignupStepperFirst from "./StepperFirst/SignupStepperFirst";
 import SignupStepperSecond from "./StepperSecond/SignupStepperSecond";
 import SignupStepperThird from "./StepperThird/SignupStepperThird";
 import Stepper from "./Stepper/Stepper";
+import { AiOutlineClose } from "react-icons/ai";
 
 type tConfirm = {
   name: boolean;
@@ -40,8 +41,10 @@ export default function SignupForm({ open, setOpen }: tOpen): JSX.Element {
 
   const [stepper, setStepper] = useState<number>(0);
 
-  const closeOverlay = () => {
-    setOpen(false);
+  const closeOverlay = (e: any) => {
+    if (e.target.id === "signup-overlay") {
+      setOpen(false);
+    }
   };
 
   const prevet = (e: React.MouseEvent<HTMLElement>) => {
@@ -73,6 +76,10 @@ export default function SignupForm({ open, setOpen }: tOpen): JSX.Element {
     setId("");
     setPassword("");
     setConfirmPassword("");
+    setJob(JOB_GROUP[0].value);
+    setUserType(USER_TYPE_SELECT[0].value);
+    setEmailCode("");
+    setEmail("");
 
     setStepper(0);
   }, [open]);
@@ -118,7 +125,6 @@ export default function SignupForm({ open, setOpen }: tOpen): JSX.Element {
 
   const vaildNext = () => {
     if (stepper === 0) {
-      console.log(confirm);
       if (!confirm.confirmPassword || !confirm.id || !confirm.name || !confirm.password) {
         Swal.fire("정보를 다시 확인해주세요.");
 
@@ -142,19 +148,21 @@ export default function SignupForm({ open, setOpen }: tOpen): JSX.Element {
     users_register(id, email, name, password, emailCode, userType, techStack!.label)
       .then(() => {
         Swal.fire("회원가입 되었습니다.");
-        closeOverlay();
+        closeOverlay({ target: { id: "signup-overlay" } });
       })
       .catch((error: any) => {
-        console.log(error);
         Swal.fire("회원가입에 실패했습니다.");
       });
   };
 
   return (
-    <SignupOverlay open={open} onClick={closeOverlay}>
+    <SignupOverlay open={open} onMouseDown={closeOverlay} id="signup-overlay">
       <SignupContainer onClick={prevet}>
+        <CloseBtnArea>
+          <AiOutlineClose onClick={closeOverlay} />
+        </CloseBtnArea>
         <TitleArea>
-          <p style={{ fontSize: "45px" }}>회원가입</p>
+          <p>회원가입</p>
         </TitleArea>
         <SiginupArea>
           <Stepper step={stepper} />

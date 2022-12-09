@@ -27,6 +27,21 @@ export const SignupContainer = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   overflow: hidden;
+
+  color: ${({ theme }) => theme.fontColor.color};
+
+  @media screen and (max-width: 820px) {
+    width: 600px;
+  }
+
+  @media screen and (max-width: 620px) {
+    top: 45%;
+    width: 100%;
+    height: 110%;
+
+    min-height: none;
+    max-height: none;
+  }
 `;
 
 export const SignupWrapper = styled.div`
@@ -59,6 +74,16 @@ export const TitleArea = styled.div`
   gap: 15px;
 
   color: ${({ theme }) => theme.fontColor.subColor};
+
+  p {
+    font-size: 45px;
+  }
+
+  @media screen and (max-width: 620px) {
+    p {
+      font-size: 35px;
+    }
+  }
 `;
 
 export const Button = styled.button`
@@ -80,4 +105,15 @@ export const ButtonArea = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+`;
+
+export const CloseBtnArea = styled.div`
+  display: none;
+
+  position: fixed;
+  top: 30px;
+  right: 30px;
+  @media screen and (max-width: 600px) {
+    display: block;
+  }
 `;

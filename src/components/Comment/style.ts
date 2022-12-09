@@ -14,10 +14,15 @@ const CommentWrapper = styled.div<tOpenStatus>`
   z-index: 520;
   width: 400px;
   transform: ${(props) => (props.status ? "translateX(-400px);" : "translateX(0px);")};
-  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1) 0s, opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1) 0s;
+  /* transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1) 0s, opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1) 0s; */
+  transition-duration: 0.3s;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-property: transform, visibility, width, opacity;
   visibility: ${(props) => (props.status ? "visible" : "hidden")};
 
   overflow-y: auto;
+
+  color: ${({ theme }) => theme.fontColor.color};
 `;
 
 const HeaderArea = styled.div`
@@ -58,7 +63,6 @@ const UserContainer = styled.div`
   flex-direction: column;
   border-radius: 4px;
   background-color: ${({ theme }) => theme.backgroundColor.subColor};
-  box-shadow: rgb(0 0 0 / 12%) 0px 2px 8px;
 `;
 
 const UserInfo = styled.div`

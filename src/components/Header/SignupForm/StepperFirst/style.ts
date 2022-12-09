@@ -2,10 +2,15 @@ import styled from "styled-components";
 
 export const CustomInput = styled.input`
   background: none;
-  color: #e4e5e7;
   padding: 0px 50px 5px 5px;
   width: 80%;
   font-size: 16px;
+
+  color: ${({ theme }) => theme.fontColor.color};
+
+  @media screen and (max-width: 620px) {
+    font-size: 10px;
+  }
 `;
 
 export const ConfirmButton = styled.button`
@@ -16,6 +21,9 @@ export const ConfirmButton = styled.button`
   font-size: 14px;
 
   color: white;
+  @media screen and (max-width: 620px) {
+    font-size: 13px;
+  }
 `;
 
 export const InputWrapper = styled.div`
@@ -34,6 +42,28 @@ export const StepperFirst = styled.div`
 
   flex-direction: column;
   gap: 20px;
+
+  p {
+    margin-bottom: 20px;
+  }
+  .error {
+    font-size: 0.825rem;
+    margin-top: 15px;
+    margin-bottom: 0px;
+  }
+
+  @media screen and (max-width: 620px) {
+    gap: 10px;
+    p {
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+
+    .error {
+      font-size: 10px;
+      margin-top: 10px;
+    }
+  }
 `;
 
 export const VisibilityBtnArea = styled.div`
@@ -42,4 +72,8 @@ export const VisibilityBtnArea = styled.div`
   right: 10px;
   cursor: pointer;
   z-index: 990;
+  color: ${({ theme }) => theme.fontColor.color};
+  @media screen and (max-width: 620px) {
+    top: 10px;
+  }
 `;

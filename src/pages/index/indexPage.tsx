@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import "@toast-ui/editor/dist/theme/toastui-editor-dark.css";
 
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Avator from "components/Avator/Avator";
 
 import * as S from "./style";
-import { getBoardDetail } from "api/indexPage";
+import { getBoardDetail, getCommentCount } from "api/indexPage";
 import { iIndexPage } from "Types/indexPage";
 import moment from "moment";
 import { Tag } from "Types/main";
@@ -14,11 +14,17 @@ import TagComponent from "components/Tag/Tag";
 
 import { BsFillChatFill } from "react-icons/bs";
 import Comment from "components/Comment/Comment";
+import Swal from "sweetalert2";
+import { user } from "Types/user";
 
 export default function IndexPage(): JSX.Element {
+  const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
+
+  const navigate = useNavigate();
   const [detail, setDetail] = useState<iIndexPage>();
   const [titleList, setTitleList] = useState<HTMLElement[]>([]);
   const [commentStatus, setCommentStatus] = useState<boolean>(false);
+  const [commentCnt, setCommentCnt] = useState<number>(0);
   const location = useLocation();
   const board_id = location.pathname.split("/")[2];
 
@@ -29,18 +35,25 @@ export default function IndexPage(): JSX.Element {
           setDetail(res);
           document.querySelector(".toastui-editor-contents")!.innerHTML = res.content;
           document.querySelectorAll<HTMLElement>(".toastui-editor-contents h1")!.forEach((data) => {
-            console.log(data);
             setTitleList((q) => {
               return [...q, data];
             });
           });
         })
         .catch((err) => {
-          console.log(err);
+          Swal.fire("정보 불러오기 실패", err, "error");
         });
+
+      await getCommentCount(parseInt(board_id)).then((res) => {
+        setCommentCnt(res);
+      });
     };
     apiGet();
   }, []);
+
+  const navigateModify = () => {
+    navigate(`/editor/${board_id}`, { state: { data: detail, id: board_id } });
+  };
 
   return (
     <>
@@ -48,8 +61,13 @@ export default function IndexPage(): JSX.Element {
         <S.CenterPosition>
           <S.TitleArea>
             <S.Title>{detail?.title}</S.Title>
+            {detail?.writer.userid === userInfo?.userid && (
+              <div style={{ display: "flex", width: "100%", justifyContent: "flex-end", marginBottom: "-30px", cursor: "pointer" }} onClick={navigateModify}>
+                수정
+              </div>
+            )}
             <S.UserArea>
-              <Avator userId={"1"} width={"3.3rem"} height={"3.3rem"} />
+              <Avator user={detail?.writer!} userId={detail?.writer.userid!} width={"3.3rem"} height={"3.3rem"} />
               <div style={{ display: "flex", justifyContent: "space-around", flexDirection: "column" }}>
                 <div>{detail?.writer.username}</div>
                 <div>{moment(detail?.date || "").format("YYYY년 MM월 DD일")}</div>
@@ -85,7 +103,7 @@ export default function IndexPage(): JSX.Element {
             )}
             <S.MainContentArea>
               <div className={localStorage.getItem("Theme") === "dark" ? "toastui-editor-dark" : "toastui-editor"}>
-                <div className="toastui-editor-contents"></div>
+                <div className="toastui-editor-contents draggable"></div>
               </div>
             </S.MainContentArea>
             {detail?.tags !== undefined && detail!.tags.length > 0 && (
@@ -101,14 +119,14 @@ export default function IndexPage(): JSX.Element {
             )}
             <S.FooterCommentArea>
               <BsFillChatFill
-                style={{ margin: "-30px 1rem", cursor: "pointer" }}
+                style={{ margin: "-30px 1rem -30px 0px", cursor: "pointer" }}
                 size={20}
                 onClick={() => {
                   setCommentStatus(!commentStatus);
                 }}
               />
-              <div>9999</div>
-              <Comment status={commentStatus} setStatus={setCommentStatus} boardID={Number(board_id)} />
+              <div>{commentCnt}</div>
+              <Comment status={commentStatus} setStatus={setCommentStatus} boardID={Number(board_id)} commentCnt={commentCnt} setCommentCnt={setCommentCnt} />
             </S.FooterCommentArea>
           </S.ContentArea>
         </S.CenterPosition>

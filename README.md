@@ -1,46 +1,56 @@
-# Getting Started with Create React App
+<div align="center">
+  <h3 align="center">Baobab Frontend Server</h3>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+  <p align="center">
+    바오밥 서비스의 UI를 제공합니다. <br/> 
+    개발자들을 위한 반응형 Web Application Blog Service입니다. <br/>
+    <br />
+    <a href="https://github.com/baobab-kr/front-server"><strong>Explore the docs »</strong></a>
+    <br />
+    <br />
+    <a href="https://qa.baobab.blog">View Demo</a>
+    ·
+    <a href="https://github.com/baobab-kr/front-server/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/baobab-kr/front-server/issues">Request Feature</a>
+  </p>
+</div>
 
-## Available Scripts
+## Installation
 
-In the project directory, you can run:
+해당 섹션에서는 API 서버를 로컬에 설치하는 방법을 안내합니다. <br/>
+이미 도커 엔진이 로컬 PC에 설치되어 있음을 가정하에 제작되었습니다. <br/>
 
-### `npm start`
+- Clone the repo
+  ```sh
+  git clone https://github.com/baobab-kr/front-server.git
+  ```
+- Docker Container build and Run
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+  ```sh
+    docker build -t blog_front .
+  ```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+  ```sh
+    docker run -d -p 2999:2999 blog_front
+  ```
 
-### `npm test`
+  <br/>
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## How to Test
 
-### `npm run build`
+컨테이너를 동작 시킨 후 웹 브라우저로 https://localhost:2999/ 접속하여 테스트해 보실 수 있습니다. <br/>
+<br/>
+<br/>
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Environment Table
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+| Variable                      | dev | qa/prod |              Example               | Explanation                                           |
+| ----------------------------- | :-: | :-----: | :--------------------------------: | ----------------------------------------------------- |
+| NODE_ENV                      | ✅  |   ✅    |            development             | Nodejs의 실행 환경을 지정합니다.                      |
+| REACT_APP_API_ROOT            | ✅  |   ✅    |       http://localhost:3000        | Backend API의 도메인과 포트 번호를 지정합니다.        |
+| REACT_APP_CLIENT_ID           | ✅  |   ✅    |              PRIVATE               | Github OAuth에 사용 할 Client ID를 지정합니다.        |
+| REACT_APP_CLIENT_SECRET       | ✅  |   ✅    |              PRIVATE               | Github OAuth에 사용 할 Client Secret ID를 지정합니다. |
+| REACT_APP_GITHUB_CALLBACK_URL | ✅  |   ✅    | http://localhost:2999/github-login | Backend API의 도메인과 포트 번호를 지정합니다.        |
+| PORT                          | ✅  |   ✅    |                2999                | Frontend의 포트 번호를 지정합니다.                    |
+| GENERATE_SOURCEMAP            | ✅  |   ✅    |               false                | 디버깅을 위한 파일의 생성 여부를 지정합니다.          |

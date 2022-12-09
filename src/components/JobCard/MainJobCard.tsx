@@ -1,31 +1,42 @@
-import React from "react";
-import { MainJobCardWrapper } from "./style";
+import React, { useState, useEffect } from "react";
+import { MainJobCardWrapper, MainCardColor } from "./style";
+import { useNavigate } from "react-router-dom";
 import { SiTesla, SiNaver, SiFacebook } from "react-icons/si";
 
 type tProps = {
   title: string;
-  경력: string;
+  description: string;
   wlrrms: string;
-  logo: string;
+  logo: any;
+  id: number | null;
 };
-export default function MainJobCard({ title, 경력, wlrrms, logo }: tProps): JSX.Element {
-  const logoOrder = () => {
-    switch (logo) {
-      case "tesla":
-        return <SiTesla size={45} />;
-      case "naver":
-        return <SiNaver size={45} />;
-      case "meta":
-        return <SiFacebook size={45} />;
+export default function MainJobCard({ id, title, description, wlrrms, logo }: tProps): JSX.Element {
+  const navigate = useNavigate();
+  const [message, setMessage] = useState<string>("");
+  useEffect(() => {
+    if (description.length > 39) {
+      setMessage(message.slice(0, 39) + "...");
+      // setMessage(description);
+    } else {
+      setMessage(description);
+    }
+  }, [description]);
+
+  const navigateJob = () => {
+    if (id) {
+      navigate(`/jobs/${id}`);
     }
   };
+
   return (
-    <MainJobCardWrapper>
-      <div style={{ width: "70px", display: "flex", justifyContent: "center" }}>{logoOrder()}</div>
+    <MainJobCardWrapper onClick={navigateJob}>
+      <div style={{ width: "70px", display: "flex", justifyContent: "center" }}>{logo}</div>
       <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-        <p>{wlrrms}</p>
-        <p style={{ fontSize: "12px" }}>{title}</p>
-        <p style={{ fontSize: "12px" }}>{경력}</p>
+        <MainCardColor>{wlrrms}</MainCardColor>
+        <MainCardColor>{title}</MainCardColor>
+        <div style={{ width: "220px", lineBreak: "anywhere" }}>
+          <MainCardColor>{message}</MainCardColor>
+        </div>
       </div>
     </MainJobCardWrapper>
   );

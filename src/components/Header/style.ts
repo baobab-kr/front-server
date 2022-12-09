@@ -90,6 +90,7 @@ export const Arrow = styled.div<tUserActionList>`
   border-right: 6px solid transparent;
   transform: scale(${(props) => props.scale});
   transition: 0.4s cubic-bezier(0.65, 0.9, 0.3, 0.95);
+
   /* background-color: #2f2f2f; */
 `;
 
@@ -98,7 +99,8 @@ export const UserActionList = styled.ul<tUserActionList>`
   top: 48px;
   right: 0px;
   width: 280px;
-  background-color: #2f2f2f;
+  background-color: ${({ theme }) => theme.backgroundColor.bg};
+
   transform-origin: 95% -3%;
   border-radius: 8px;
   transform: scale(${(props) => props.scale});
@@ -110,7 +112,7 @@ export const UserActionListItem = styled.li`
   padding: 8px;
 
   &:hover {
-    background-color: #1d1d1d;
+    background-color: ${({ theme }) => theme.backgroundColor.subColor};
   }
 `;
 
@@ -130,5 +132,19 @@ export const Tabs = styled.p<tCurrentTab>`
   cursor: pointer;
   &:hover {
     color: ${({ theme }) => theme.fontColor.color};
+  }
+`;
+
+export const SearchBtn = styled.div`
+  display: block;
+  @media screen and (max-width: 350px) {
+    display: none;
+  }
+`;
+
+export const UserActionSearch = styled.div`
+  display: none;
+  @media screen and (max-width: 350px) {
+    display: block;
   }
 `;
