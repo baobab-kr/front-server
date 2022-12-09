@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Location } from "constants/index";
 import Select from "react-select";
 import { Title } from "./style";
+
 type tProps = { value: string; label: string };
 const formatOptionLabel = ({ value, label }: tProps) => (
   <div style={{ display: "flex", color: "black" }}>
@@ -10,19 +11,18 @@ const formatOptionLabel = ({ value, label }: tProps) => (
 );
 
 type tValue = {
+  value: string;
   setValue: (location: string) => void;
 };
 
-export default function LocationSelector({ setValue }: tValue): JSX.Element {
+export default function LocationSelector({ value, setValue }: tValue): JSX.Element {
   const siGroup: tProps[] = Object.keys(Location).map((_si, index) => {
     return { value: `si_${index}`, label: _si };
   });
-  const guGroupDefault: tProps[] = Location[siGroup[0].label].map((_gu, index) => {
-    return { value: `gu_${index}`, label: _gu };
-  });
+  const guGroupDefault: tProps[] = [];
   const [guGroup, setGuGroup] = useState<tProps[]>(guGroupDefault);
-  const [si, setSi] = useState<tProps>();
-  const [gu, setGu] = useState<tProps>();
+  const [si, setSi] = useState<tProps | null>();
+  const [gu, setGu] = useState<tProps | null>();
 
   const siHandler = (props: any) => {
     setSi(props);
@@ -32,7 +32,26 @@ export default function LocationSelector({ setValue }: tValue): JSX.Element {
   };
 
   useEffect(() => {
-    if (si !== undefined) {
+    if (value === "") {
+      guHandler(null);
+      siHandler(null);
+      setGuGroup([]);
+    } else {
+      const loc = value.split(" ");
+      const nSi = siGroup.find((q) => q.label === loc[0]);
+      setSi(nSi);
+
+      const newGroup: tProps[] = Location[nSi!.label].map((_gu, index) => {
+        return { value: `gu_${index}`, label: _gu };
+      });
+
+      setGuGroup(newGroup);
+      setGu(newGroup[0]);
+    }
+  }, [value]);
+
+  useEffect(() => {
+    if (si) {
       const newGroup: tProps[] = Location[si!.label].map((_gu, index) => {
         return { value: `gu_${index}`, label: _gu };
       });
@@ -43,7 +62,7 @@ export default function LocationSelector({ setValue }: tValue): JSX.Element {
   }, [si]);
 
   useEffect(() => {
-    if (si !== undefined && gu !== undefined) {
+    if (si && gu) {
       setValue(`${si!.label} ${gu!.label}`);
     }
   }, [gu]);

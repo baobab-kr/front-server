@@ -198,17 +198,11 @@ export default function JobsPage(): JSX.Element {
                 <LinkBtn onClick={navagateBusiness}>채용 광고 신청하러 가기</LinkBtn>
               </BannerTitle>
             )}
-            <BannerDesc>
-              {/* <h1>Spotify - Moved by Music</h1> */}
-              {/* <p>by BAOBAB</p> */}
-            </BannerDesc>
+            <BannerDesc></BannerDesc>
           </div>
         </MainBanner>
         <Wrapper>
           <WrapperInner>
-            {/* <NavArea>
-              <Category />
-            </NavArea> */}
             <ContentArea>
               <p style={{ marginBottom: "15px" }} onClick={() => setIsOpen(!isOpen)}>
                 필터
@@ -296,14 +290,18 @@ export default function JobsPage(): JSX.Element {
                     </div>
                   </SearchItem>
                   <SearchItem style={{ paddingTop: "5px" }}>
-                    <LocationSelector setValue={locationHandler} />
+                    <LocationSelector value={location} setValue={locationHandler} />
                   </SearchItem>
                 </SearchArea>
 
                 {!isOpen && (
                   <div style={{ display: "flex", gap: "15px", borderTop: "1px solid white", paddingTop: "10px", marginTop: "15px" }}>
-                    <div onClick={clear}>초기화</div>
-                    <div onClick={submit}>적용</div>
+                    <div style={{ cursor: "pointer" }} onClick={clear}>
+                      초기화
+                    </div>
+                    <div style={{ cursor: "pointer" }} onClick={submit}>
+                      적용
+                    </div>
                   </div>
                 )}
               </SearchAccordion>

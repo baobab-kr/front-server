@@ -21,7 +21,7 @@ export default function Comment({ status, setStatus, boardID, commentCnt, setCom
   const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
 
   const [comments, setComments] = useState<iComment[]>([]);
-  const [page, setPage] = useState<number>(0);
+  const [page, setPage] = useState<number>(-1);
   const [comment, setComment] = useState<string>("");
   const [isLastPage, setIsLastPage] = useState<boolean>(false);
   const textArea = useRef<HTMLTextAreaElement>(null);
@@ -34,26 +34,22 @@ export default function Comment({ status, setStatus, boardID, commentCnt, setCom
 
   const onRespond = async () => {
     await createComment(comment, boardID!).then(async (res) => {
-      console.log("createComment", res);
       setComment("");
       setCommentCnt(commentCnt + 1);
-      // await getCommentsFnc();
       setIsLastPage(false);
-      setPage(page - 1 === -1 ? 0 : page - 1);
+      await getNewCommentsFnc();
       await CreateFilteringComment(res.comment_id, res.content);
     });
   };
 
-  useEffect(() => {
-    if (isLastPage) return;
-    console.log("asdasd");
-    getCommentsFnc();
-    getCommentCountFnc();
-  }, [page]);
+  // useEffect(() => {
 
-  const getCommentsFnc = async () => {
+  // }, [page]);
+
+  const getCommentsFnc = async (page: number) => {
     await getComments(boardID!, page)
       .then((res: iComment[]) => {
+        setPage(page);
         const ids = comments.map((q) => q.id);
         const result = res.filter((q) => !ids.includes(q.id));
         if (result.length === 0) {
@@ -62,19 +58,36 @@ export default function Comment({ status, setStatus, boardID, commentCnt, setCom
         setComments([...comments, ...result]);
       })
       .catch((err) => {
-        console.log("getcommetn err => ", err);
+        setIsLastPage(true);
+        setPage(page - 1);
+      });
+  };
+
+  const getNewCommentsFnc = async () => {
+    await getComments(boardID!, 0)
+      .then((res: iComment[]) => {
+        const ids = comments.map((q) => q.id);
+        const result = res.filter((q) => !ids.includes(q.id));
+        if (result.length === 0) {
+          throw new Error("is Last Page");
+        }
+        setComments([...result, ...comments]);
+        getCommentCountFnc();
+      })
+      .catch((err) => {
         setIsLastPage(true);
       });
   };
 
   const getCommentCountFnc = async () => {
     await getCommentCount(boardID!).then((res) => {
-      console.log(res);
+      setCommentCnt(res);
     });
   };
 
   const loadMore = () => {
-    setPage(page + 1);
+    if (isLastPage) return;
+    getCommentsFnc(page + 1);
   };
 
   return (
@@ -87,8 +100,8 @@ export default function Comment({ status, setStatus, boardID, commentCnt, setCom
         {userInfo !== null && (
           <S.UserContainer>
             <S.UserInfo>
-              <Avator height="2em" width="2rem" userId={"1"} />
-              <div>tugwon</div>
+              <Avator height="2em" width="2rem" userId={userInfo.userid} user={userInfo} />
+              <div>{userInfo.username}</div>
             </S.UserInfo>
             <div style={{ display: "flex", flexDirection: "column" }}>
               <S.Textarea

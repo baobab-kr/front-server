@@ -7,6 +7,7 @@ import { user } from "Types/user";
 import { CreateFilteringReComment, createReComment, getReCommentCount, getReComments, patchDeleteComment } from "api/indexPage";
 import { CardWrapper, Card, UserContainer, UserInfo, Comment, CommentFooter, ShowReply, ReplyArea, Textarea, TextActionArea, LoadMoreBtn } from "./style";
 import { timeForToday } from "util/date";
+import Swal from "sweetalert2";
 
 type tProps = {
   data: iComment;
@@ -24,7 +25,7 @@ export default function CommentCard({ data, comments, setComments, commentCnt, s
   const [reComment, setReComment] = useState<string>("");
   const [reCommentCnt, setReCommentCnt] = useState<number>(0);
 
-  const [page, setPage] = useState<number>(0);
+  const [page, setPage] = useState<number>(-1);
 
   const textArea = useRef<HTMLTextAreaElement>(null);
   const resize = () => {
@@ -37,7 +38,9 @@ export default function CommentCard({ data, comments, setComments, commentCnt, s
   const replyStatusHandler = (condition: boolean) => {
     setReplyStatus(condition);
     if (!condition) {
-      setPage(0);
+      setPage(-1);
+    } else {
+      loadMore();
     }
   };
 
@@ -48,9 +51,9 @@ export default function CommentCard({ data, comments, setComments, commentCnt, s
     });
   };
 
-  useEffect(() => {
-    getReCommentsFnc();
-  }, [page]);
+  // useEffect(() => {
+  //   getReCommentsFnc();
+  // }, [page]);
 
   useEffect(() => {
     const apiGet = async () => {
@@ -61,23 +64,39 @@ export default function CommentCard({ data, comments, setComments, commentCnt, s
     apiGet();
   }, []);
 
-  const getReCommentsFnc = async () => {
+  const getReCommentsFnc = async (page: number) => {
     await getReComments(data.id, page)
       .then((res: iComment[]) => {
+        setPage(page);
+
         const ids = reComments.map((q) => q.id);
         const result = res.filter((q) => !ids.includes(q.id));
+        if (result.length === 0) {
+          throw new Error("is Last Page");
+        }
         setReComments([...reComments, ...result]);
       })
       .catch((err) => {
-        console.log("getcommetn err => ", err);
+        setPage(page - 1);
+      });
+  };
+
+  const getNewReCommentsFnc = async () => {
+    await getReComments(data.id, 0)
+      .then((res: iComment[]) => {
+        const ids = reComments.map((q) => q.id);
+        const result = res.filter((q) => !ids.includes(q.id));
+        setReComments([...result, ...reComments]);
+      })
+      .catch((err) => {
+        Swal.fire("댓글 작성 실패", err, "error");
       });
   };
 
   const onRespond = async () => {
     await createReComment(reComment, data.id).then(async (res) => {
-      console.log("re", res);
       setReComment("");
-      await getReCommentsFnc();
+      await getNewReCommentsFnc();
       setCreateReply(false);
       setReCommentCnt(reCommentCnt + 1);
 
@@ -86,7 +105,7 @@ export default function CommentCard({ data, comments, setComments, commentCnt, s
   };
 
   const loadMore = () => {
-    setPage(page + 1);
+    getReCommentsFnc(page + 1);
   };
 
   return (
@@ -95,7 +114,7 @@ export default function CommentCard({ data, comments, setComments, commentCnt, s
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <UserContainer>
             <UserInfo>
-              <Avator height="2em" width="2rem" userId={"1"} />
+              <Avator height="2em" width="2rem" userId={data.writer.userid} user={data.writer} />
               <div style={{ display: "flex", flexDirection: "column" }}>
                 <div>{data.writer.username}</div>
                 <div style={{ color: "rgba(255, 7, 110, 1)", fontSize: "12px", marginTop: "5px" }}>{timeForToday(data.date)}</div>

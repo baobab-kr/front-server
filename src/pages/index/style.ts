@@ -4,6 +4,7 @@ const WrapperArea = styled.div`
   box-sizing: border-box;
   margin: 0;
   min-width: 0;
+  color: ${({ theme }) => theme.fontColor.color};
 `;
 
 const CenterPosition = styled.div`
@@ -60,6 +61,8 @@ const ContentListTitle = styled.h2`
   font-size: 1.5rem;
   padding-left: 2rem;
   margin-bottom: 1rem;
+
+  color: ${({ theme }) => theme.fontColor.color};
 `;
 
 const ContentListArea = styled.div`
@@ -115,6 +118,9 @@ const MainContentArea = styled.div`
   border-radius: 0.5rem;
   transition: transform 250ms ease, box-shadow 250ms ease, color 250ms ease;
   box-shadow: 1px 1px 5px 0 rgb(1 1 1 / 5%);
+
+  color: ${({ theme }) => theme.fontColor.color};
+
   /* padding: 2rem; */
 `;
 

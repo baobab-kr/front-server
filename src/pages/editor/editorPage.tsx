@@ -5,7 +5,7 @@ import * as E from "./editorStyle";
 import ReactTagInput from "@pathofdev/react-tag-input";
 
 import { ICreateBoard, IEditBoard } from "Types/main";
-import { CreateBoard, EditBoard } from "api/board";
+import { CreateBoard, EditBoard, getBoardThumbnail } from "api/board";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import ThumbnailImg from "assets/ThumbnailImg.png";
@@ -29,54 +29,37 @@ type props = {
   boardId: string;
 };
 function Popup({ onClose, data, setData, boardId }: props) {
+  const location: any = useLocation();
+
   const [isPublic, setIsPublic] = useState<boolean>(true);
   const [description, setDescription] = useState<string>("");
   const [fileImage, setFileImage] = useState<string>("");
-  const [fileList, setFileList] = useState<FileList>();
+  const [fileList, setFileList] = useState<FileList | string>();
 
   const navigate = useNavigate();
 
   const imageSelectHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileLists = e.target.files;
     if (fileLists !== null) {
-      // setFileImage(fileImage);
       setFileImage(URL.createObjectURL(fileLists[0]));
       setFileList(fileLists);
-      console.log("asd", fileList);
     }
-  };
-
-  const saveFileImage = (e: any) => {
-    setData({ ...data, thumbnail: e.target.files[0] });
-  };
-  const deleteFileImage = () => {
-    URL.revokeObjectURL(data.thumbnail);
-    setData({ ...data, thumbnail: "" });
-  };
-
-  const descriptionHandle = (e: any) => {
-    setData({ ...data, description: e.target.value });
   };
 
   const onClick = () => {
     onClose(false);
   };
 
-  const onSaveClick = () => {
-    if (isPublic) {
-      onSave();
-    } else {
-      onOnlyMe();
-    }
-  };
   const onSave = () => {
+    if (description === "") {
+      Swal.fire("필수입력", "설명을 입력해주세요!", "error");
+    }
     const formData: any = new FormData();
     formData.append("title", data.title);
     formData.append("description", description);
     formData.append("content", data.content);
     formData.append("board_status", isPublic ? 0 : 1);
     if (fileList) formData.append("thumbnail", fileList![0]);
-    console.log("data", data.tag_name);
     if (data.tag_name.length === 1) {
       formData.append("tag_name[0]", data.tag_name[0]);
     } else {
@@ -84,28 +67,27 @@ function Popup({ onClose, data, setData, boardId }: props) {
         formData.append("tag_name", data.tag_name[i]);
       }
     }
-    console.log("_createBoard", formData.get("tag_name"));
 
     CreateBoard(formData)
       .then((res) => {
-        console.log("Board 생성 성공", res);
-
         navigate("/");
       })
       .catch((err) => {
-        console.log("Board 생성 실패", err);
+        Swal.fire("포스트 생성 실패", err, "error");
       });
   };
 
   const onEdit = () => {
     const formData: any = new FormData();
-    formData.append("board_id", boardId.toString());
+    formData.append("board_id", Number(17));
     formData.append("title", data.title);
     formData.append("description", description);
     formData.append("content", data.content);
     formData.append("board_status", isPublic ? 0 : 1);
-    if (fileList) formData.append("thumbnail", fileList![0]);
-    console.log("data", data.tag_name);
+
+    if (fileList && typeof fileList !== typeof "") formData.append("thumbnail", fileList![0]);
+    else formData.append("thumbnail", location.state.data.thumbnail);
+
     if (data.tag_name.length === 1) {
       formData.append("tag_name[0]", data.tag_name[0]);
     } else {
@@ -113,31 +95,32 @@ function Popup({ onClose, data, setData, boardId }: props) {
         formData.append("tag_name", data.tag_name[i]);
       }
     }
-    console.log("_createBoard", formData.get("tag_name"));
-    console.log(typeof formData.get("board_id"));
+
     EditBoard(formData)
       .then((res) => {
-        console.log("Board 수정 성공", res);
-
         navigate("/");
       })
       .catch((err) => {
-        console.log("Board 수정 실패", err);
-        Swal.fire("Board 수정 실패 하였습니다.");
+        console.log(err);
+        Swal.fire("포스트 수정 실패", err, "error");
       });
   };
 
-  const onOnlyMe = () => {
-    setData({ ...data, board_status: 1 });
-    CreateBoard(data)
-      .then((res) => {
-        console.log("Board 생성 성공", res);
+  useEffect(() => {
+    if (location.state !== null) {
+      console.log(location.state.data);
+      setDescription(location.state.data.description);
+      getThumbnail(location.state.data.thumbnail);
+    }
+  }, []);
 
-        navigate("/");
-      })
-      .catch((err) => {
-        console.log("Board 생성 실패", err);
-      });
+  const getThumbnail = async (name: string) => {
+    await getBoardThumbnail(name).then((data) => {
+      const blob = new Blob([data.data], { type: data.type });
+      const url = URL.createObjectURL(blob);
+      setFileList(url);
+      setFileImage(url);
+    });
   };
 
   return (
@@ -229,9 +212,8 @@ export default function EditorPage() {
   };
 
   useEffect(() => {
-    if (location.state !== null) {
+    if (location.state !== null && location.state.data.content) {
       editorRef.current?.getInstance().setHTML(location.state.data.content);
-      console.log();
       tagHandler(location.state.data.tags.map((q: any) => q.tag_name));
     }
 
@@ -281,8 +263,6 @@ export default function EditorPage() {
             const formData = new FormData();
             formData.append("ToastImage", blob);
 
-            console.log("add", blob);
-
             API({
               method: "post",
               url: "/jobs/UploadToastUiImage",
@@ -293,7 +273,6 @@ export default function EditorPage() {
                 callback(`${process.env.REACT_APP_API_ROOT}/jobs/getToastImage?file_name=${response.data}`, "image");
               })
               .catch(function (response) {
-                console.log("err", response);
                 callback("image_load_fail", "image");
               });
           },

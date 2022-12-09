@@ -10,11 +10,8 @@ export default function GithubLogin(): JSX.Element {
     if (code === undefined) {
       navigate("/");
     }
-    console.log("========================================");
     githubLoginAPI(code)
       .then((res: any) => {
-        console.log("성공 ", res);
-
         localStorage.setItem("atexpires", JSON.stringify(res.headers.atexpires));
         localStorage.setItem("rtexpires", JSON.stringify(res.headers.rtexpires));
         localStorage.setItem("user", JSON.stringify(res.data));
@@ -23,7 +20,6 @@ export default function GithubLogin(): JSX.Element {
         window.location.reload();
       })
       .catch((err) => {
-        console.log("error catch", err);
         Swal.fire("로그인 중 오류가 발생했습니다. 다시 시도해주세요");
         navigate("/");
       });

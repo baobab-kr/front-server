@@ -30,7 +30,7 @@ export default function ReCommentCard({ data, reComments, setReComments, reComme
         <UserContainer>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <UserInfo>
-              <Avator height="2em" width="2rem" userId={"1"} />
+              <Avator height="2em" width="2rem" userId={data.writer.userid} user={data.writer} />
               <div style={{ display: "flex", flexDirection: "column" }}>
                 <div>{data.writer.username}</div>
                 <div style={{ color: "rgba(255, 7, 110, 1)", fontSize: "12px", marginTop: "5px" }}>{timeForToday(data.date)}</div>

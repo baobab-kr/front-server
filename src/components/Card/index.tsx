@@ -7,6 +7,7 @@ import { getBoardThumbnail, touchLikes } from "api/board";
 
 import Avator from "../Avator/Avator";
 import TagComponent from "components/Tag/Tag";
+import Swal from "sweetalert2";
 // import de from "../../baobab-data/develop1.jpg";
 
 type Props = {
@@ -57,7 +58,7 @@ export default function Card({ board, width, height, isMyHome, deleteBoard, imgH
         likeIcon(count, board.likes);
       })
       .catch((err) => {
-        console.log(err);
+        Swal.fire("좋아요 실패", err, "error");
       });
   };
 
@@ -130,10 +131,7 @@ export default function Card({ board, width, height, isMyHome, deleteBoard, imgH
 
         <Footer>
           <User onClick={navigatePerson}>
-            {/* <div style={{ width: "1.5rem", height: "1.5rem", borderRadius: "50%", overflow: "hidden" }}>
-            <img src={DefaultAvator} style={{ width: "100%", height: "100%", objectFit: "cover" }} alt="avator"></img>
-          </div> */}
-            <Avator userId={board.writer!.userid} width={"1.5rem"} height={"1.5rem"} />
+            <Avator user={board.writer!} userId={board.writer!.userid} width={"1.5rem"} height={"1.5rem"} />
             by {board.writer!.username}
           </User>
           <LikeComponent onClick={liking}>{likeState}</LikeComponent>

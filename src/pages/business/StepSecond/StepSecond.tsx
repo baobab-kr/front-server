@@ -1,4 +1,5 @@
 import React, { useState, useEffect, Dispatch, SetStateAction } from "react";
+import { useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 
 import InputText from "../Custominput/InputText";
@@ -20,7 +21,8 @@ import checkImg from "../../../assets/selected.png";
 import moment from "moment";
 
 import Select from "react-select";
-import { JOB_GROUP, USER_TYPE, USER_TYPE_SELECT } from "constants/index";
+import { JOB_GROUP } from "constants/index";
+import { tJob } from "Types/Jobs";
 
 type tProps = {
   value: tStepSecond;
@@ -36,12 +38,13 @@ const formatOptionLabel = ({ value, label }: tLabel) => (
 );
 
 export default function StepSecond({ value, setValue, stepperController }: tProps): JSX.Element {
+  const location: any = useLocation();
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [endDate, setEndDate] = useState<Date>(new Date());
   const [isDate, setIsDate] = useState<boolean>(true);
   const [careerType, setCareerType] = useState<number>(0);
   const [talent, setTalent] = useState<string[]>(["", "", ""]);
-  const [job, setJob] = useState<string>(JOB_GROUP[0].value);
+  const [job, setJob] = useState<tLabel>(JOB_GROUP[0]);
 
   const setpController = () => {
     if (
@@ -72,7 +75,6 @@ export default function StepSecond({ value, setValue, stepperController }: tProp
   };
 
   const logoFileController = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.files);
     if (e.target.files?.length) {
       setValue((v) => {
         return {
@@ -91,7 +93,6 @@ export default function StepSecond({ value, setValue, stepperController }: tProp
   };
 
   const imageFileController = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.files);
     if (e.target.files?.length) {
       setValue((v) => {
         return {
@@ -120,7 +121,7 @@ export default function StepSecond({ value, setValue, stepperController }: tProp
 
   useEffect(() => {
     const date = isDate ? null : moment(startDate).format("YYYYMMDD");
-
+    console.log("st", date);
     setValue((v) => {
       return { ...v, StartDate: date };
     });
@@ -128,6 +129,8 @@ export default function StepSecond({ value, setValue, stepperController }: tProp
 
   useEffect(() => {
     const date = isDate ? null : moment(endDate).format("YYYYMMDD");
+    console.log("end", date);
+
     setValue((v) => {
       return { ...v, EndDate: date };
     });
@@ -146,19 +149,50 @@ export default function StepSecond({ value, setValue, stepperController }: tProp
   }, [talent]);
 
   useEffect(() => {
-    const techStack = JOB_GROUP.find((q) => q.value === job);
-
     setValue((v) => {
-      return { ...v, Field: techStack!.label };
+      return { ...v, Field: job.label };
     });
   }, [job]);
+
+  useEffect(() => {
+    if (location.state !== null) {
+      const data: tJob = location.state.data;
+      const techStack = JOB_GROUP.find((q) => q.label === data.field);
+      setJob(techStack!);
+
+      const dateFnc = (datetmp: string): Date => {
+        const y = parseInt(datetmp.slice(0, 4));
+        const m = parseInt(datetmp.slice(4, 6));
+        const d = parseInt(datetmp.slice(6, 8));
+
+        return new Date(`${y}-${m}-${d}`);
+      };
+      if (data.startDate !== null) {
+        const start: Date = dateFnc(data.startDate);
+        setStartDate(start);
+      }
+      if (data.endDate !== null) {
+        const end: Date = dateFnc(data.endDate);
+        setEndDate(end);
+      }
+      if (data.startDate === null || data.startDate === "null") {
+        setIsDate(true);
+      } else {
+        setIsDate(false);
+      }
+
+      setTalent(data.talent.split(","));
+      setCareerType(data.careerType);
+      // console.log(data);
+    }
+  }, []);
 
   return (
     <>
       <TemplateSection title="필수 정보" open={true}>
         <InputContainer title="채용 분야" description="">
           <div className="input">
-            <Select defaultValue={JOB_GROUP[0]} options={JOB_GROUP} formatOptionLabel={formatOptionLabel} onChange={jobHandler} />
+            <Select value={job} options={JOB_GROUP} formatOptionLabel={formatOptionLabel} onChange={jobHandler} />
           </div>
         </InputContainer>
 
@@ -198,7 +232,7 @@ export default function StepSecond({ value, setValue, stepperController }: tProp
 
         <InputContainer title="근무 지역" description="">
           <div className="input">
-            <LocationSelector setValue={locationHandler} />
+            <LocationSelector value={value.Location} setValue={locationHandler} />
           </div>
         </InputContainer>
 
@@ -296,9 +330,24 @@ export default function StepSecond({ value, setValue, stepperController }: tProp
 
         <InputContainer title="인재상" description="회사에 필요한 인재상을 적어주세요.">
           <div className="input" style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-            <InputText maxLength={60} placeholder="예) 신입" value={talent[0]} setValue={(e: React.ChangeEvent<HTMLInputElement>) => talentHandler(e, 0)} />
-            <InputText maxLength={60} placeholder="예) 신입" value={talent[1]} setValue={(e: React.ChangeEvent<HTMLInputElement>) => talentHandler(e, 1)} />
-            <InputText maxLength={60} placeholder="예) 신입" value={talent[2]} setValue={(e: React.ChangeEvent<HTMLInputElement>) => talentHandler(e, 2)} />
+            <InputText
+              maxLength={60}
+              placeholder="인재상을 입력해주세요."
+              value={talent[0]}
+              setValue={(e: React.ChangeEvent<HTMLInputElement>) => talentHandler(e, 0)}
+            />
+            <InputText
+              maxLength={60}
+              placeholder="인재상을 입력해주세요."
+              value={talent[1]}
+              setValue={(e: React.ChangeEvent<HTMLInputElement>) => talentHandler(e, 1)}
+            />
+            <InputText
+              maxLength={60}
+              placeholder="인재상을 입력해주세요."
+              value={talent[2]}
+              setValue={(e: React.ChangeEvent<HTMLInputElement>) => talentHandler(e, 2)}
+            />
           </div>
         </InputContainer>
       </TemplateSection>

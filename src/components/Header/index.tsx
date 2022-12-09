@@ -27,6 +27,8 @@ import LoginForm from "./LoginForm/LoginForm";
 import SignupForm from "./SignupForm/SignupForm";
 
 import { TITLE_TAB, USER_TYPE } from "../../constants/index";
+import USER from "store/store.user";
+import { useRecoilState } from "recoil";
 
 type tState = {
   state: tUesrId;
@@ -40,8 +42,9 @@ export default function Header(): JSX.Element {
   const navigate = useNavigate();
   const location = useLocation();
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const [userInfo, setUser] = useRecoilState<user>(USER);
 
-  const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
+  // let userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
   const [toggleUser, setToggleUser] = useState<number>(0);
   const [loginModal, setLoginModal] = useState<boolean>(false);
   const [signupModal, setSignupModal] = useState<boolean>(false);
@@ -140,7 +143,7 @@ export default function Header(): JSX.Element {
         <Tabs onClick={navagateJob} current={tab === TITLE_TAB.JOB}>
           채용
         </Tabs>
-        {userInfo !== null && (
+        {userInfo.id !== -1 && (
           <>
             <div style={{ width: "2px", backgroundColor: "gray" }} />
             <Tabs onClick={navagateJobManagement} current={tab === TITLE_TAB.JOB_MANAGEMENT}>
@@ -159,7 +162,7 @@ export default function Header(): JSX.Element {
         <LoginForm open={loginModal} setOpen={setLoginModal} />
         <SignupForm open={signupModal} setOpen={setSignupModal} />
         <Sign>
-          {userInfo === null ? (
+          {userInfo.id === -1 ? (
             <div style={{ display: "flex", gap: "15px" }}>
               <Button onClick={navagateLogin}>로그인</Button>
               <Button onClick={navagateSignup}>회원가입</Button>
@@ -168,10 +171,10 @@ export default function Header(): JSX.Element {
             <div ref={wrapperRef} onClick={toggleUserInfo}>
               <Arrow scale={toggleUser} />
               <UserContainer>
-                <Avator userId={userInfo.userid} height={"40px"} width={"40px"} />
+                <Avator user={userInfo} userId={userInfo.userid} height={"40px"} width={"40px"} state={false} />
                 <UserActionList scale={toggleUser}>
                   <div style={{ margin: "10px", display: "flex", gap: "15px", alignItems: "center" }}>
-                    <Avator userId={userInfo.userid} height={"40px"} width={"40px"} />
+                    <Avator user={userInfo} userId={userInfo.userid} height={"40px"} width={"40px"} state={false} />
                     <p>{userInfo.username}</p>
                   </div>
                   <hr color="#999999" />

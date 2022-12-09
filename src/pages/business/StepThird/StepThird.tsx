@@ -69,25 +69,13 @@ export default function StepThird({ stepFirst, stepSecond, stepperController }: 
     }
   };
 
-  // const saveLogo = async () => {
-  //   const formData: any = new FormData();
-  //   formData.append("CompanyLogo", stepSecond.CompanyLogo![0]);
-  //   API({
-  //     method: "post",
-  //     url: "/jobs/UploadOfCompanyLogo",
-  //     data: formData,
-  //     headers: { "Content-Type": "multipart/form-data" },
-  //   })
-  //     .then(function (response) {
-  //       logo = response.data;
-  //       console.log("saveLogo", logo);
-  //     })
-  //     .catch(function (response) {
-  //       alert(response);
-  //     });
-  // };
-
   function saveLogo(): Promise<string> {
+    if (typeof stepSecond.CompanyLogo === typeof "") {
+      return new Promise<string>((resolve, reject) => {
+        resolve(location.state.data.logo);
+      });
+    }
+
     const formData: any = new FormData();
     formData.append("CompanyLogo", stepSecond.CompanyLogo![0]);
     return new Promise<string>((resolve, reject) => {
@@ -99,7 +87,6 @@ export default function StepThird({ stepFirst, stepSecond, stepperController }: 
       })
         .then(function (response) {
           resolve(response.data);
-          console.log("saveLogo", logo);
         })
         .catch(function (response) {
           reject(response);
@@ -118,7 +105,6 @@ export default function StepThird({ stepFirst, stepSecond, stepperController }: 
     })
       .then(function (response) {
         image = response.data;
-        console.log("saveLicense", image);
       })
       .catch(function (response) {
         alert(response);
@@ -159,9 +145,7 @@ export default function StepThird({ stepFirst, stepSecond, stepperController }: 
         };
 
         await saveLogo().then((res) => {
-          console.log(res);
           body = Object.assign(body, { logo: res, license: "test" });
-          console.log("body", body);
         });
 
         await CreateJob(body)
@@ -169,7 +153,6 @@ export default function StepThird({ stepFirst, stepSecond, stepperController }: 
             navigate("/jobs");
           })
           .catch((err) => {
-            console.log(err);
             Swal.fire({ title: "생성 실패하였습니다.", scrollbarPadding: false });
           });
       }
@@ -211,9 +194,7 @@ export default function StepThird({ stepFirst, stepSecond, stepperController }: 
         };
 
         await saveLogo().then((res) => {
-          console.log(res);
           body = Object.assign(body, { logo: res, license: "test" });
-          console.log("body", body);
         });
 
         await UpdateJobs(body)
@@ -221,7 +202,6 @@ export default function StepThird({ stepFirst, stepSecond, stepperController }: 
             navigate("/jobs");
           })
           .catch((err) => {
-            console.log(err);
             Swal.fire({ title: "생성 실패하였습니다.", scrollbarPadding: false });
           });
       }
@@ -229,7 +209,6 @@ export default function StepThird({ stepFirst, stepSecond, stepperController }: 
   };
 
   const dateOrder = () => {
-    console.log(stepSecond);
     if (stepSecond.EndDate === null || stepSecond.StartDate === null) {
       return "상시 채용";
     } else {
@@ -305,7 +284,8 @@ export default function StepThird({ stepFirst, stepSecond, stepperController }: 
           <InputAreaFooter className="footer">
             <div className="input">
               {location.state === null && <CustomButton onClick={saveContorller}>제출</CustomButton>}
-              {location.state !== null && <CustomButton onClick={saveContorller}>수정</CustomButton>}
+              {location.state !== null && location.state.data.approvalStatus === 0 && <CustomButton onClick={saveContorller}>수정</CustomButton>}
+              {location.state !== null && location.state.data.approvalStatus === 1 && <p>채용 공고가 승인되어 수정할 수 없습니다.</p>}
             </div>
           </InputAreaFooter>
         </InputWrap>

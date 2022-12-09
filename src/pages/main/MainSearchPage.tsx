@@ -62,7 +62,6 @@ export default function MainSearchPage(): JSX.Element {
   const getInfo = async () => {
     if (mainState) return;
     const query = queryParse(location.search);
-    console.log(query);
 
     await getBoardSearchOfTitle(page, query["title"])
       .then((data) => {
@@ -70,7 +69,6 @@ export default function MainSearchPage(): JSX.Element {
         setBoard((curInfoArray) => [...curInfoArray, ...data]); // state에 추가
       })
       .catch((err) => {
-        console.log(err);
         setMainState(true);
       });
   };

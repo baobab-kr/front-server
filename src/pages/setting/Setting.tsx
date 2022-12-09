@@ -85,6 +85,7 @@ export default function Setting(): JSX.Element {
     await getUserInfo()
       .then((data) => {
         localStorage.setItem("user", JSON.stringify(data));
+        navigate("/");
       })
       .catch((err) => {
         localStorage.removeItem("atexpires");
@@ -130,7 +131,7 @@ export default function Setting(): JSX.Element {
                       <img src={fileImage} style={{ width: "100%", height: "100%", objectFit: "cover" }} alt="avator"></img>
                     </div>
                   )}
-                  {fileImage === "" && <Avator userId="tester" height="150px" width="150px" />}
+                  {fileImage === "" && userInfo?.userid && <Avator user={userInfo} userId={userInfo?.userid} height="150px" width="150px" />}
                   <div className="profile-overlay"></div>
                   <div className="profile-btn">
                     <FiEdit3 size={35} />
@@ -163,7 +164,7 @@ export default function Setting(): JSX.Element {
             <S.SaveBtn onClick={secession} style={{ backgroundColor: "#999999" }}>
               회원 탈퇴
             </S.SaveBtn>
-            <S.SaveBtn onClick={saveController}>파일저장</S.SaveBtn>
+            <S.SaveBtn onClick={saveController}>정보 수정</S.SaveBtn>
           </S.ActionArea>
         </S.SettingArea>
       </S.ContentWrapper>

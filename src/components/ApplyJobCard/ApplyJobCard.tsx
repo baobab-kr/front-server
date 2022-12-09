@@ -14,9 +14,10 @@ type Props = {
   imgHeight: string;
   isMyHome: boolean;
   deleteBoard: (id: number) => void;
+  editMode?: boolean | null;
 };
 
-export default function ApplyJobCard({ jobItem, board, width, height, isMyHome, deleteBoard, imgHeight }: Props): JSX.Element {
+export default function ApplyJobCard({ jobItem, board, width, height, isMyHome, deleteBoard, imgHeight, editMode }: Props): JSX.Element {
   const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
 
   const navigate = useNavigate();
@@ -24,7 +25,11 @@ export default function ApplyJobCard({ jobItem, board, width, height, isMyHome, 
 
   const routeDetailPage = () => {
     // navigate(`/apply/${board}`);
-    navigate(`/@${userInfo?.userid}/my-apply-jobs/${board}`);
+    if (editMode === false) {
+      navigate(`/@${userInfo?.userid}/job-management/${jobItem.jobs_Id.id}/list/${jobItem.id}`);
+    } else {
+      navigate(`/@${userInfo?.userid}/my-apply-jobs/${jobItem.id}`);
+    }
   };
   const orderType = (type: number | null) => {
     if (type === null) return "신입";
@@ -49,8 +54,6 @@ export default function ApplyJobCard({ jobItem, board, width, height, isMyHome, 
 
     return `${education} ${status}`;
   };
-
-  console.log("jobItem", jobItem);
 
   return (
     <CardWrapper>

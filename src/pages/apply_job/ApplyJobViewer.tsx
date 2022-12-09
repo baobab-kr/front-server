@@ -46,7 +46,7 @@ export const EDUCATION_GROUP = [
 
 type tProps = { value: string; label: string };
 
-export default function ApplyJobModify(): JSX.Element {
+export default function ApplyJobViewer(): JSX.Element {
   const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
 
   const navigate = useNavigate();
@@ -155,6 +155,7 @@ export default function ApplyJobModify(): JSX.Element {
             </TitleArea>
             <div style={{ padding: "30px" }}>
               <Custominput
+                disabled
                 placeholder="ex) 최고를 위해 늘 성실하게 최선을 다 합니다."
                 maxLength={30}
                 value={title}
@@ -168,7 +169,14 @@ export default function ApplyJobModify(): JSX.Element {
             </TitleArea>
             <UserInfoArea>
               <div>
-                <input type="file" id="imgUpload" style={{ display: "none" }} onChange={imageSelectHandler} accept="image/jpg, image/jpeg, image/png"></input>
+                <input
+                  disabled
+                  type="file"
+                  id="imgUpload"
+                  style={{ display: "none" }}
+                  onChange={imageSelectHandler}
+                  accept="image/jpg, image/jpeg, image/png"
+                />
                 <label htmlFor="imgUpload">
                   <ThumbnailArea>
                     <img src={fileImage === "" ? photo : fileImage} alt="이미지 등록하기" />
@@ -179,20 +187,26 @@ export default function ApplyJobModify(): JSX.Element {
                 <div className="info-area" style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                   <div style={{ display: "flex", alignItems: "center" }}>
                     <h1 style={{ width: "80px" }}>이름</h1>
-                    <CustomEditinput placeholder="이름을 입력하세요." maxLength={30} value={name} onChange={(e) => setName(e.target.value)} />
+                    <CustomEditinput disabled placeholder="이름을 입력하세요." maxLength={30} value={name} onChange={(e) => setName(e.target.value)} />
                   </div>
                   <div style={{ display: "flex", alignItems: "center" }}>
                     <h1 style={{ width: "80px" }}>이메일</h1>
-                    <CustomEditinput placeholder="이메일을 입력하세요." maxLength={30} value={email} onChange={(e) => setEmail(e.target.value)} />
+                    <CustomEditinput disabled placeholder="이메일을 입력하세요." maxLength={30} value={email} onChange={(e) => setEmail(e.target.value)} />
                   </div>
                   <div style={{ display: "flex", alignItems: "center" }}>
                     <h1 style={{ width: "80px" }}>Social Url</h1>
-                    <CustomEditinput placeholder="Socual Url을 입력하세요." maxLength={30} value={socialUrl} onChange={(e) => setSocialUrl(e.target.value)} />
+                    <CustomEditinput
+                      disabled
+                      placeholder="Socual Url을 입력하세요."
+                      maxLength={30}
+                      value={socialUrl}
+                      onChange={(e) => setSocialUrl(e.target.value)}
+                    />
                   </div>
                   <div style={{ display: "flex", alignItems: "center" }}>
                     <h1 style={{ width: "80px" }}>TechStack</h1>
                     <div style={{ marginLeft: "15px", width: "100%" }}>
-                      <Select value={job} options={JOB_GROUP} formatOptionLabel={formatOptionLabel} onChange={jobHandler} />
+                      <Select isDisabled={true} value={job} options={JOB_GROUP} formatOptionLabel={formatOptionLabel} onChange={jobHandler} />
                     </div>
                   </div>
                 </div>
@@ -205,7 +219,7 @@ export default function ApplyJobModify(): JSX.Element {
               <SubTitle>∙ 로그인이 필요한 URL은 기업 담당자의 확인이 어려울 수 있으니 미리 확인바랍니다.</SubTitle>
             </TitleArea>
             <div style={{ padding: "30px" }}>
-              <Custominput placeholder="http://" value={url} onChange={(e) => setUrl(e.target.value)} />
+              <Custominput disabled placeholder="http://" value={url} onChange={(e) => setUrl(e.target.value)} />
             </div>
           </FormWrapper>
           <FormWrapper>
@@ -214,19 +228,21 @@ export default function ApplyJobModify(): JSX.Element {
             </TitleArea>
             <EduArea>
               <div className="edu-selector">
-                <Select defaultValue={EDUCATION_GROUP[0]} options={EDUCATION_GROUP} formatOptionLabel={formatOptionLabel} onChange={userTypeHandler} />
+                <Select
+                  isDisabled={true}
+                  defaultValue={EDUCATION_GROUP[0]}
+                  options={EDUCATION_GROUP}
+                  formatOptionLabel={formatOptionLabel}
+                  onChange={userTypeHandler}
+                />
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
-                  <CheckBoxBtn onClick={() => setEducationStatus(0)}>
-                    {educationStatus === 0 && <img src={checkImg} alt="aa" style={{ width: "100%" }} />}
-                  </CheckBoxBtn>
+                  <CheckBoxBtn>{educationStatus === 0 && <img src={checkImg} alt="aa" style={{ width: "100%" }} />}</CheckBoxBtn>
                   <p>졸업 예정</p>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
-                  <CheckBoxBtn onClick={() => setEducationStatus(1)}>
-                    {educationStatus === 1 && <img src={checkImg} alt="aa" style={{ width: "100%" }} />}
-                  </CheckBoxBtn>
+                  <CheckBoxBtn>{educationStatus === 1 && <img src={checkImg} alt="aa" style={{ width: "100%" }} />}</CheckBoxBtn>
                   <p>졸업</p>
                 </div>
               </div>
@@ -237,15 +253,16 @@ export default function ApplyJobModify(): JSX.Element {
               <Title>경력사항</Title>
             </div>
             <CareerArea>
-              <CareerButton onClick={() => setCareerYear(null)}>
+              <CareerButton>
                 <p className={careerYear === null ? "isSelected" : ""}>신입</p>
               </CareerButton>
-              <CareerButton onClick={() => setCareerYear(0)}>
+              <CareerButton>
                 <p className={careerYear !== null ? "isSelected" : ""}>경력</p>
               </CareerButton>
               {careerYear !== null && (
                 <div>
                   <CustomEditinput
+                    disabled
                     value={careerYear!}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       if (!isNaN(Number(e.target.value))) {
@@ -262,9 +279,6 @@ export default function ApplyJobModify(): JSX.Element {
             </CareerArea>
           </FormWrapper>
         </FormArea>
-        <SubmitArea>
-          <SubmitBtn onClick={submit}>수정하기</SubmitBtn>
-        </SubmitArea>
       </Template>
     </Wrapper>
   );

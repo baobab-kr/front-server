@@ -9,8 +9,8 @@ export type tStepFirst = {
 export type tStepSecond = {
   Field: string;
   Title: string;
-  CompanyLogo: FileList | null;
-  Image: FileList | null;
+  CompanyLogo: FileList | null | any;
+  Image: FileList | null | any;
   CompanyName: string;
   Location: string;
   Message: string;

@@ -24,7 +24,6 @@ export default function StepFirst({ value, setValue, stepperController }: tProps
   };
 
   const fileController = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.files);
     if (e.target.files?.length) {
       setValue((v) => {
         return {

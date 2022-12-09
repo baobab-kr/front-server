@@ -20,7 +20,6 @@ const refresh = async (config: AxiosRequestConfig): Promise<AxiosRequestConfig> 
         localStorage.setItem("atexpires", JSON.stringify(res.headers.atexpires));
       })
       .catch((err) => {
-        console.log(err);
         localStorage.removeItem("atexpires");
         localStorage.removeItem("rtexpires");
         localStorage.removeItem("user");
@@ -31,7 +30,6 @@ const refresh = async (config: AxiosRequestConfig): Promise<AxiosRequestConfig> 
 };
 
 const refreshErrorHandle = (err: any) => {
-  console.log("refreshErrorHandle - ERROR");
   localStorage.removeItem("atexpires");
   localStorage.removeItem("rtexpires");
   localStorage.removeItem("user");

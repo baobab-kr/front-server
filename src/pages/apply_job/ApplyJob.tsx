@@ -27,6 +27,7 @@ import { JOB_GROUP } from "constants/index";
 import { user } from "Types/user";
 import Swal from "sweetalert2";
 import { CreateApplyJob, getAutoCompleteAPI } from "api/jobs";
+import API from "api";
 
 const formatOptionLabel = ({ value, label }: tProps) => (
   <div style={{ display: "flex", color: "black" }}>
@@ -77,17 +78,35 @@ export default function ApplyJob(): JSX.Element {
   const imageSelectHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileLists = e.target.files;
     if (fileLists !== null) {
-      // setFileImage(fileImage);
       setFileImage(URL.createObjectURL(fileLists[0]));
       setFileList(fileLists);
-      console.log("asd", fileList);
     }
   };
+
+  function saveProfile(): Promise<string> {
+    const formData: any = new FormData();
+    console.log(fileList![0]);
+    formData.append("file", fileList![0]);
+    return new Promise<string>((resolve, reject) => {
+      API({
+        method: "post",
+        url: "/ApplyJob/UploadProfile",
+        data: formData,
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+        .then(function (response) {
+          resolve(response.data);
+        })
+        .catch(function (response) {
+          reject(response);
+        });
+    });
+  }
 
   const submit = async () => {
     const id = location.pathname.split("/");
 
-    if (title === "" || name === "" || email === "" || url === "" || socialUrl === "") {
+    if (title === "" || name === "" || email === "" || url === "" || socialUrl === "" || fileList === undefined) {
       Swal.fire("다시 확인해주세요");
       return;
     }
@@ -101,13 +120,12 @@ export default function ApplyJob(): JSX.Element {
       careerYear: careerYear,
       resumeUrl: url,
       socialUrl: socialUrl,
-      profile: "test",
       education: education,
       educationStatus: educationStatus,
     };
-    console.log(body);
-
-    await CreateApplyJob(body)
+    const filename = await saveProfile();
+    console.log(filename);
+    await CreateApplyJob({ ...body, profile: filename })
       .then((res) => {
         navigate("/");
       })

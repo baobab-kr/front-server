@@ -102,14 +102,16 @@ export default function HeadHunterMgmt(): JSX.Element {
                           <ActionArea>
                             {item.jobStatus === 1 && (
                               <>
-                                <div
-                                  className="approval"
-                                  onClick={() => {
-                                    modifyJob(item);
-                                  }}
-                                >
-                                  수정
-                                </div>
+                                {item.approvalStatus === 0 && (
+                                  <div
+                                    className="approval"
+                                    onClick={() => {
+                                      modifyJob(item);
+                                    }}
+                                  >
+                                    수정
+                                  </div>
+                                )}
                                 <div
                                   className="approval"
                                   onClick={() => {

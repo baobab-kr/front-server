@@ -9,6 +9,7 @@ import InfiniteScroll from "components/InfiniteScroll";
 import JobCard from "components/JobCard/JobCard";
 import { approvalJobsBoardForAdmin, deleteJobsBoardForAdmin, getJobsBoardForAdmin } from "api/jobs";
 import { tJob } from "Types/Jobs";
+import Swal from "sweetalert2";
 
 function getWindowSize() {
   const { innerWidth, innerHeight } = window;
@@ -48,9 +49,23 @@ export default function HeadHunterMgmt(): JSX.Element {
   };
 
   const apply = async (id: number) => {
-    await approvalJobsBoardForAdmin(id);
+    Swal.fire({
+      title: "정말로 승인 하시겠습니까?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "승인",
+      cancelButtonText: "취소",
+      reverseButtons: true, // 버튼 순서 거꾸로
+    }).then(async (result: any) => {
+      if (result.isConfirmed) {
+        await approvalJobsBoardForAdmin(id);
+        setBoard((curInfoArray) => [...curInfoArray.filter((q) => q.id !== id)]);
 
-    setBoard((curInfoArray) => [...curInfoArray.filter((q) => q.id !== id)]);
+        Swal.fire("채용공고", "승인이 완료되었습니다.", "success");
+      }
+    });
   };
 
   const deleteJob = async (id: number) => {

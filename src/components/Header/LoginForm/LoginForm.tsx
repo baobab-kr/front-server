@@ -7,6 +7,8 @@ import Wave from "./Wave/Wave";
 import Swal from "sweetalert2";
 import { AiFillGithub, AiOutlineClose } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import POPUP from "store/store.popup";
 
 type tOpen = {
   open: boolean;
@@ -18,9 +20,13 @@ export default function LoginForm({ open, setOpen }: tOpen): JSX.Element {
   const [id, setID] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [visibility, setVisibility] = useState<boolean>(false);
+  const [popup, setPopup] = useRecoilState<boolean>(POPUP);
 
-  const closeOverlay = () => {
-    setOpen(false);
+  const closeOverlay = (e: any) => {
+    if (e.target.id === "login-overlay") {
+      setOpen(false);
+      setPopup(false);
+    }
   };
 
   const prevet = (e: React.MouseEvent<HTMLElement>) => {
@@ -31,7 +37,6 @@ export default function LoginForm({ open, setOpen }: tOpen): JSX.Element {
   const handleSubmit = async () => {
     API.post("/users/login", { userid: id, password: password }, { withCredentials: true })
       .then((res) => {
-        console.log("/users/login => ", res);
         localStorage.setItem("atexpires", JSON.stringify(res.headers.atexpires));
         localStorage.setItem("rtexpires", JSON.stringify(res.headers.rtexpires));
         localStorage.setItem("user", JSON.stringify(res.data));
@@ -51,8 +56,6 @@ export default function LoginForm({ open, setOpen }: tOpen): JSX.Element {
   const githubLogin = () => {
     const url: string = `https://github.com/login/oauth/authorize?client_id=${process.env.REACT_APP_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_GITHUB_CALLBACK_URL}`;
 
-    // window.open(url);
-
     document.location.href = url;
   };
 
@@ -62,8 +65,14 @@ export default function LoginForm({ open, setOpen }: tOpen): JSX.Element {
     setVisibility(false);
   }, [open]);
 
+  useEffect(() => {
+    if (popup) {
+      setOpen(popup);
+    }
+  }, [popup]);
+
   return (
-    <LoginOverlay open={open} onClick={closeOverlay}>
+    <LoginOverlay open={open} onMouseDown={closeOverlay} id="login-overlay">
       <LoginContainer onClick={prevet}>
         <Wave />
         <CloseBtnArea

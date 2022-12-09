@@ -23,6 +23,7 @@ import { USER_TYPE } from "constants/index";
 import { approvalJobsBoardForAdmin, deleteJobsBoardForAdmin, getJobsBoardDetail } from "api/jobs";
 import { tDetailJob, tJob } from "Types/Jobs";
 import moment from "moment";
+import Swal from "sweetalert2";
 
 export default function JobDetail(): JSX.Element {
   const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
@@ -32,30 +33,22 @@ export default function JobDetail(): JSX.Element {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const jobApplyList = () => {
+    const id = location.pathname.split("/");
+
+    navigate(`/@${userInfo?.userid}/job-management/${id[id.length - 1]}/list`, { state: { data: data } });
+  };
+
   const routeApplyJobPage = () => {
-    console.log(location.pathname);
     const id = location.pathname.split("/");
     navigate(`/apply/${id[id.length - 1]}`);
   };
 
-  const jobDelete = async () => {
-    const id = location.pathname.split("/");
-    console.log(id[id.length - 1]);
-    const targetId: number = Number(id[id.length - 1]);
-    //TODO Error
-    if (targetId === undefined) return;
-    await deleteJobsBoardForAdmin(targetId);
-    navigate("/jobs");
-  };
-
   const jobApply = async () => {
     const id = location.pathname.split("/");
-    console.log(id[id.length - 1]);
     const targetId: number = Number(id[id.length - 1]);
-    //TODO Error
     if (targetId === undefined) return;
     await approvalJobsBoardForAdmin(targetId);
-
     navigate("/jobs");
   };
 
@@ -67,17 +60,16 @@ export default function JobDetail(): JSX.Element {
     const id = location.pathname.split("/");
     await getJobsBoardDetail(Number(id[id.length - 1]))
       .then((res) => {
-        console.log(res);
         setData(res);
       })
       .catch((err) => {
-        console.log("getJobsBoardDetail - error", err);
+        Swal.fire("정보 불러오기 실패", err, "error");
       });
   };
 
   const dateOrder = () => {
     if (data?.endDate === undefined || data.startDate === undefined) return "";
-    if (data?.endDate === null || data?.startDate === null) {
+    if (data?.endDate === "null" || data?.startDate === "null" || data?.endDate === null || data?.startDate === null) {
       return "상시 채용";
     } else {
       return moment(data.endDate).format("YYYY-MM-DD");
@@ -107,7 +99,9 @@ export default function JobDetail(): JSX.Element {
             <TitleArea>
               <CompanyName>{data?.companyName}</CompanyName>
               {userInfo?.role === USER_TYPE.DEVELOPER && <ApplyButton onClick={routeApplyJobPage}>입사 지원</ApplyButton>}
-              {/* {userInfo?.role === USER_TYPE.HEADHUNTER && <ApplyButton onClick={jobDelete}>채용 마감</ApplyButton>} */}
+              {userInfo?.role === USER_TYPE.HEADHUNTER && data?.user_id.userid === userInfo.userid && (
+                <ApplyButton onClick={jobApplyList}>채용 리스트 확인</ApplyButton>
+              )}
               {userInfo?.role === USER_TYPE.ADMIN && data?.approvalStatus === 0 && <ApplyButton onClick={jobApply}>승인</ApplyButton>}
             </TitleArea>
             <Title>{data?.title}</Title>

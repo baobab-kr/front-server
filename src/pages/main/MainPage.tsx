@@ -60,7 +60,6 @@ export default function MainPage(): JSX.Element {
 
   const getInfo = async () => {
     if (mainState) return;
-    console.log(page);
 
     await getMainBoard(page)
       .then((data) => {
@@ -68,7 +67,6 @@ export default function MainPage(): JSX.Element {
         setBoard((curInfoArray) => [...curInfoArray, ...data]); // state에 추가
       })
       .catch((err) => {
-        console.log(err);
         setMainState(true);
       });
   };
@@ -139,6 +137,7 @@ export default function MainPage(): JSX.Element {
                       <JobList>
                         {jobs.length > 0 && (
                           <MainJobCard
+                            id={jobs[0].id}
                             logo={
                               <img
                                 src={`${process.env.REACT_APP_API_ROOT}/jobs/getToastImage?file_name=${jobs[0].logo}`}
@@ -149,11 +148,12 @@ export default function MainPage(): JSX.Element {
                             }
                             title={jobs[0].title}
                             wlrrms={`[${jobs[0].companyName}] ${jobs[0].field}`}
-                            경력={jobs[0].message}
+                            description={jobs[0].message}
                           />
                         )}
                         {jobs.length > 1 && (
                           <MainJobCard
+                            id={jobs[1].id}
                             logo={
                               <img
                                 src={`${process.env.REACT_APP_API_ROOT}/jobs/getToastImage?file_name=${jobs[1].logo}`}
@@ -164,11 +164,12 @@ export default function MainPage(): JSX.Element {
                             }
                             title={jobs[1].title}
                             wlrrms={`[${jobs[1].companyName}] ${jobs[1].field}`}
-                            경력={jobs[1].message}
+                            description={jobs[1].message}
                           />
                         )}
                         {jobs.length > 2 && (
                           <MainJobCard
+                            id={jobs[2].id}
                             logo={
                               <img
                                 src={`${process.env.REACT_APP_API_ROOT}/jobs/getToastImage?file_name=${jobs[2].logo}`}
@@ -179,7 +180,7 @@ export default function MainPage(): JSX.Element {
                             }
                             title={jobs[2].title}
                             wlrrms={`[${jobs[2].companyName}] ${jobs[2].field}`}
-                            경력={jobs[2].message}
+                            description={jobs[2].message}
                           />
                         )}
                       </JobList>

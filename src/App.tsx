@@ -23,9 +23,14 @@ import { USER_TYPE } from "constants/index";
 import GithubLogin from "pages/github-login/GithubLogin";
 import MainSearchPage from "pages/main/MainSearchPage";
 import ApplyJobModify from "pages/apply_job/ApplyJobModify";
+import USER from "./store/store.user";
+import { user } from "Types/user";
+import JobForApplyList from "pages/jobs/job-apply-list/JobForApplyList";
+import ApplyJobViewer from "pages/apply_job/ApplyJobViewer";
 
 export default function App(): JSX.Element {
   const [, setDarkMode] = useRecoilState<boolean>(Darkmode);
+  const [, setUser] = useRecoilState<user>(USER);
 
   useEffect(() => {
     getUserInfoFnc();
@@ -37,11 +42,23 @@ export default function App(): JSX.Element {
     await getUserInfo()
       .then((data) => {
         localStorage.setItem("user", JSON.stringify(data));
+        setUser(data);
       })
       .catch((err) => {
         localStorage.removeItem("atexpires");
         localStorage.removeItem("rtexpires");
         localStorage.removeItem("user");
+        setUser({
+          id: -1,
+          userid: "",
+          username: "",
+          email: "",
+          role: null,
+          description: null,
+          avatar_image: null,
+          socialUrl: "",
+          techStack: "",
+        });
       });
   };
 
@@ -59,6 +76,8 @@ export default function App(): JSX.Element {
           <Route path="/@:id/my-apply-jobs" element={<PrivateRoute authentication={true} component={MyApplyJobs} role={USER_TYPE.DEVELOPER} />} />
           <Route path="/@:id/my-apply-jobs/:jobid" element={<PrivateRoute authentication={true} component={ApplyJobModify} />} />
           <Route path="/@:id/job-management" element={<PrivateRoute authentication={true} component={JobMenagement} />} />
+          <Route path="/@:id/job-management/:jobID/list" element={<PrivateRoute authentication={false} component={JobForApplyList} />} />
+          <Route path="/@:id/job-management/:jobID/list/:applyID" element={<PrivateRoute authentication={false} component={ApplyJobViewer} />} />
           <Route path="/setting" element={<Setting />} />
           <Route path="/editor" element={<PrivateRoute authentication={true} component={EditorPage} />} />
           <Route path="/editor/:id" element={<PrivateRoute authentication={true} component={EditorPage} />} />

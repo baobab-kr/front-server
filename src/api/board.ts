@@ -1,5 +1,6 @@
 import API from ".";
 import { Board, PersonalInfo, ICreateBoard, Like, TagCount, Writer, IEditBoard } from "Types/main";
+import { user } from "Types/user";
 
 export function getMainBoard(page: number): Promise<Board[]> {
   return new Promise<Board[]>((resolve, reject) => {
@@ -58,7 +59,7 @@ export function getBoardPersonalTag(page: number, userId: number, tag: string[])
         resolve(res.data);
       })
       .catch((err) => {
-        reject(err.response);
+        reject(err.response.data.message);
       });
   });
 }
@@ -70,7 +71,7 @@ export function touchLikes(board_id: number): Promise<Like> {
         resolve(res.data[0]);
       })
       .catch((err) => {
-        reject(err.response);
+        reject(err.response.data.message);
       });
   });
 }
@@ -82,7 +83,7 @@ export function CreateBoard(_createBoard: ICreateBoard): Promise<string> {
         resolve(res.statusText);
       })
       .catch((err) => {
-        reject(err.response);
+        reject(err.response.data.message);
       });
   });
 }
@@ -94,7 +95,7 @@ export function EditBoard(_editBoard: any): Promise<string> {
         resolve(res.statusText);
       })
       .catch((err) => {
-        reject(err.response);
+        reject(err.response.data.message);
       });
   });
 }
@@ -123,8 +124,8 @@ export function getBoardPersonalTagCount(user_id: number): Promise<TagCount[]> {
   });
 }
 
-export function getBoardPersonalWriter(user_id: number): Promise<Writer> {
-  return new Promise<Writer>((resolve, reject) => {
+export function getBoardPersonalWriter(user_id: number): Promise<user> {
+  return new Promise<user>((resolve, reject) => {
     API.post("/board/BoardPersonalWriter", { user_id: user_id })
       .then((res) => {
         resolve(res.data);
