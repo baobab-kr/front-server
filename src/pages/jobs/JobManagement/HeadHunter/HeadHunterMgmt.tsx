@@ -10,6 +10,7 @@ import { getMainBoard } from "api/board";
 import JobCard from "components/JobCard/JobCard";
 import { tJob } from "Types/Jobs";
 import { getJobsBoardAll, getJobsBoardForHeadHunt, UpdateJobs } from "api/jobs";
+import Swal from "sweetalert2";
 
 function getWindowSize() {
   const { innerWidth, innerHeight } = window;
@@ -55,7 +56,27 @@ export default function HeadHunterMgmt(): JSX.Element {
   };
 
   const endJob = (item: tJob) => {
-    UpdateJobs({ ...item, jobStatus: 0 });
+    Swal.fire({
+      title: "정말로 마감 하시겠습니까?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "마감",
+      cancelButtonText: "취소",
+      reverseButtons: true, // 버튼 순서 거꾸로
+    }).then(async (result: any) => {
+      if (result.isConfirmed) {
+        await UpdateJobs({ id: item.id, jobStatus: 0 })
+          .then((res) => {
+            setBoard(board.map((it) => (it.id === item.id ? { ...it, jobStatus: 0 } : it)));
+            Swal.fire("채용공고", "마감이 완료되었습니다.", "success");
+          })
+          .catch((err) => {
+            Swal.fire("채용 마감 실패", err, "error");
+          });
+      }
+    });
   };
 
   const modifyJob = (item: tJob) => {
@@ -122,7 +143,7 @@ export default function HeadHunterMgmt(): JSX.Element {
                                 </div>
                               </>
                             )}
-                            {item.jobStatus === 0 && <div className="approval">마감된 채용공고 입니다.</div>}
+                            {item.jobStatus === 0 && <div>마감된 채용공고 입니다.</div>}
                           </ActionArea>
                         </CustomCard>
                       );

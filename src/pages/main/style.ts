@@ -186,7 +186,8 @@ export const JobList = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  justify-content: space-between;
+  /* justify-content: space-between; */
+  gap: 10px;
 `;
 
 export const JobCard = styled.div`

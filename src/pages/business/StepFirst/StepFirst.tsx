@@ -1,12 +1,14 @@
-import React, { Dispatch, SetStateAction, useEffect } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import InputText from "../Custominput/InputText";
 import InputFile from "../Custominput/InputFile";
 import InputContainer from "../Custominput/InputContainer";
 import TemplateSection from "../TemplateSection/TemplateSection";
 
-import { TemplateSectionFooter, InputWrap, LabelArea, CustomButton, InputAreaFooter } from "./style";
+import { TemplateSectionFooter, InputWrap, LabelArea, CustomButton, InputAreaFooter, LiesenceBtn } from "./style";
 import { tStepFirst } from "Types/Business";
+import { ntsBusinessman } from "api/jobs";
+import { off } from "process";
 
 type tProps = {
   value: tStepFirst;
@@ -15,9 +17,13 @@ type tProps = {
 };
 
 export default function StepFirst({ value, setValue, stepperController }: tProps): JSX.Element {
+  const [isVerification, setIsVerification] = useState<boolean>(false);
   const setpController = () => {
-    if (value.BusinessLicense !== null && value.ManagerEMail !== "" && value.ManagerName !== "" && value.ManagerPhone !== "") {
+    if (value.BusinessLicense !== null && value.ManagerName !== "" && value.ManagerPhone !== "" && isVerification) {
       stepperController(1);
+      setValue((v) => {
+        return { ...v, ManagerEMail: "" };
+      });
     } else {
       Swal.fire("정보를 다시 확인해주세요.");
     }
@@ -34,12 +40,44 @@ export default function StepFirst({ value, setValue, stepperController }: tProps
     }
   };
 
+  const onlyNumber = (value: any) => {
+    if (isNaN(Number(value))) return;
+    setValue((v) => {
+      return { ...v, ManagerEMail: value };
+    });
+  };
+
+  const onNtsBusinessman = async () => {
+    const result: string = await ntsBusinessman(value.ManagerEMail);
+    if (result === "등록된 사업자등록번호") {
+      Swal.fire("사업자등록번호", "인증이 완료되었습니다.", "success");
+      setIsVerification(true);
+    } else {
+      Swal.fire("사업자등록번호", "인증되지 않은 사업자등록번호입니다.", "error");
+      setIsVerification(false);
+    }
+  };
+
   return (
     <>
       <TemplateSection title="기본 정보" open={true}>
-        <InputContainer title="사업자등록증" description="5MB 이하의 PDF, JPG, PNG 파일">
+        <InputContainer title="사업자등록증" description="5MB 이하의 JPG, PNG 파일">
           <InputFile fileController={fileController} />
         </InputContainer>
+
+        <InputContainer title="사업자 등록번호" description="사업자 등록번호를 '-'없이 입력">
+          <div className="input" style={{ display: "flex", gap: "15px", alignItems: "center" }}>
+            <InputText
+              maxLength={60}
+              placeholder="사업자 등록번호를 입력해주세요"
+              value={value.ManagerEMail}
+              setValue={(e: React.ChangeEvent<HTMLInputElement>) => onlyNumber(e.target.value)}
+            />
+            {!isVerification && <LiesenceBtn onClick={onNtsBusinessman}>검증</LiesenceBtn>}
+            {isVerification && <LiesenceBtn>완료</LiesenceBtn>}
+          </div>
+        </InputContainer>
+
         <InputContainer title="담당자 성함" description="">
           <div className="input">
             <InputText
@@ -49,21 +87,6 @@ export default function StepFirst({ value, setValue, stepperController }: tProps
               setValue={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setValue((v) => {
                   return { ...v, ManagerName: e.target.value };
-                })
-              }
-            />
-          </div>
-        </InputContainer>
-
-        <InputContainer title="담당자 이메일" description="채용 광고 진행 및 리포트가 발송됩니다.">
-          <div className="input">
-            <InputText
-              maxLength={60}
-              placeholder="이메일을 입력해주세요"
-              value={value.ManagerEMail}
-              setValue={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setValue((v) => {
-                  return { ...v, ManagerEMail: e.target.value };
                 })
               }
             />

@@ -99,6 +99,7 @@ export default function ApplyJob(): JSX.Element {
         })
         .catch(function (response) {
           reject(response);
+          Swal.fire("Error", "증명사진 업로드를 실패했습니다.", "error");
         });
     });
   }

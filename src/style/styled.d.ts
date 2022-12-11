@@ -8,6 +8,7 @@ declare module "styled-components" {
       color: string;
       subColor: string;
       jobCardColor: string;
+      active: string;
     };
     mainColor: {
       main: string;

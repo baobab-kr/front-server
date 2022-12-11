@@ -53,12 +53,13 @@ function Popup({ onClose, data, setData, boardId }: props) {
   const onSave = () => {
     if (description === "") {
       Swal.fire("필수입력", "설명을 입력해주세요!", "error");
+      return;
     }
     const formData: any = new FormData();
     formData.append("title", data.title);
     formData.append("description", description);
     formData.append("content", data.content);
-    formData.append("board_status", isPublic ? 0 : 1);
+    formData.append("board_status", isPublic ? 0 : 2);
     if (fileList) formData.append("thumbnail", fileList![0]);
     if (data.tag_name.length === 1) {
       formData.append("tag_name[0]", data.tag_name[0]);
@@ -73,17 +74,22 @@ function Popup({ onClose, data, setData, boardId }: props) {
         navigate("/");
       })
       .catch((err) => {
-        Swal.fire("포스트 생성 실패", err, "error");
+        console.log("EEEE", err);
+        if (err.length > 1) {
+          Swal.fire("포스트 생성 실패", err[err.length - 1], "error");
+        } else {
+          Swal.fire("포스트 생성 실패", err, "error");
+        }
       });
   };
 
   const onEdit = () => {
     const formData: any = new FormData();
-    formData.append("board_id", Number(17));
+    formData.append("board_id", Number(boardId));
     formData.append("title", data.title);
     formData.append("description", description);
     formData.append("content", data.content);
-    formData.append("board_status", isPublic ? 0 : 1);
+    formData.append("board_status", isPublic ? 0 : 2);
 
     if (fileList && typeof fileList !== typeof "") formData.append("thumbnail", fileList![0]);
     else formData.append("thumbnail", location.state.data.thumbnail);
@@ -133,7 +139,7 @@ function Popup({ onClose, data, setData, boardId }: props) {
               <input type="file" id="imgUpload" style={{ display: "none" }} onChange={imageSelectHandler}></input>
               <label htmlFor="imgUpload">
                 <E.ThumbnailArea>
-                  <img src={fileImage === "" ? ThumbnailImg : fileImage} alt="이미지 등록하기" />
+                  <E.ThumbnailImg src={fileImage === "" ? ThumbnailImg : fileImage} alt="이미지 등록하기" />
                 </E.ThumbnailArea>
               </label>
             </div>

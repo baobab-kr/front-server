@@ -137,6 +137,8 @@ export const Tabs = styled.p<tCurrentTab>`
 
 export const SearchBtn = styled.div`
   display: block;
+  color: ${({ theme }) => theme.fontColor.color};
+
   @media screen and (max-width: 350px) {
     display: none;
   }

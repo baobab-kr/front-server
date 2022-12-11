@@ -28,6 +28,7 @@ import { user } from "Types/user";
 import Swal from "sweetalert2";
 import { CreateApplyJob, getApplyJobDetail, getAutoCompleteAPI, UpdateApplyJob } from "api/jobs";
 import { tApplyJob } from "Types/Jobs";
+import API from "api";
 
 const formatOptionLabel = ({ value, label }: tProps) => (
   <div style={{ display: "flex", color: "black" }}>
@@ -54,14 +55,13 @@ export default function ApplyJobModify(): JSX.Element {
 
   const [applyJobId, setApplyJobId] = useState<number>(-1);
 
-  const [education, setEducation] = useState<string>(EDUCATION_GROUP[0].value);
+  const [education, setEducation] = useState<{ value: string; label: string }>(EDUCATION_GROUP[0]);
   const [educationStatus, setEducationStatus] = useState<number>(0);
   const [careerYear, setCareerYear] = useState<number | null>(null);
   const [url, setUrl] = useState<string>("");
   const [title, setTitle] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
-  // const [job, setJob] = useState<string>(JOB_GROUP[0].value);
   const [job, setJob] = useState<{ value: string; label: string }>(JOB_GROUP[0]);
   const [jobId, setJobId] = useState<number>();
 
@@ -71,7 +71,7 @@ export default function ApplyJobModify(): JSX.Element {
   const [fileList, setFileList] = useState<FileList>();
 
   const userTypeHandler = (props: any) => {
-    setEducation(props.value);
+    setEducation(props);
   };
 
   const jobHandler = (props: any) => {
@@ -86,6 +86,29 @@ export default function ApplyJobModify(): JSX.Element {
       setFileList(fileLists);
     }
   };
+
+  function saveProfile(): Promise<string> {
+    const id = location.pathname.split("/");
+
+    const formData: any = new FormData();
+    if (fileList !== undefined) formData.append("file", fileList![0]);
+    formData.append("id", id[id.length - 1]);
+    return new Promise<string>((resolve, reject) => {
+      API({
+        method: "post",
+        url: "/ApplyJob/UploadProfile",
+        data: formData,
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+        .then(function (response) {
+          resolve(response.data);
+        })
+        .catch(function (response) {
+          reject(response);
+          Swal.fire("Error", "증명사진 업로드를 실패했습니다.", "error");
+        });
+    });
+  }
 
   const submit = async () => {
     const id = location.pathname.split("/");
@@ -106,11 +129,18 @@ export default function ApplyJobModify(): JSX.Element {
       resumeUrl: url,
       socialUrl: socialUrl,
       profile: "test",
-      education: education,
+      education: education.value,
       educationStatus: educationStatus,
     };
+    let filename = "";
+    if (fileList !== undefined) {
+      filename = await saveProfile();
+      console.log(filename);
+    } else {
+      filename = fileImage.split("=")[1];
+    }
 
-    await UpdateApplyJob(body)
+    await UpdateApplyJob({ ...body, profile: filename })
       .then((res) => {
         navigate("/jobs");
       })
@@ -133,7 +163,11 @@ export default function ApplyJobModify(): JSX.Element {
         }
       }
 
-      setEducation(String(res.education));
+      const edu = EDUCATION_GROUP.find((q) => q.value === String(res.education));
+      if (edu !== undefined) {
+        console.log(edu);
+        setEducation(edu);
+      }
       setEducationStatus(res.educationStatus);
       setCareerYear(res.careerYear);
       setUrl(res.resumeUrl);
@@ -141,6 +175,8 @@ export default function ApplyJobModify(): JSX.Element {
       setName(res.name);
       setApplyJobId(res.id);
       setJobId(Number(res.jobs_Id));
+
+      setFileImage(`${process.env.REACT_APP_API_ROOT}/ApplyJob/getProfile?file_name=${res.profile}`);
     });
   }, []);
 
@@ -214,7 +250,7 @@ export default function ApplyJobModify(): JSX.Element {
             </TitleArea>
             <EduArea>
               <div className="edu-selector">
-                <Select defaultValue={EDUCATION_GROUP[0]} options={EDUCATION_GROUP} formatOptionLabel={formatOptionLabel} onChange={userTypeHandler} />
+                <Select value={education} options={EDUCATION_GROUP} formatOptionLabel={formatOptionLabel} onChange={userTypeHandler} />
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>

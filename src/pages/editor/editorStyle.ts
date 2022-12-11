@@ -60,7 +60,7 @@ type tProps = {
 
 const PopuoButton = styled.div<tProps>`
   background-color: ${({ theme, active }) => (active ? theme.backgroundColor.subColor : "transparent")};
-  color: ${({ theme, active }) => (active ? "#96F2D7" : theme.fontColor.color)};
+  color: ${({ theme, active }) => (active ? theme.fontColor.active : theme.fontColor.color)};
   padding: 10px 20px;
   cursor: pointer;
 
@@ -87,10 +87,18 @@ const ThumbnailArea = styled.div`
 
   margin: 0px auto;
 
+  overflow: hidden;
   @media screen and (max-width: 900px) {
     padding: 10%;
     height: auto;
   }
+`;
+
+const ThumbnailImg = styled.img`
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+  border-radius: 5px 5px 0px 0px;
 `;
 
 const Position = styled.div`
@@ -172,4 +180,18 @@ const saveBtn = styled.button`
   border-radius: 3px;
 `;
 
-export { TagSelectorArea, popup, popupInner, Position, ThumbnailArea, Textarea, PopupTitle, PopuoButton, PopupBtnArea, TitleWrpper, titleInput, saveBtn };
+export {
+  TagSelectorArea,
+  popup,
+  popupInner,
+  Position,
+  ThumbnailArea,
+  Textarea,
+  PopupTitle,
+  PopuoButton,
+  PopupBtnArea,
+  TitleWrpper,
+  titleInput,
+  saveBtn,
+  ThumbnailImg,
+};

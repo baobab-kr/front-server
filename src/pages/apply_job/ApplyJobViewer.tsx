@@ -54,7 +54,8 @@ export default function ApplyJobViewer(): JSX.Element {
 
   const [applyJobId, setApplyJobId] = useState<number>(-1);
 
-  const [education, setEducation] = useState<string>(EDUCATION_GROUP[0].value);
+  const [education, setEducation] = useState<{ value: string; label: string }>(EDUCATION_GROUP[0]);
+
   const [educationStatus, setEducationStatus] = useState<number>(0);
   const [careerYear, setCareerYear] = useState<number | null>(null);
   const [url, setUrl] = useState<string>("");
@@ -71,7 +72,7 @@ export default function ApplyJobViewer(): JSX.Element {
   const [fileList, setFileList] = useState<FileList>();
 
   const userTypeHandler = (props: any) => {
-    setEducation(props.value);
+    setEducation(props);
   };
 
   const jobHandler = (props: any) => {
@@ -133,7 +134,11 @@ export default function ApplyJobViewer(): JSX.Element {
         }
       }
 
-      setEducation(String(res.education));
+      const edu = EDUCATION_GROUP.find((q) => q.value === String(res.education));
+      if (edu !== undefined) {
+        console.log(edu);
+        setEducation(edu);
+      }
       setEducationStatus(res.educationStatus);
       setCareerYear(res.careerYear);
       setUrl(res.resumeUrl);
@@ -141,6 +146,7 @@ export default function ApplyJobViewer(): JSX.Element {
       setName(res.name);
       setApplyJobId(res.id);
       setJobId(Number(res.jobs_Id));
+      setFileImage(res.profile);
     });
   }, []);
 
@@ -179,7 +185,7 @@ export default function ApplyJobViewer(): JSX.Element {
                 />
                 <label htmlFor="imgUpload">
                   <ThumbnailArea>
-                    <img src={fileImage === "" ? photo : fileImage} alt="이미지 등록하기" />
+                    <img src={`${process.env.REACT_APP_API_ROOT}/ApplyJob/getProfile?file_name=${fileImage}`} alt="이미지 등록하기" />
                   </ThumbnailArea>
                 </label>
               </div>
@@ -228,13 +234,7 @@ export default function ApplyJobViewer(): JSX.Element {
             </TitleArea>
             <EduArea>
               <div className="edu-selector">
-                <Select
-                  isDisabled={true}
-                  defaultValue={EDUCATION_GROUP[0]}
-                  options={EDUCATION_GROUP}
-                  formatOptionLabel={formatOptionLabel}
-                  onChange={userTypeHandler}
-                />
+                <Select isDisabled={true} value={education} options={EDUCATION_GROUP} formatOptionLabel={formatOptionLabel} onChange={userTypeHandler} />
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>

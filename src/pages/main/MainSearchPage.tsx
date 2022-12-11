@@ -54,10 +54,10 @@ export default function MainSearchPage(): JSX.Element {
   }, []);
 
   useEffect(() => {
-    getJobsBoardAll({ page: 0 }).then((res) => {
-      setJobs(res);
-    });
-  }, []);
+    setBoard([]);
+    setPage(0);
+    setMainState(false);
+  }, [location.search]);
 
   const getInfo = async () => {
     if (mainState) return;
@@ -125,7 +125,7 @@ export default function MainSearchPage(): JSX.Element {
               <div>
                 <ItemArea>
                   <ItemTitleArea>
-                    <span>검색</span>
+                    <span>검색어 : "{queryParse(location.search)["title"]}"</span>
                   </ItemTitleArea>
                   <InfiniteScroll loadFnc={getInfo} data={board} isLast={mainState} isOnTop={true}>
                     {board?.map((item: Board, index: number) => {
