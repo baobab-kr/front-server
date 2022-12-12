@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   JobsBusinessWrap,
   HeaderLocalComp,
@@ -25,11 +25,16 @@ import MainJobCard from "components/JobCard/MainJobCard";
 
 import { tStepFirst, tStepSecond } from "Types/Business";
 
-import test from "../../assets/Logo2.png";
 import { tJob } from "Types/Jobs";
-import { JOB_GROUP } from "constants/index";
+import { USER_TYPE } from "constants/index";
+import { checkUserRole, userLogout } from "api/user";
+import { user } from "Types/user";
+import Swal from "sweetalert2";
 
 export default function BusinessPage(): JSX.Element {
+  const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
+
+  const navigate = useNavigate();
   const location: any = useLocation();
   const [isModify, setIsModify] = useState<boolean>(false);
   const [stepper, setStepper] = useState<number>(0);
@@ -77,6 +82,24 @@ export default function BusinessPage(): JSX.Element {
     approvalStatus: 0,
     jobStatus: 0,
   });
+
+  const checkRole = async () => {
+    if (userInfo !== null) {
+      await checkUserRole(userInfo?.userid).then(async (res) => {
+        if (res !== USER_TYPE.HEADHUNTER) {
+          Swal.fire("접근불가", "비정상적인 접근입니다.", "error");
+          await userLogout().then((res) => {
+            navigate("/");
+            window.location.reload();
+          });
+        }
+      });
+    }
+  };
+
+  useEffect(() => {
+    checkRole();
+  }, []);
 
   useEffect(() => {
     if (stepSecond.CompanyLogo !== null && stepSecond.CompanyLogo !== undefined) {
