@@ -25,6 +25,7 @@ import { JOB_GROUP } from "constants/index";
 import { tJob } from "Types/Jobs";
 
 type tProps = {
+  isModify: boolean;
   value: tStepSecond;
   setValue: Dispatch<SetStateAction<tStepSecond>>;
   stepperController: (value: number) => void;
@@ -37,7 +38,7 @@ const formatOptionLabel = ({ value, label }: tLabel) => (
   </div>
 );
 
-export default function StepSecond({ value, setValue, stepperController }: tProps): JSX.Element {
+export default function StepSecond({ isModify, value, setValue, stepperController }: tProps): JSX.Element {
   const location: any = useLocation();
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [endDate, setEndDate] = useState<Date>(new Date());
@@ -116,7 +117,7 @@ export default function StepSecond({ value, setValue, stepperController }: tProp
   };
 
   const jobHandler = (props: any) => {
-    setJob(props.value);
+    setJob(props);
   };
 
   useEffect(() => {
@@ -155,7 +156,7 @@ export default function StepSecond({ value, setValue, stepperController }: tProp
   }, [job]);
 
   useEffect(() => {
-    if (location.state !== null) {
+    if (location.state !== null && isModify === false) {
       const data: tJob = location.state.data;
       const techStack = JOB_GROUP.find((q) => q.label === data.field);
       setJob(techStack!);
@@ -184,6 +185,38 @@ export default function StepSecond({ value, setValue, stepperController }: tProp
       setTalent(data.talent.split(","));
       setCareerType(data.careerType);
       // console.log(data);
+    } else {
+      const data: tStepSecond = value;
+      if (data.Field !== "") {
+        const techStack = JOB_GROUP.find((q) => q.label === data.Field);
+        setJob(techStack!);
+      }
+
+      const dateFnc = (datetmp: string): Date => {
+        const y = parseInt(datetmp.slice(0, 4));
+        const m = parseInt(datetmp.slice(4, 6));
+        const d = parseInt(datetmp.slice(6, 8));
+
+        return new Date(`${y}-${m}-${d}`);
+      };
+      if (data.StartDate !== null && data.StartDate !== "") {
+        const start: Date = dateFnc(data.StartDate);
+        setStartDate(start);
+      }
+      if (data.EndDate !== null && data.EndDate !== "") {
+        const end: Date = dateFnc(data.EndDate);
+        setEndDate(end);
+      }
+      if (data.StartDate === null || data.StartDate === "null" || data.StartDate === "") {
+        setIsDate(true);
+      } else {
+        setIsDate(false);
+      }
+
+      if (data.talent !== "") {
+        setTalent(data.talent.split(","));
+      }
+      setCareerType(data.Type);
     }
   }, []);
 

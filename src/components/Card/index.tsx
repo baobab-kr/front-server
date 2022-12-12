@@ -4,7 +4,7 @@ import { Board, Tag, Like } from "Types/main";
 import { useNavigate, useLocation } from "react-router-dom";
 import { timeForToday } from "util/date";
 import { getBoardThumbnail, touchLikes } from "api/board";
-
+import { AiFillDelete } from "react-icons/ai";
 import Avator from "../Avator/Avator";
 import TagComponent from "components/Tag/Tag";
 import Swal from "sweetalert2";
@@ -125,7 +125,7 @@ export default function Card({ board, width, height, isMyHome, deleteBoard, imgH
               deleteBoard(board.id);
             }}
           >
-            🗑
+            <AiFillDelete />
           </DeleteButton>
         )}
 

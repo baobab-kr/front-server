@@ -50,6 +50,7 @@ export const Properties = styled.div`
 export const TagListTItle = styled.div`
   width: 100%;
   max-width: 320px;
+  color: ${({ theme }) => theme.fontColor.color};
 
   @media screen and (max-width: 830px) {
     max-width: none;
@@ -70,6 +71,7 @@ export const TagPlace = styled.div`
   margin-top: 8px;
   overflow-y: auto;
   flex-wrap: wrap;
+  color: ${({ theme }) => theme.fontColor.color};
 `;
 
 export const UserInfo = styled.div`

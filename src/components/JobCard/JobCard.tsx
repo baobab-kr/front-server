@@ -57,9 +57,11 @@ export default function JobCard({ jobItem, board, width, height, isMyHome, delet
               {previewLogo !== "" && <CardImage src={previewLogo} alt="logo" />}
             </CardLogo>
             <CardTitle>
-              <div className="jobLink">[{jobItem.field}]</div>
+              <div className="jobLink">
+                [{jobItem.companyName}] {jobItem.field}
+              </div>
               <div style={{ padding: "6px 0 8px" }}>
-                <CardName>{jobItem.companyName}</CardName>
+                <CardName>{jobItem.title}</CardName>
                 <div className="location">{jobItem.location}</div>
               </div>
             </CardTitle>

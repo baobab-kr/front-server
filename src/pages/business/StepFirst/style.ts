@@ -59,3 +59,17 @@ export const InputAreaFooter = styled.div`
   justify-content: flex-end;
   width: 100%;
 `;
+
+export const LiesenceBtn = styled.div`
+  cursor: pointer;
+  display: inline-block;
+  font-size: 15px;
+  height: 47px;
+  line-height: 54px;
+  text-align: center;
+  width: 80px;
+  background: rgb(255, 255, 255);
+  border-radius: 6px;
+  margin-right: 10px;
+  color: black;
+`;

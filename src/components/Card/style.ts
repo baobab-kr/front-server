@@ -193,6 +193,7 @@ export const DeleteButton = styled.div`
   position: absolute;
   top: 15px;
   right: -25px;
-  color: #fff;
+  color: ${({ theme }) => theme.fontColor.color};
+
   font-size: 20px;
 `;

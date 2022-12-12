@@ -12,6 +12,7 @@ export default function SearchArea({ open, setOpen }: tOpen): JSX.Element {
   const navigate = useNavigate();
   const closeOverlay = () => {
     setOpen(false);
+    setSearchWord("");
   };
 
   const prevet = (e: React.MouseEvent<HTMLElement>) => {
@@ -27,6 +28,7 @@ export default function SearchArea({ open, setOpen }: tOpen): JSX.Element {
     if (e.key === "Enter") {
       navigate(`/search?title=${searchWord}`);
       setOpen(false);
+      setSearchWord("");
     }
   };
 
