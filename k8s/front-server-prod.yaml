@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: front-server
-          image: ghcr.io/baobab-kr/front-server/front-server-prod:v0.2.1
+          image: ghcr.io/baobab-kr/front-server/front-server-prod:v0.2.3
           imagePullPolicy: Always
           ports:
             - containerPort: 2999
