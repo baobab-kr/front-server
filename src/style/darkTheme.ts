@@ -4,6 +4,7 @@ const fontColor = {
   color: "#FFFFFF",
   subColor: "#999999",
   jobCardColor: "#F7F7F7",
+  active: "#96F2D7",
 };
 
 const mainColor = {

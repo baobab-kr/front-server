@@ -31,6 +31,7 @@ import { JOB_GROUP } from "constants/index";
 
 export default function BusinessPage(): JSX.Element {
   const location: any = useLocation();
+  const [isModify, setIsModify] = useState<boolean>(false);
   const [stepper, setStepper] = useState<number>(0);
   const [stepFirst, setStepFirst] = useState<tStepFirst>({
     BusinessLicense: null,
@@ -102,7 +103,7 @@ export default function BusinessPage(): JSX.Element {
   }, [stepSecond]);
 
   useEffect(() => {
-    if (location.state !== null) {
+    if (location.state !== null && isModify === false) {
       const data: tJob = location.state.data;
 
       setStepFirst({
@@ -129,6 +130,14 @@ export default function BusinessPage(): JSX.Element {
         talent: data.talent,
         Title: data.title,
         Type: data.careerType,
+      });
+    } else {
+      setStepFirst({
+        BusinessLicense: null, //data.license,
+        ManagerEMail: "",
+        ManagerName: stepFirst.ManagerName,
+        ManagerPhone: stepFirst.ManagerPhone,
+        URL: "",
       });
     }
   }, []);
@@ -206,7 +215,7 @@ export default function BusinessPage(): JSX.Element {
                 )}
                 {stepper === 1 && (
                   <div className="step-2">
-                    <StepSecond value={stepSecond} setValue={setStepSecond} stepperController={stepperController} />
+                    <StepSecond isModify={isModify} value={stepSecond} setValue={setStepSecond} stepperController={stepperController} />
                   </div>
                 )}
                 {stepper === 2 && (

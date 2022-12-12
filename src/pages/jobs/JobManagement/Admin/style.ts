@@ -93,6 +93,7 @@ export const CustomCard = styled.div`
   display: flex;
   flex-direction: column;
   gap: 15px;
+  color: ${({ theme }) => theme.fontColor.color};
 `;
 
 export const ActionArea = styled.div`

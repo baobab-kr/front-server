@@ -4,6 +4,7 @@ const fontColor = {
   color: "#000000",
   subColor: "#7F7F7F",
   jobCardColor: "#555555",
+  active: "#000080",
 };
 
 const mainColor = {
@@ -13,7 +14,7 @@ const mainColor = {
 };
 
 const backgroundColor = {
-  bg: "#FFFFFF",
+  bg: "#F5F6FA",
   subColor: "#E0E0E0",
 };
 

@@ -205,17 +205,17 @@ export function UpdateJobs(body: any): Promise<string> {
   });
 }
 
-// export function getJobsBoard(page: number): Promise<Board[]> {
-//   return new Promise<Board[]>((resolve, reject) => {
-//     API.get("/board/BoardMain", { page: page })
-//       .then((res) => {
-//         if (res.data.message) {
-//           reject(res.data.message);
-//         }
-//         resolve(res.data);
-//       })
-//       .catch((err) => {
-//         reject(err.response);
-//       });
-//   });
-// }
+export function ntsBusinessman(business_number: string): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
+    API.post("/jobs/nts_businessman", { business_number: business_number })
+      .then((res) => {
+        if (res.data.message) {
+          reject(res.data.message);
+        }
+        resolve(res.data);
+      })
+      .catch((err) => {
+        reject(err.response);
+      });
+  });
+}

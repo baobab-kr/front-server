@@ -27,13 +27,12 @@ const TitleArea = styled.div`
 
 const Title = styled.div`
   font-size: 3.3rem;
-  color: white;
   line-height: 1.33;
 `;
 
 const UserArea = styled.div`
   display: flex;
-  border-left: 5px solid white;
+  border-left: 5px solid ${({ theme }) => theme.fontColor.color};
   margin: 0;
   margin-top: 2rem;
   padding: 0.5rem 1rem;

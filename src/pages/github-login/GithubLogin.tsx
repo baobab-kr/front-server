@@ -2,6 +2,9 @@ import { githubLoginAPI } from "api/login";
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { AiFillGithub } from "react-icons/ai";
+import { Wrapper, WrapperInner } from "./style";
+import { SyncLoader } from "react-spinners";
 export default function GithubLogin(): JSX.Element {
   const location = useLocation();
   const navigate = useNavigate();
@@ -26,9 +29,15 @@ export default function GithubLogin(): JSX.Element {
   }, []);
 
   return (
-    <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
-      로그인중 입니다. <br />
-      잠시만 기다려주세요!
-    </div>
+    <Wrapper>
+      <WrapperInner>
+        <AiFillGithub size={200} />
+        <div>
+          <p>로그인중 입니다.</p>
+          잠시만 기다려주세요!
+        </div>
+      </WrapperInner>
+      <SyncLoader color={localStorage.getItem("Theme") === "dark" ? "#FFFFFF" : "#000000"} />
+    </Wrapper>
   );
 }
