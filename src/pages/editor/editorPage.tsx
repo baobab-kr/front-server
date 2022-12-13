@@ -136,7 +136,7 @@ function Popup({ onClose, data, setData, boardId }: props) {
           <E.Position>
             <div>
               <E.PopupTitle>포스트 썸네일</E.PopupTitle>
-              <input type="file" id="imgUpload" style={{ display: "none" }} onChange={imageSelectHandler}></input>
+              <input type="file" id="imgUpload" style={{ display: "none" }} onChange={imageSelectHandler} accept="image/jpg, image/png, image/jpeg"></input>
               <label htmlFor="imgUpload">
                 <E.ThumbnailArea>
                   <E.ThumbnailImg src={fileImage === "" ? ThumbnailImg : fileImage} alt="이미지 등록하기" />
