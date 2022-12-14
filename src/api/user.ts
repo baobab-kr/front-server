@@ -99,3 +99,15 @@ export function deleteUser(userid: string): Promise<string> {
       });
   });
 }
+
+export function checkUserRole(id: string): Promise<number> {
+  return new Promise<number>((resolve, reject) => {
+    API.post("/users/check-role", { user_id: id })
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        reject(err.response);
+      });
+  });
+}

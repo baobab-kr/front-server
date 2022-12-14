@@ -78,7 +78,6 @@ export const JOB_GROUP = [
   { value: "JOB_68", label: "루비온레일즈개발자" },
   { value: "JOB_69", label: "CIO,ChiefInformationOfficer" },
   { value: "JOB_70", label: "Fullstack개발자" },
-  { value: "JOB_71", label: "프론트앤드개발자" },
   { value: "JOB_72", label: "BL엔지니어" },
   { value: "JOB_73", label: "NET개발자" },
   { value: "JOB_74", label: "영상엔지니어" },
