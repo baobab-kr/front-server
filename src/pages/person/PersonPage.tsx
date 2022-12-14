@@ -146,6 +146,7 @@ export default function PersonPage(): JSX.Element {
             setMainState(false);
             setPage(0);
             modeSelector(tagMode);
+            window.location.reload();
           })
           .catch((err) => {});
         Swal.fire("게시글 삭제", "삭제가 완료되었습니다.", "success");
