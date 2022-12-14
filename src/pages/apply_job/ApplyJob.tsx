@@ -126,6 +126,7 @@ export default function ApplyJob(): JSX.Element {
     };
     const filename = await saveProfile();
     console.log(filename);
+    console.log("body", body);
     await CreateApplyJob({ ...body, profile: filename })
       .then((res) => {
         navigate("/");

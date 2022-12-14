@@ -94,12 +94,7 @@ const ThumbnailArea = styled.div`
   }
 `;
 
-const ThumbnailImg = styled.img`
-  object-fit: cover;
-  height: 100%;
-  width: 100%;
-  border-radius: 5px 5px 0px 0px;
-`;
+const ThumbnailImg = styled.img``;
 
 const Position = styled.div`
   height: 100%;
