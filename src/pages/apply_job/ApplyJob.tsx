@@ -108,7 +108,21 @@ export default function ApplyJob(): JSX.Element {
     const id = location.pathname.split("/");
 
     if (title === "" || name === "" || email === "" || url === "" || socialUrl === "" || fileList === undefined) {
-      Swal.fire("다시 확인해주세요");
+      let err =
+        title === ""
+          ? "이력서 제목을"
+          : name === ""
+          ? "이름을"
+          : email === ""
+          ? "이메일을"
+          : url === ""
+          ? "이력서 URL을"
+          : socialUrl === ""
+          ? "SNS URL을"
+          : "증명사진을 ";
+
+      Swal.fire("필수입력", `${err} 입력해주세요`, "error");
+
       return;
     }
     const body = {
@@ -132,7 +146,8 @@ export default function ApplyJob(): JSX.Element {
         navigate("/");
       })
       .catch((err) => {
-        Swal.fire("Error 다시 입력해주세요");
+        console.log(err.data.message);
+        Swal.fire("Error 다시 입력해주세요", err.data.message[0], "error");
       });
     //
   };
