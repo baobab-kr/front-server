@@ -30,6 +30,7 @@ type props = {
 };
 function Popup({ onClose, data, setData, boardId }: props) {
   const location: any = useLocation();
+  let isCreating = false;
 
   const [isPublic, setIsPublic] = useState<boolean>(true);
   const [description, setDescription] = useState<string>("");
@@ -51,6 +52,11 @@ function Popup({ onClose, data, setData, boardId }: props) {
   };
 
   const onSave = () => {
+    if (isCreating) {
+      console.log("onSave is creating");
+      return;
+    }
+
     if (description === "") {
       Swal.fire("필수입력", "설명을 입력해주세요!", "error");
       return;
@@ -69,17 +75,28 @@ function Popup({ onClose, data, setData, boardId }: props) {
       }
     }
 
+    isCreating = true;
     CreateBoard(formData)
       .then((res) => {
         navigate("/");
       })
       .catch((err) => {
         console.log("EEEE", err);
-        if (err.length > 1) {
-          Swal.fire("포스트 생성 실패", err[err.length - 1], "error");
+        if (err.length >= 1) {
+          let t = "";
+          if (data.title.length >= 50) {
+            t = "제목이 ";
+          } else if (description.length >= 50) {
+            t = "설명이 ";
+          }
+
+          Swal.fire("포스트 생성 실패", t + err[0], "error");
         } else {
           Swal.fire("포스트 생성 실패", err, "error");
         }
+      })
+      .finally(() => {
+        isCreating = false;
       });
   };
 

@@ -8,6 +8,8 @@ import { FiEdit3, FiSettings } from "react-icons/fi";
 import { MdBusinessCenter } from "react-icons/md";
 import Avator from "components/Avator/Avator";
 import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import Darkmode from "../../store/store.theme";
 
 import * as S from "./style";
 import { ModifySocialUrl, ModifyTechStack, ModifyDescription, getUserInfo, deleteAllPostsForJobs, deleteAllPostsForBoard, deleteUser } from "api/user";
@@ -21,6 +23,7 @@ const formatOptionLabel = ({ value, label }: tProps) => (
 export default function Setting(): JSX.Element {
   const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
   const navigate = useNavigate();
+  const [darkMode, setDarkMode] = useRecoilState<boolean>(Darkmode);
 
   const [job, setJob] = useState<{ value: string; label: string }>(JOB_GROUP[0]);
   const [fileImage, setFileImage] = useState<string>("");
@@ -44,6 +47,11 @@ export default function Setting(): JSX.Element {
       setFileImage(URL.createObjectURL(fileLists[0]));
       setFileList(fileLists);
     }
+  };
+
+  const modeHandler = (state: boolean) => {
+    localStorage.setItem("Theme", state ? "dark" : "light");
+    setDarkMode(state);
   };
 
   const saveProfile = async (e: React.MouseEvent<HTMLDivElement>) => {
@@ -157,6 +165,25 @@ export default function Setting(): JSX.Element {
               <S.GroupItem>
                 <div>소셜 미디어</div>
                 <S.CustomInput placeholder="www." value={url} onChange={(e) => setUrl(e.target.value)} />
+              </S.GroupItem>
+            </S.SettingContainer>
+          </S.SettingGroupArea>
+          <S.SettingGroupArea>
+            <S.SettingContainer>
+              <S.GroupTitle>
+                <div style={{ padding: "32px 0", fontSize: "25px" }}>서비스 설정</div>
+                <UnderLine color="white" margin="none" />
+              </S.GroupTitle>
+              <S.GroupItem>
+                <div style={{ alignSelf: "start", marginTop: "20px" }}>테마</div>
+                <S.ThemeArea>
+                  <S.Mode isSelected={!darkMode} onClick={() => modeHandler(false)}>
+                    light
+                  </S.Mode>
+                  <S.Mode isSelected={darkMode} onClick={() => modeHandler(true)}>
+                    dark
+                  </S.Mode>
+                </S.ThemeArea>
               </S.GroupItem>
             </S.SettingContainer>
           </S.SettingGroupArea>
