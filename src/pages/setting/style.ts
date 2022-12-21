@@ -202,6 +202,27 @@ const SaveBtn = styled.div`
   cursor: pointer;
 `;
 
+const ThemeArea = styled.div`
+  display: flex;
+  gap: 15px;
+  background: ${({ theme }) => theme.backgroundColor.bg};
+
+  padding: 15px;
+  border-radius: 8px;
+`;
+
+type tSelected = {
+  isSelected: boolean;
+};
+
+const Mode = styled.p<tSelected>`
+  font-size: 14px;
+  font-weight: bold;
+  color: ${({ theme, isSelected }) => (isSelected ? "#3858F6" : theme.fontColor.subColor)};
+
+  cursor: pointer;
+`;
+
 export {
   Wrapper,
   ActionArea,
@@ -218,4 +239,6 @@ export {
   CustomTextarea,
   RouterArea,
   Routers,
+  Mode,
+  ThemeArea,
 };

@@ -48,6 +48,7 @@ type tProps = { value: string; label: string };
 
 export default function ApplyJob(): JSX.Element {
   const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
+  let isCreating = false;
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -105,6 +106,8 @@ export default function ApplyJob(): JSX.Element {
   }
 
   const submit = async () => {
+    if (isCreating) return;
+
     const id = location.pathname.split("/");
 
     if (title === "" || name === "" || email === "" || url === "" || socialUrl === "" || fileList === undefined) {
@@ -141,6 +144,7 @@ export default function ApplyJob(): JSX.Element {
     const filename = await saveProfile();
     console.log(filename);
     console.log("body", body);
+    isCreating = true;
     await CreateApplyJob({ ...body, profile: filename })
       .then((res) => {
         navigate("/");
@@ -148,6 +152,9 @@ export default function ApplyJob(): JSX.Element {
       .catch((err) => {
         console.log(err.data.message);
         Swal.fire("Error 다시 입력해주세요", err.data.message[0], "error");
+      })
+      .finally(() => {
+        isCreating = false;
       });
     //
   };
