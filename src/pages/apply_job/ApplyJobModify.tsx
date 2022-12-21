@@ -49,6 +49,7 @@ type tProps = { value: string; label: string };
 
 export default function ApplyJobModify(): JSX.Element {
   const userInfo: user | null = JSON.parse(localStorage.getItem("user")!) || null;
+  let isCreating = false;
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -111,6 +112,7 @@ export default function ApplyJobModify(): JSX.Element {
   }
 
   const submit = async () => {
+    if (isCreating) return;
     const id = location.pathname.split("/");
 
     if (title === "" || name === "" || email === "" || url === "" || socialUrl === "") {
@@ -139,13 +141,16 @@ export default function ApplyJobModify(): JSX.Element {
     } else {
       filename = fileImage.split("=")[1];
     }
-
+    isCreating = true;
     await UpdateApplyJob({ ...body, profile: filename })
       .then((res) => {
         navigate("/jobs");
       })
       .catch((err) => {
         Swal.fire("Error 다시 입력해주세요");
+      })
+      .finally(() => {
+        isCreating = false;
       });
     //
   };
